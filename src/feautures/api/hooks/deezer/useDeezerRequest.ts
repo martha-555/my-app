@@ -12,7 +12,7 @@ const useDeezerRequest = () => {
     const response = makeRequest({
       payload: {
         method: method,
-        url: ` ${DEEZER_API_URL}${path}?access_code=frJQYCcZk1e7ScxjNrIfm7HbJnz38Q4Qcquv3wPVfpCl8fsrYA `,
+        url: ` ${DEEZER_API_URL}${path} `,
       },
     });
     return response;
