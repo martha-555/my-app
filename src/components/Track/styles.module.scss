@@ -1,0 +1,22 @@
+/** @format */
+.container {
+  background-color: #d3d3d3;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cover {
+  max-height: 64px;
+  border-radius: 12px;
+}
+
+.mainInfo {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}
+.duration {
+  margin-left: auto;
+}

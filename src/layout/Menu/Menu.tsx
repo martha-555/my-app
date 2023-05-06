@@ -6,20 +6,10 @@ import { useState } from "react";
 import classNames from "classnames";
 
 const Menu = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const handleToggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   const navigate = useNavigate();
   const renderItem = (path: string, name: string) => {
     return (
-      <div
-        className={isSidebarOpen ? classes.openMenu : classes.closedMenu}
-        key={name}
-        onClick={() => navigate(path)}
-      >
+      <div className={classes.item} key={name} onClick={() => navigate(path)}>
         {name}
       </div>
     );
@@ -27,15 +17,7 @@ const Menu = () => {
 
   return (
     <div>
-      <button className={classes.menuButton} onClick={handleToggleSidebar}>
-        +
-      </button>
-      <div
-        className={classNames(
-          classes.container,
-          isSidebarOpen ? classes.open : classes.closed
-        )}
-      >
+      <div className={classes.container}>
         {routes.map((item) => renderItem(item.path, item.name))}
       </div>
     </div>
