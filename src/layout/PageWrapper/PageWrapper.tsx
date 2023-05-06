@@ -1,11 +1,18 @@
 /** @format */
 
+import { ReactNode } from "react";
 import Menu from "../Menu";
+import classes from "./styles.module.scss";
 
-const PageWrapper = () => {
+type Props = {
+  children: ReactNode;
+};
+
+const PageWrapper = ({ children }: Props) => {
   return (
-    <div>
+    <div className={classes.container}>
       <Menu />
+      <div className={classes.content}>{children}</div>
     </div>
   );
 };

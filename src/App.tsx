@@ -18,10 +18,6 @@ import FavoriteTracks from "./pages/LikedTracks/FavoriteTracks";
 
 const authRouters = createBrowserRouter([
   {
-    path: "/",
-    element: <PageWrapper />,
-  },
-  {
     path: "/favorite",
     element: <FavoriteTracks />,
   },
@@ -35,7 +31,7 @@ const authRouters = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Navigate to="/" />,
+    element: <Navigate to="/favorite" />,
   },
 ]);
 

@@ -1,31 +1,24 @@
 /** @format */
 
 import Menu from "../../layout/Menu";
-import classes from "./styles.module.scss";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { useContext, useEffect, useState } from "react";
 import { authContext } from "../../feautures/auth/authProvider";
-import FavoriteTracksRequest from "./FavoriteTracksRequest";
+import { TrackData } from "../../types/deezer";
+import { parseDeezerTrack } from "../../utils/deezer";
+import useFetchFavoriteTracks from "../../feautures/api/hooks/deezer/useFetchFavoriteTracks";
+import PageWrapper from "../../layout/PageWrapper/PageWrapper";
+import Track from "../../components/Track";
+import Tracklist from "../../components/Tracklist/Tracklist";
 
 const FavoriteTracks = () => {
-  const { authKey } = useContext(authContext);
-  const request = useDeezerRequest();
-  const [track, setTrack] = useState([]);
-  useEffect(() => {
-    const fetchRequest = async () => {
-      const response = await request(`/user/me/tracks?access_token=${authKey}`);
-      const trackList = await response.json();
-      setTrack(trackList.data);
-    };
+  const tracks = useFetchFavoriteTracks();
+  console.log({ tracks });
 
-    fetchRequest();
-  }, [authKey]);
-
-  console.log(track);
   return (
-    <div>
-      <Menu />
-    </div>
+    <PageWrapper>
+      <Tracklist tracks={tracks} />
+    </PageWrapper>
   );
 };
 
