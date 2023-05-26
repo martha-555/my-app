@@ -13,7 +13,6 @@ import Tracklist from "../../components/Tracklist/Tracklist";
 
 const FavoriteTracks = () => {
   const tracks = useFetchFavoriteTracks();
-  console.log({ tracks });
 
   return (
     <PageWrapper>
