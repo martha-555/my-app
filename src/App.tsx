@@ -15,7 +15,6 @@ import Auth from "./pages/Auth/Auth";
 import useIsAuthorize from "./feautures/auth/hooks/useIsAuthorize";
 import AuthProvider from "./feautures/auth/authProvider";
 import FavoriteTracks from "./pages/LikedTracks/FavoriteTracks";
-import PlayerProvider from "./feautures/player/playerProvider";
 
 const authRouters = createBrowserRouter([
   {
@@ -57,11 +56,9 @@ function App() {
 
   return (
     <div>
-      <PlayerProvider>
-        <AuthProvider>
-          <AppRoutes />
-        </AuthProvider>
-      </PlayerProvider>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </div>
   );
 }
