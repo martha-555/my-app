@@ -1,0 +1,14 @@
+/** @format */
+
+.container {
+  display: flex;
+  background: rgb(205, 163, 163);
+  padding: 10px;
+  justify-content: space-evenly;
+}
+.song {
+  display: flex;
+}
+.range {
+  width: 100px;
+}
