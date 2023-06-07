@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { PlayerContext } from "../../feautures/player/playerProvider";
 import classes from "./styles.module.scss";
 import { formatSeconds } from "../../utils/time";
@@ -9,12 +9,13 @@ import { ReactDOM } from "react";
 import moment from "moment";
 
 const Player = () => {
-  const myRef = useRef<HTMLInputElement>(null);
-  const range = myRef;
 
-  const { togglePlay, paused, next, back, currentTrack, rewind, currentTime,subtractTime } =
+ const { togglePlay, paused, next, back, currentTrack, rewind, currentTime,subtractTime } =
     useContext(PlayerContext);
 
+    const handleMove = (event:React.MouseEvent<HTMLInputElement>) => {
+console.log(event)
+    }
   return (
     <div className={classes.container}>
       {currentTrack ? (
@@ -32,7 +33,7 @@ const Player = () => {
       <div>{currentTime()} </div>
       {currentTrack ? (
         <input
-          ref={myRef}
+        onMouseDown={handleMove}
           className={classes.range}
           type="range"
           defaultValue="0"
