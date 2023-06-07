@@ -41,7 +41,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   const [currentTrack, setCurrentTrack] = useState<TrackData | null>(null);
   const [paused, setPaused] = useState(true);
   const getMp3 = useGetMp3();
-  const [currentTime, setCurrentTime] = useState(
+  const [currentTime, setCurrentTime] = useState<string>(
     formatSeconds(audio.currentTime)
   );
   const [subtractTime, setSubtractTime] = useState('');

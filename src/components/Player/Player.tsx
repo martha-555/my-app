@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { PlayerContext } from "../../feautures/player/playerProvider";
 import classes from "./styles.module.scss";
 import { formatSeconds } from "../../utils/time";
@@ -10,11 +10,14 @@ import moment from "moment";
 
 const Player = () => {
 
+
  const { togglePlay, paused, next, back, currentTrack, rewind, currentTime,subtractTime } =
     useContext(PlayerContext);
 
     const handleMove = (event:React.MouseEvent<HTMLInputElement>) => {
-console.log(event)
+
+      console.log(event.currentTarget.value)
+    
     }
   return (
     <div className={classes.container}>
@@ -34,6 +37,7 @@ console.log(event)
       {currentTrack ? (
         <input
         onMouseDown={handleMove}
+       
           className={classes.range}
           type="range"
           defaultValue="0"
