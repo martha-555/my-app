@@ -63,7 +63,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
     currentTrack && callBack();
   }, [currentTrack]);
 
-  let a = 5;
+ 
   useEffect(() => {
     audio.onpause = () => setPaused(true);
     audio.onplay = () => setPaused(false);
