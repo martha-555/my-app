@@ -49,7 +49,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   useEffect((()=> {
    if (currentTrack) setSubtractTime ( formatSeconds(currentTrack.duration - audio.currentTime));
   }),[audio.currentTime])
-let aff = 5;
+
  
   useEffect(() => {
     const callBack = async () => {
