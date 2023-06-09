@@ -14,9 +14,12 @@ const Player = () => {
  const { togglePlay, paused, next, back, currentTrack, rewind, currentTime,subtractTime } =
     useContext(PlayerContext);
 
-    const handleMove = (event:React.MouseEvent<HTMLInputElement>) => {
-
-      console.log(event.currentTarget.value)
+    const handleMove = (event: React.SyntheticEvent) => {
+   
+      let target = (event.target as HTMLInputElement).value
+      console.log(target)
+      // const value = +event.currentTarget.value;
+  // rewind(value)
     
     }
   return (
@@ -41,9 +44,6 @@ const Player = () => {
           className={classes.range}
           type="range"
           defaultValue="0"
-          onChange={() => {
-            rewind();
-          }}
         />
       ) : null}
       <div> {subtractTime} </div>

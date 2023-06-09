@@ -11,12 +11,12 @@ type PlayerContextType = {
   pause: () => void;
   next: () => void;
   back: () => void;
-  rewind: () => number | void;
+  rewind: (eventValue:number) => void;
   setTracklist: (tracks: TrackData[]) => void;
   currentTrack: TrackData | null;
   togglePlay: () => void;
   paused: boolean;
-  currentTime: () => any;
+  currentTime: () => number|string;
   subtractTime: string|null;
 };
 
@@ -30,7 +30,7 @@ export const PlayerContext = createContext<PlayerContextType>({
   currentTrack: null,
   togglePlay: () => {},
   paused: true,
-  currentTime: () => {},
+  currentTime: () => {return ''},
   subtractTime:''
 });
 
@@ -92,8 +92,11 @@ const PlayerProvider = (props: { children: ReactElement }) => {
           if (index < 0) index = tracks.length - 1;
           setCurrentTrack(tracks[index]);
         },
-        rewind: () => {
-          // audio.currentTime += 15;
+        rewind: (eventValue) => {
+          if (currentTrack)
+audio.currentTime =  (currentTrack?.duration * eventValue)/100;
+// console.log(audio.currentTime)
+return (formatSeconds (audio.currentTime));
         },
         subtractTime,
 
@@ -111,6 +114,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
           setInterval(() => {
             setCurrentTime(formatSeconds(audio.currentTime));
           }, 1000);
+          
           return currentTime;
         },
       }}
