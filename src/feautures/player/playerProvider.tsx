@@ -5,19 +5,19 @@ import { TrackData } from "../../types/deezer";
 import useGetMp3 from "../api/hooks/youtube/useGetMp3";
 import { formatSeconds } from "../../utils/time";
 
-
 type PlayerContextType = {
   play: (id: number) => void;
   pause: () => void;
   next: () => void;
   back: () => void;
-  rewind: (eventValue:number) => void;
+  rewind: (eventValue: number) => void;
   setTracklist: (tracks: TrackData[]) => void;
   currentTrack: TrackData | null;
+  currentInputValue: number;
   togglePlay: () => void;
   paused: boolean;
-  currentTime: () => number|string;
-  subtractTime: string|null;
+  currentTime: () => number | string;
+  subtractTime: string | null;
 };
 
 export const PlayerContext = createContext<PlayerContextType>({
@@ -28,29 +28,36 @@ export const PlayerContext = createContext<PlayerContextType>({
   rewind: () => {},
   setTracklist: () => {},
   currentTrack: null,
+  currentInputValue: 0,
   togglePlay: () => {},
   paused: true,
-  currentTime: () => {return ''},
-  subtractTime:''
+  currentTime: () => {
+    return "";
+  },
+
+  subtractTime: "",
 });
 
-const audio:any = new Audio();
+const audio: any = new Audio();
 
 const PlayerProvider = (props: { children: ReactElement }) => {
   const [tracks, setTracks] = useState<TrackData[]>([]);
   const [currentTrack, setCurrentTrack] = useState<TrackData | null>(null);
   const [paused, setPaused] = useState(true);
   const getMp3 = useGetMp3();
-  const [currentTime, setCurrentTime] = useState<string>(
-    formatSeconds(audio.currentTime)
+  const [currentTime, setCurrentTime] = useState<string | number>(
+    audio.currentTime
   );
-  const [subtractTime, setSubtractTime] = useState('');
+  const [subtractTime, setSubtractTime] = useState("");
+  const [currentInputValue, setCurrentInputValue] = useState(0);
 
-  useEffect((()=> {
-   if (currentTrack) setSubtractTime ( formatSeconds(currentTrack.duration - audio.currentTime));
-  }),[audio.currentTime])
+  useEffect(() => {
+    if (currentTrack) {
+      setSubtractTime(formatSeconds(currentTrack.duration - audio.currentTime));
+      setCurrentInputValue((audio.currentTime / currentTrack.duration) * 100);
+    }
+  }, [audio.currentTime]);
 
- 
   useEffect(() => {
     const callBack = async () => {
       const response = await getMp3(
@@ -63,7 +70,6 @@ const PlayerProvider = (props: { children: ReactElement }) => {
     currentTrack && callBack();
   }, [currentTrack]);
 
- 
   useEffect(() => {
     audio.onpause = () => setPaused(true);
     audio.onplay = () => setPaused(false);
@@ -94,12 +100,12 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         },
         rewind: (eventValue) => {
           if (currentTrack)
-audio.currentTime =  (currentTrack?.duration * eventValue)/100;
-// console.log(audio.currentTime)
-return (formatSeconds (audio.currentTime));
+            // setCurrentTime((currentTrack?.duration * eventValue) / 100);
+            audio.currentTime = (currentTrack?.duration * eventValue) / 100;
+          console.log("rewind val", eventValue);
         },
         subtractTime,
-
+        //
         setTracklist: (items) => {
           setTracks(items);
         },
@@ -110,11 +116,12 @@ return (formatSeconds (audio.currentTime));
           }
         },
         paused,
+        currentInputValue,
         currentTime: () => {
           setInterval(() => {
             setCurrentTime(formatSeconds(audio.currentTime));
           }, 1000);
-          
+
           return currentTime;
         },
       }}

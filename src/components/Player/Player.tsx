@@ -6,22 +6,34 @@ import classes from "./styles.module.scss";
 import { formatSeconds } from "../../utils/time";
 import classNames from "classnames";
 import { ReactDOM } from "react";
-import moment from "moment";
 
 const Player = () => {
+  const {
+    togglePlay,
+    paused,
+    next,
+    back,
+    currentTrack,
+    rewind,
+    currentTime,
+    subtractTime,
+    currentInputValue,
+  } = useContext(PlayerContext);
 
+  const [inputValue, setInputValue] = useState<number>(0);
 
- const { togglePlay, paused, next, back, currentTrack, rewind, currentTime,subtractTime } =
-    useContext(PlayerContext);
+  const handleMove = (event: React.MouseEvent) => {
+    let target = (event.target as HTMLInputElement).value;
+    // setInputValue(Math.round(+target));
+    // console.log(Math.round(+target));
+    rewind(+target);
+  };
 
-    const handleMove = (event: React.SyntheticEvent) => {
-   
-      let target = (event.target as HTMLInputElement).value
-      console.log(target)
-      // const value = +event.currentTarget.value;
-  // rewind(value)
-    
-    }
+  useEffect(() => {
+    setInputValue(currentInputValue);
+    console.log("useeffect val", inputValue);
+  }, [currentTime]);
+
   return (
     <div className={classes.container}>
       {currentTrack ? (
@@ -33,17 +45,27 @@ const Player = () => {
         <div></div>
       )}
 
-      <div onClick={() => back()}>back</div>
+      <div
+        onClick={() => {
+          back();
+        }}
+      >
+        back
+      </div>
       <div onClick={() => togglePlay()}>{paused ? "play" : "||"}</div>
       <div onClick={() => next()}>next</div>
       <div>{currentTime()} </div>
       {currentTrack ? (
         <input
-        onMouseDown={handleMove}
-       
+          onMouseUp={handleMove}
+          onChange={(e) => {
+            setInputValue(+e.target.value);
+            console.log("onchange val", e.target.value);
+          }}
           className={classes.range}
           type="range"
-          defaultValue="0"
+          name="inp"
+          value={inputValue}
         />
       ) : null}
       <div> {subtractTime} </div>
