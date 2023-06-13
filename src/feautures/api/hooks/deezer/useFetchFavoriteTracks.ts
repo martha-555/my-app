@@ -7,6 +7,7 @@ import { TrackData } from "../../../../types/deezer";
 import { parseDeezerTrack } from "../../../../utils/deezer";
 
 const useFetchFavoriteTracks = () => {
+
   const { authKey } = useContext(authContext);
   const request = useDeezerRequest();
   const [tracks, setTracks] = useState<TrackData[]>([]);

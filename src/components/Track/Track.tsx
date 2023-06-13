@@ -28,7 +28,7 @@ const Track = ({ track }: Props) => {
         <span>{track.artist.name}</span>
       </div>
       <div className={classes.duration}>{formatSeconds(track.duration)}</div>
-      <PlayButton atr={`${track.title} ${track.artist.name}`} />
+      {/* <PlayButton atr={`${track.title} ${track.artist.name}`} /> */}
     </div>
   );
 };

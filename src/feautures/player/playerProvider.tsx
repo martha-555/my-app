@@ -100,12 +100,10 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         },
         rewind: (eventValue) => {
           if (currentTrack)
-            // setCurrentTime((currentTrack?.duration * eventValue) / 100);
             audio.currentTime = (currentTrack?.duration * eventValue) / 100;
-          console.log("rewind val", eventValue);
         },
         subtractTime,
-        //
+      
         setTracklist: (items) => {
           setTracks(items);
         },

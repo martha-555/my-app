@@ -22,16 +22,14 @@ const Player = () => {
 
   const [inputValue, setInputValue] = useState<number>(0);
 
-  const handleMove = (event: React.MouseEvent) => {
+  const handleMove = (event: React.ChangeEvent) => {
     let target = (event.target as HTMLInputElement).value;
-    // setInputValue(Math.round(+target));
-    // console.log(Math.round(+target));
+    setInputValue(+target);
     rewind(+target);
   };
 
   useEffect(() => {
     setInputValue(currentInputValue);
-    console.log("useeffect val", inputValue);
   }, [currentTime]);
 
   return (
@@ -57,11 +55,7 @@ const Player = () => {
       <div>{currentTime()} </div>
       {currentTrack ? (
         <input
-          onMouseUp={handleMove}
-          onChange={(e) => {
-            setInputValue(+e.target.value);
-            console.log("onchange val", e.target.value);
-          }}
+          onChange={handleMove}
           className={classes.range}
           type="range"
           name="inp"
