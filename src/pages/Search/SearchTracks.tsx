@@ -20,12 +20,14 @@ const searchRequest = () => {
 const response = await fetchRequest(encodeURI( `/search?q=${value}`));
 const list = await response.json();
 setTracks(list.data)
-
 }
 requestFetch()
 
 }
 
+
+
+console.log(tracks)
   return (
     <PageWrapper>
       <div className={classes.inputBlock}>
@@ -34,7 +36,7 @@ requestFetch()
         }} />
       <button onClick={searchRequest} >Ok</button>
       </div>
- { tracks?  <Tracklist tracks={tracks}/>: <div>Введіть запит</div> }
+ { tracks?  <Tracklist tracks={tracks}/>: <div> </div> }
     </PageWrapper>
   );
 };
