@@ -2,31 +2,39 @@
 
 import { useSearchParams } from "react-router-dom";
 import Tracklist from "../../components/Tracklist/Tracklist";
-import useFetchSearch from "../../feautures/api/hooks/deezer/useFetchSearch";
-import Menu from "../../layout/Menu";
+
 import React, { useEffect, useState } from "react";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
+import classes from './styles.module.scss';
 
 const SearchTracks = () => {
   const [value,setvalue] = useState<string>('');
  const [tracks,setTracks] = useState<TrackData[]>([])
+ const [error, setError] = useState<string>('');
  const fetchRequest = useDeezerRequest();
 
 const searchRequest = () => {
   const requestFetch = async() => {
-const response = await fetchRequest(`/search?q=${value}`);
-const res = await response.json();
-console.log(res)
-  }
-  requestFetch()
+const response = await fetchRequest(encodeURI( `/search?q=${value}`));
+const list = await response.json();
+setTracks(list.data)
+
 }
+requestFetch()
+
+}
+
   return (
     <PageWrapper>
-      <input type="text" placeholder="search" onInput={(e) => setvalue((e.target as HTMLInputElement).value)} />
-    {value?<Tracklist tracks={tracks}/>:null}  
+      <div className={classes.inputBlock}>
+      <input type="text" placeholder="search"  onInput={
+        (e) =>{ { setvalue((e.target as HTMLInputElement).value)}
+        }} />
       <button onClick={searchRequest} >Ok</button>
+      </div>
+ { tracks?  <Tracklist tracks={tracks}/>: <div>Введіть запит</div> }
     </PageWrapper>
   );
 };
