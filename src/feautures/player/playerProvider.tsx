@@ -38,7 +38,7 @@ export const PlayerContext = createContext<PlayerContextType>({
   subtractTime: "",
 });
 
-const audio: any = new Audio();
+const audio: HTMLAudioElement = new Audio();
 
 const PlayerProvider = (props: { children: ReactElement }) => {
   const [tracks, setTracks] = useState<TrackData[]>([]);
@@ -65,6 +65,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
       );
       const json = await response.json();
       audio.src = json.data.mp3;
+      // audio.cloneNode(true).play();
       audio.play();
     };
     currentTrack && callBack();

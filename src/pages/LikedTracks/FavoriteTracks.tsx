@@ -15,9 +15,12 @@ const FavoriteTracks = () => {
   const tracks = useFetchFavoriteTracks();
 
   return (
-    <PageWrapper>
+    <div  >
+
+    <PageWrapper >
       <Tracklist tracks={tracks} />
     </PageWrapper>
+    </div>
   );
 };
 

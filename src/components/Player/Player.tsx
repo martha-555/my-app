@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { PlayerContext } from "../../feautures/player/playerProvider";
 import classes from "./styles.module.scss";
 import { formatSeconds } from "../../utils/time";
@@ -22,6 +22,7 @@ const Player = () => {
 
   const [inputValue, setInputValue] = useState<number>(0);
 
+
   const handleMove = (event: React.ChangeEvent) => {
     let target = (event.target as HTMLInputElement).value;
     setInputValue(+target);
@@ -32,8 +33,24 @@ const Player = () => {
     setInputValue(currentInputValue);
   }, [currentTime]);
 
+  const handleKeyUp = useCallback (
+    (event:KeyboardEvent) => {
+   
+   if(event.key === 'ArrowRight') next();
+   if (event.key === 'ArrowLeft') back()
+    },
+    [currentTrack]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyUp);
+    return () => {
+      document.removeEventListener("keydown", handleKeyUp);
+    };
+  }, [handleKeyUp]);
+
   return (
-    <div className={classes.container}>
+    <div className={classes.container}  >
       {currentTrack ? (
         <div className={classes.song}>
           <span>{`${currentTrack?.artist.name}`}</span>
