@@ -20,23 +20,27 @@ const searchRequest = () => {
 const response = await fetchRequest(encodeURI( `/search?q=${value}`));
 const list = await response.json();
 setTracks(list.data)
+
+
 }
 requestFetch()
-
 }
 
+useEffect(() => {
+  if (tracks) {
+    setError(value && tracks.length === 0?'По Вашому запиту нічого не знайдено': '')
+  } else {setError('Введіть значення')}
+},[tracks])
 
-
-console.log(tracks)
   return (
     <PageWrapper>
       <div className={classes.inputBlock}>
-      <input type="text" placeholder="search"  onInput={
+      <input type="text" placeholder="search" onKeyUp={(e) => {if (e.key === 'Enter') searchRequest()}}  onChange={
         (e) =>{ { setvalue((e.target as HTMLInputElement).value)}
         }} />
       <button onClick={searchRequest} >Ok</button>
       </div>
- { tracks?  <Tracklist tracks={tracks}/>: <div> </div> }
+ { tracks && tracks.length > 0?  <Tracklist tracks={tracks}/>: <div>{error} </div> }
     </PageWrapper>
   );
 };
