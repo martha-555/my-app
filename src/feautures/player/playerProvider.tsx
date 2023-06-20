@@ -40,6 +40,7 @@ export const PlayerContext = createContext<PlayerContextType>({
 
 const audio: HTMLAudioElement = new Audio();
 
+
 const PlayerProvider = (props: { children: ReactElement }) => {
   const [tracks, setTracks] = useState<TrackData[]>([]);
   const [currentTrack, setCurrentTrack] = useState<TrackData | null>(null);
@@ -50,6 +51,9 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   );
   const [subtractTime, setSubtractTime] = useState("");
   const [currentInputValue, setCurrentInputValue] = useState(0);
+
+  const controller = new AbortController();
+
 
   useEffect(() => {
     if (currentTrack) {
@@ -64,13 +68,26 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         `${currentTrack?.artist.name} ${currentTrack?.title}`
       );
       const json = await response.json();
-      audio.src = json.data.mp3;
-      // audio.cloneNode(true).play();
-      audio.play();
-    };
-    currentTrack && callBack();
-  }, [currentTrack]);
+      audio.src = await json.data.mp3;
+      const playPromise = audio.play();
+  
+      if (playPromise !== undefined || null) {
+        playPromise.then(_ => {
+          audio.play()
+        })
+        .catch(error => {
+          console.log(error)
+        });
+      }
 
+      //  if (playPromise !== null) {
+      //   audio.play();
+      //   playPromise.catch(() => {console.log('dd')})
+      // } 
+     
+    };
+    currentTrack && callBack() ;
+  }, [currentTrack]);
   useEffect(() => {
     audio.onpause = () => setPaused(true);
     audio.onplay = () => setPaused(false);
@@ -80,6 +97,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
     <PlayerContext.Provider
       value={{
         play: (id) => {
+      
           setCurrentTrack(tracks.find((item) => item.id === id) || null);
         },
         pause: () => {
