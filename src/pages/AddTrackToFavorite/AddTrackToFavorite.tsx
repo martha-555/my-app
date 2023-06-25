@@ -15,7 +15,7 @@ const AddTrackToFavorite = ({ tracks, error }: Props) => {
   const request = useDeezerRequest();
   const handleClick = (e: any) => {
     const fetchRequest = async () => {
-      await request(`/playlists/title=llll`, HttpMethod.POST);
+      await request(`/user/me/playlists&title=namr`, HttpMethod.POST);
     };
     fetchRequest();
   };
