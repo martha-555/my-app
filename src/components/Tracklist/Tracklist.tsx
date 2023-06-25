@@ -7,6 +7,7 @@ import classes from "./styles.module.scss";
 import { PlayerContext } from "../../feautures/player/playerProvider";
 type Props = {
   tracks: TrackData[];
+  children?: JSX.Element;
 };
 
 const Tracklist = ({ tracks }: Props) => {

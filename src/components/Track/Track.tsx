@@ -10,9 +10,10 @@ import { PlayerContext } from "../../feautures/player/playerProvider";
 
 type Props = {
   track: TrackData;
+  children?: any;
 };
 
-const Track = ({ track }: Props) => {
+const Track = ({ track, children }: Props) => {
   const { play, currentTrack, pause, togglePlay } = useContext(PlayerContext);
 
   return (
@@ -28,7 +29,7 @@ const Track = ({ track }: Props) => {
         <span>{track.artist.name}</span>
       </div>
       <div className={classes.duration}>{formatSeconds(track.duration)}</div>
-      {/* <PlayButton atr={`${track.title} ${track.artist.name}`} /> */}
+      {children}
     </div>
   );
 };
