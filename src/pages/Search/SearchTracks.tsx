@@ -10,6 +10,7 @@ import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest"
 import classes from "./styles.module.scss";
 import AddTrackToFavorite from "../AddTrackToFavorite/AddTrackToFavorite";
 
+
 const SearchTracks = () => {
   const [tracks, setTracks] = useState<TrackData[]>([]);
   const [error, setError] = useState<string>("");
