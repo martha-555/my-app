@@ -37,15 +37,14 @@ const request = useDeezerRequest();
 
 
   const handleClick = (e:React.MouseEvent<HTMLButtonElement>  ) => {
-    setIdLiked(+(e.target as HTMLButtonElement).id)
+    const target = e.target as HTMLButtonElement;
+    setIdLiked(+target.id)
+
     const fetchRequest = async () => {
-      await request(`/playlist/${lovedTracks}/tracks&songs=${(e.target as HTMLButtonElement).id}`, HttpMethod.POST);
+      await request(`/playlist/${lovedTracks}/tracks&songs=${target.id}`, idLikedList.includes(+target.id)? HttpMethod.DELETE: HttpMethod.POST );
     };
     fetchRequest();
-    +(e.target as HTMLButtonElement).id === +idLiked? setClickLike(!clickLike): setClickLike(true)
-    console.log(+(e.target as HTMLButtonElement).id);
-    console.log({idLiked})
-    console.log(+(e.target as HTMLButtonElement).id === +idLiked)
+    +target.id === +idLiked? setClickLike(!clickLike): setClickLike(true)
   };
 
 // useEffect(() => {setClickLike(true)},[idLiked])
