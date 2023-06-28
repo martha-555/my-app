@@ -6,8 +6,10 @@ import { HttpMethod } from "../../feautures/api/types";
 import { TrackData } from "../../types/deezer";
 import useFetchUsersPlaylists from "../../feautures/api/hooks/deezer/useFetchUsersPlaylists";
 import useFetchFavoriteTracks from "../../feautures/api/hooks/deezer/useFetchFavoriteTracks";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import classes from './styles.module.scss'
+import { parseDeezerTrack } from "../../utils/deezer";
+import { authContext } from "../../feautures/auth/authProvider";
 
 
 type Playlist = {
@@ -24,20 +26,29 @@ type Props = {
 const AddTrackToFavorite = ({ tracks, error }: Props) => {
 const [lovedTracks, setLovedTracks] = useState<number>()
 const [onClick, setOnClick] = useState<boolean> (false)
+const [clickLike, setClickLike] = useState<boolean>(false)
 const [selectedTrack, setSelectedTrack] = useState(0)
-
+const [idLikedList, setidLikedList] = useState<number[]>([])
+const [idLiked,setIdLiked] = useState<number>(0)
 
 const playlists:Playlist[] = useFetchUsersPlaylists()
-
+const { authKey } = useContext(authContext);
 const request = useDeezerRequest();
+
+
   const handleClick = (e:React.MouseEvent<HTMLButtonElement>  ) => {
+    setIdLiked(+(e.target as HTMLButtonElement).id)
     const fetchRequest = async () => {
       await request(`/playlist/${lovedTracks}/tracks&songs=${(e.target as HTMLButtonElement).id}`, HttpMethod.POST);
     };
     fetchRequest();
+    +(e.target as HTMLButtonElement).id === +idLiked? setClickLike(!clickLike): setClickLike(true)
+    console.log(+(e.target as HTMLButtonElement).id);
+    console.log({idLiked})
+    console.log(+(e.target as HTMLButtonElement).id === +idLiked)
   };
 
-
+// useEffect(() => {setClickLike(true)},[idLiked])
 
 useEffect(() => {
  playlists.map((item)=> item.title == 'Loved Tracks'? setLovedTracks(item.id): null)
@@ -48,20 +59,32 @@ setOnClick(!onClick)
  setSelectedTrack(e.target.id);
 
 }
-console.log(onClick)
+
+  useEffect(() => {
+    const fetchRequest = async () => {
+      const response = await request(`/user/me/tracks`);
+      const trackList = await response.json();
+      const parsed:TrackData[] = (trackList.data.map(parseDeezerTrack));
+      const id = parsed.map((item) => item.id);
+
+      setidLikedList(id)
+    };
+
+    fetchRequest();
+  }, [authKey, request,idLiked]);
+
   return (
     <div>
       {tracks && tracks.length > 0 ? (
         tracks.map((item) => (
-          <Track track={item} key={item.id}>
-            <button id={item.id.toString()} onClick={handleClick}>
-          	&#10084;
+          <Track track={item} key={item.id}> 
+
+            <button id={item.id.toString()} onClick={handleClick} className={(+idLiked === +item.id && clickLike) || idLikedList.includes(+item.id)  ?classes.isLiked:''}>
+          	&#10084;  
             </button>
           <button  id={item.id.toString()} onClick={selectPlaylist} >Додати в плейлист</button>
-          {}
+        {+item.id === +selectedTrack   ? <div  id={item.id.toString()} className={  classes.showList } > </div>:null }
       
-          <div  id={item.id.toString()} className={ +item.id === +selectedTrack && onClick  ? classes.showList : classes.hideList} > </div>
-       
           </Track>
         ))
       ) : (

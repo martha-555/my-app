@@ -16,6 +16,7 @@ const useFetchFavoriteTracks = () => {
       const response = await request(`/user/me/tracks`);
       const trackList = await response.json();
       setTracks(trackList.data.map(parseDeezerTrack));
+      
     };
 
     fetchRequest();
