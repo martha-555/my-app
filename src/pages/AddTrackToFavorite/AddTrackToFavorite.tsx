@@ -9,12 +9,13 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import classes from './styles.module.scss'
 import { parseDeezerTrack } from "../../utils/deezer";
 import { authContext } from "../../feautures/auth/authProvider";
+import LikeButton from "./LikeButton";
 
 
-type Playlist = {
-  id: number;
-  title:string
-}
+// type Playlist = {
+//   id: number;
+//   title:string
+// }
 
 type Props = {
   tracks: TrackData[];
@@ -23,33 +24,33 @@ type Props = {
 
 // /user/me/playlists&title=namr
 const AddTrackToFavorite = ({ tracks, error }: Props) => {
-const [lovedTracks, setLovedTracks] = useState<number>()
+// const [lovedTracks, setLovedTracks] = useState<number>()
 const [onClick, setOnClick] = useState<boolean> (false)
 const [selectedTrack, setSelectedTrack] = useState(0)
-const [idLikedList, setidLikedList] = useState<number[]>([])
-const [idLiked,setIdLiked] = useState<number>(0)
+// const [idLikedList, setidLikedList] = useState<number[]>([])
+// const [idLiked,setIdLiked] = useState<number>(0)
 
-const playlists:Playlist[] = useFetchUsersPlaylists()
-const { authKey } = useContext(authContext);
-const request = useDeezerRequest();
+// const playlists:Playlist[] = useFetchUsersPlaylists()
+// const { authKey } = useContext(authContext);
+// const request = useDeezerRequest();
 
 
-  const handleClick = (e:React.MouseEvent<HTMLButtonElement>  ) => {
-    const target = e.target as HTMLButtonElement;
-    setIdLiked(+target.id)
-    const fetchRequest = async () => {
-      await request(`/playlist/${lovedTracks}/tracks&songs=${target.id}`, idLikedList.includes(+target.id) && idLikedList? HttpMethod.DELETE: HttpMethod.POST );
-    };
-    fetchRequest();
+  // const handleClick = (e:React.MouseEvent<HTMLButtonElement>  ) => {
+  //   const target = e.target as HTMLButtonElement;
+  //   setIdLiked(+target.id)
+  //   const fetchRequest = async () => {
+  //     await request(`/playlist/${lovedTracks}/tracks&songs=${target.id}`, idLikedList.includes(+target.id) && idLikedList? HttpMethod.DELETE: HttpMethod.POST );
+  //   };
+  //   fetchRequest();
    
     
-  };
+  // };
 
 
 
-useEffect(() => {
- playlists.map((item)=> item.title == 'Loved Tracks'? setLovedTracks(item.id): null)
-},[playlists])
+// useEffect(() => {
+//  playlists.map((item)=> item.title == 'Loved Tracks'? setLovedTracks(item.id): null)
+// },[playlists])
 
 const selectPlaylist = (e:any) => {
 setOnClick(!onClick)
@@ -57,17 +58,17 @@ setOnClick(!onClick)
 
 }
 
-  useEffect(() => {
-    const fetchRequest = async () => {
-      const response = await request(`/user/me/tracks`);
-      const trackList = await response.json();
-      const parsed:TrackData[] = (trackList.data.map(parseDeezerTrack));
-      const id = parsed.map((item) => item.id);
+  // useEffect(() => {
+  //   const fetchRequest = async () => {
+  //     const response = await request(`/user/me/tracks`);
+  //     const trackList = await response.json();
+  //    if (trackList){ const parsed:TrackData[] = (trackList.data.map(parseDeezerTrack));
+  //     const id = parsed.map((item) => item.id);
 
-      setidLikedList(id)
-    };
-    fetchRequest();
-  }, [authKey, handleClick,idLiked]);
+  //     setidLikedList(id)}
+  //   };
+  //   fetchRequest();
+  // }, [authKey, handleClick,idLiked]);
 
 
   return (
@@ -75,10 +76,10 @@ setOnClick(!onClick)
       {tracks && tracks.length > 0 ? (
         tracks.map((item) => (
           <Track track={item} key={item.id}> 
-
-            <button id={item.id.toString()} onClick={handleClick} className={ idLikedList.includes(+item.id)?classes.isLiked:''}>
+<LikeButton selectedTrack={+item.id} />
+            {/* <button id={item.id.toString()} onClick={handleClick} className={ idLikedList.includes(+item.id)?classes.isLiked:''}>
           	&#10084;  
-            </button>
+            </button> */}
           <button  id={item.id.toString()} onClick={selectPlaylist} >Додати в плейлист</button>
         {+item.id === +selectedTrack   ? <div  id={item.id.toString()} className={  classes.showList } > </div>:null }
       

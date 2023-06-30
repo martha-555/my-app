@@ -46,7 +46,7 @@ const SearchTracks = () => {
 
   useEffect(() => {
     searchRequest();
-  }, [searchParams]);
+  }, [searchParams.get("q")]);
 
   return (
     <PageWrapper>
