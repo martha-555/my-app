@@ -34,13 +34,13 @@ useEffect(() => {
 
   // console.log(lovedTracks)
 
-const handleClick = () => {
+  const handleClick = () => {
     setBooleanClick(!booleanClick)
     console.log(booleanClick)
-      setIdLiked(selectedTrack); 
-      const fetchRequest = async () => {
-        await request(`/playlist/${lovedTracks}/tracks&songs=${selectedTrack}`, idLikedList.includes(selectedTrack) && idLikedList? HttpMethod.DELETE: HttpMethod.POST );
-      };
+    setIdLiked(selectedTrack); 
+    const fetchRequest = async () => {
+      await request(`/playlist/${lovedTracks}/tracks&songs=${selectedTrack}`, idLikedList.includes(selectedTrack) && idLikedList? HttpMethod.DELETE: HttpMethod.POST );
+    };
       fetchRequest(); 
    
     }
@@ -52,10 +52,10 @@ const handleClick = () => {
           const response = await request(`/user/me/tracks`);
           const trackList = await response.json();
        
-         if (trackList.data.length >0){ const parsed:TrackData[] = trackList.data.map(parseDeezerTrack);
+          const parsed:TrackData[] = trackList.data.length >0? trackList.data.map(parseDeezerTrack):[];
           const id = parsed.map((item) => item.id);
     
-          setidLikedList(id)}
+          setidLikedList(id)
         };
         fetchRequest();
       }, [authKey]);
