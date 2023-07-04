@@ -34,31 +34,47 @@ useEffect(() => {
 
   // console.log(lovedTracks)
 
-  const handleClick = () => {
-    setBooleanClick(!booleanClick)
-    console.log(booleanClick)
+
+  
+  // const handleClick = () => {
+   
+  //     setIdLiked(selectedTrack); 
+  //     const fetchRequest = async () => {
+  //       await request(`/playlist/${lovedTracks}/tracks&songs=${selectedTrack}`, idLikedList.includes(selectedTrack) && idLikedList? HttpMethod.DELETE: HttpMethod.POST );
+  //     };
+  //       fetchRequest(); 
+     
+  //     }
+  
+  const handleClick = useCallback( ( ) => {
     setIdLiked(selectedTrack); 
     const fetchRequest = async () => {
       await request(`/playlist/${lovedTracks}/tracks&songs=${selectedTrack}`, idLikedList.includes(selectedTrack) && idLikedList? HttpMethod.DELETE: HttpMethod.POST );
+      update()
     };
-      fetchRequest(); 
-   
-    }
+    fetchRequest(); 
+
+    },[selectedTrack,request,lovedTracks,idLikedList,idLiked,HttpMethod]
+ 
+  ) 
   
    
+  const update = async () => {
+    const response = await request(`/user/me/tracks`);
+    const trackList = await response.json();
+ console.log('lovedTracks')
+    const parsed:TrackData[] = trackList.data.length >0? trackList.data.map(parseDeezerTrack):[];
+    const id = parsed.map((item) => item.id);
+console.log('lovedTracks')
+    setidLikedList(id);
+ 
+  };
+     
       useEffect(() => {
-      
-        const fetchRequest = async () => {
-          const response = await request(`/user/me/tracks`);
-          const trackList = await response.json();
-       
-          const parsed:TrackData[] = trackList.data.length >0? trackList.data.map(parseDeezerTrack):[];
-          const id = parsed.map((item) => item.id);
-    
-          setidLikedList(id)
-        };
-        fetchRequest();
-      }, [authKey]);
+        update() 
+
+      },[])
+
 return(
     <>
    
