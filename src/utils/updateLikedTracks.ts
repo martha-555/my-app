@@ -4,10 +4,9 @@ import { parseDeezerTrack } from "./deezer";
 type Props = {
     updateState:React.Dispatch<React.SetStateAction<number[]>>,
     request:Function,
-    likedList?: React.Dispatch<React.SetStateAction<TrackData[] >> ,
 }
 
-export const updateLikedTracks =({updateState,request,likedList}:Props) => {
+export const updateLikedTracks =({updateState,request}:Props) => {
     const updateTracks = async () => {
         const response = await request(`/user/me/tracks`);
         const trackList = await response.json();
