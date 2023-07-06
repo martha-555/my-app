@@ -19,19 +19,6 @@ const SearchTracks = () => {
   let [searchParams, setSearchParams] = useSearchParams({});
   const fetchRequest = useDeezerRequest();
 
-  // const searchRequest = () => {
-  //   if (searchParams.get("q")) {
-  //     const requestFetch = async () => {
-  //       const response = await fetchRequest(
-  //         encodeURI(`/search?q=${searchParams.get("q")}`)
-  //       );
-  //       const list = await response.json();
-  //       setTracks(list.data);
-  //     };
-  //     requestFetch();
-  //   }
-  // };
-
 const searchRequest = useCallback(() => {
   if (searchParams.get("q")) {
     const requestFetch = async () => {

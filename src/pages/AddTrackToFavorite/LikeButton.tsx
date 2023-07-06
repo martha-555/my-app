@@ -39,9 +39,8 @@ useEffect(() => {
     fetchRequest(); 
 
     },[selectedTrack,request,lovedTracks,idLikedList,idLiked,HttpMethod,authKey]
- 
   ) 
-  
+
 return(
     <>
      <button id={selectedTrack.toString()} onClick={handleClick} className={ idLikedList.includes(+selectedTrack)?classes.isLiked:''}>

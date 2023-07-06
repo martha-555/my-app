@@ -23,6 +23,7 @@ const [onClick, setOnClick] = useState<boolean> (false)
 const [selectedTrack, setSelectedTrack] = useState(0)
 const [idLikedList, setidLikedList] = useState<number[]>([])
 let [searchParams, setSearchParams] = useSearchParams({});
+const ifTracksIsTrue = tracks &&  tracks.length  > 0 && (idLikedList.length > 0 || searchParams.get("q"));
 const request = useDeezerRequest();
    
     useEffect(() => {
@@ -37,7 +38,7 @@ setOnClick(!onClick)
 
   return (
     <div>
-      {tracks &&  tracks.length  > 0 && (idLikedList.length > 0 || searchParams.get("q")) ? (
+      {ifTracksIsTrue ? (
         tracks.map((item) => (
           <Track track={item} key={item.id}> 
           <LikeButton selectedTrack={+item.id} likedList={idLikedList} />
