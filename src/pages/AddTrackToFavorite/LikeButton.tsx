@@ -18,7 +18,6 @@ type Playlist = {
     title:string
   }
 const LikeButton = ({selectedTrack,likedList}:Props) =>{
-
 const [idLikedList, setidLikedList] = useState<number[]>(likedList)
 const [idLiked,setIdLiked] = useState<number>(0)
 const [lovedTracks, setLovedTracks] = useState<number>()

@@ -81,7 +81,7 @@ const searchRequest = useCallback(() => {
         />
         <button onClick={errorHandler}>Ok</button>
       </div>
-      <AddTrackToFavorite tracks={tracks} error={error} />
+      <AddTrackToFavorite tracks={tracks} error={error} ><button>Додати в плейлист</button></AddTrackToFavorite>
     </PageWrapper>
   );
 };
