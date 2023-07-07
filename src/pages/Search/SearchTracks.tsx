@@ -1,15 +1,13 @@
 /** @format */
 
 import { useSearchParams } from "react-router-dom";
-import Tracklist from "../../components/Tracklist/Tracklist";
-
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import classes from "./styles.module.scss";
 import AddTrackToFavorite from "../AddTrackToFavorite/AddTrackToFavorite";
-import { request } from "http";
+
 
 
 const SearchTracks = () => {
@@ -68,7 +66,7 @@ const searchRequest = useCallback(() => {
         />
         <button onClick={errorHandler}>Ok</button>
       </div>
-      <AddTrackToFavorite tracks={tracks} error={error} ><button>Додати в плейлист</button></AddTrackToFavorite>
+      <AddTrackToFavorite tracks={tracks} error={error} />
     </PageWrapper>
   );
 };

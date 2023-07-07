@@ -1,20 +1,25 @@
 /** @format */
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TrackData } from "../../types/deezer";
 
 import { formatSeconds } from "../../utils/time";
 import PlayButton from "../PlayButton/PlayButton";
 import classes from "./styles.module.scss";
 import { PlayerContext } from "../../feautures/player/playerProvider";
+import LikeButton from "../../pages/AddTrackToFavorite/LikeButton";
+import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
+import { updateLikedTracks } from "../../utils/updateLikedTracks";
 
 type Props = {
   track: TrackData;
   children?: any;
+  
 };
 
 const Track = ({ track, children }: Props) => {
   const { play, currentTrack, pause, togglePlay } = useContext(PlayerContext);
+  const [selectedTrack, setSelectedTrack] = useState(0);
 
   return (
     <div
@@ -30,6 +35,8 @@ const Track = ({ track, children }: Props) => {
       </div>
       <div className={classes.duration}>{formatSeconds(track.duration)}</div>
       {children}
+
+      <LikeButton selectedTrack={+track.id} />
     </div>
   );
 };
