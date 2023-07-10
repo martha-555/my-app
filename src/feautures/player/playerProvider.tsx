@@ -51,7 +51,8 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   );
   const [subtractTime, setSubtractTime] = useState("");
   const [currentInputValue, setCurrentInputValue] = useState(0);
-
+  const isPlaying = audio.currentTime > 0 && !audio.paused && !audio.ended 
+  && audio.readyState > audio.HAVE_CURRENT_DATA;
 
 
 
@@ -73,20 +74,17 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   
       if (playPromise !== undefined || null) {
         playPromise.then(_ => {
-          audio.play()
+    
+         audio.play()
         })
         .catch(error => {
           console.log(error)
         });
-      }
-
-      //  if (playPromise !== null) {
-      //   audio.play();
-      //   playPromise.catch(() => {console.log('dd')})
-      // } 
-     
+      }     
     };
-    currentTrack && callBack() ;
+    
+
+   currentTrack && callBack() ;
   }, [currentTrack]);
   useEffect(() => {
     audio.onpause = () => setPaused(true);
@@ -101,8 +99,8 @@ const PlayerProvider = (props: { children: ReactElement }) => {
           setCurrentTrack(tracks.find((item) => item.id === id) || null);
         },
         pause: () => {
-          
-          audio.pause();
+         
+          if (currentTrack && audio.readyState === 4)  audio.pause();
         },
 
         next: () => {
@@ -129,8 +127,9 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         },
         currentTrack,
         togglePlay: () => {
-          if (currentTrack) {
+          if (currentTrack && audio.readyState === 4) {
             audio.paused ? audio.play() : audio.pause();
+          
           }
         },
         paused,

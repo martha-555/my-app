@@ -21,7 +21,7 @@ const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
 }
 useEffect(() => {
 
-console.log(currentTrack?.id === selectedTrack)
+// console.log(currentTrack?.id === selectedTrack)
 
 },[isClicked,selectedTrack])
 
