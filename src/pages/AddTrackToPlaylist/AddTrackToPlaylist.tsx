@@ -12,24 +12,23 @@ const [isClicked, setIsClicked] = useState<boolean>(false);
 const [selectedTrack, setSelectedTrack] = useState<number>(0)
 const {currentTrack} = useContext(PlayerContext)
 const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-   
-        setIsClicked(!isClicked)
+    setIsClicked(!isClicked)
     const target = (e.target as HTMLButtonElement);
- setSelectedTrack(+target.id);
-
-
+    setSelectedTrack(+target.id);
+    
+    
 }
 useEffect(() => {
-
+setSelectedTrack(currentTrack?.id||0)
 // console.log(currentTrack?.id === selectedTrack)
 
-},[isClicked,selectedTrack])
+},[isClicked])
 
 
     return(
         <div>
             <button id={currentTrack?.id.toString()} onClick={handleClick}>Додати в плейлист</button>
-          { currentTrack?.id === selectedTrack? <div>kkkkkkkkk</div>:'' }
+          { currentTrack?.id === selectedTrack ? <div>kkkkkkkkk</div>:'' }
          
         </div>
     )
