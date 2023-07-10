@@ -7,6 +7,7 @@ import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import classes from "./styles.module.scss";
 import AddTrackToFavorite from "../AddTrackToFavorite/AddTrackToFavorite";
+import Tracklist from "../../components/Tracklist/Tracklist";
 
 
 
@@ -66,7 +67,7 @@ const searchRequest = useCallback(() => {
         />
         <button onClick={errorHandler}>Ok</button>
       </div>
-      <AddTrackToFavorite tracks={tracks} error={error} />
+      <Tracklist tracks={tracks} error={error} />
     </PageWrapper>
   );
 };

@@ -23,7 +23,7 @@ const Track = ({ track, children }: Props) => {
   const { play, currentTrack, pause, togglePlay } = useContext(PlayerContext);
   const [selectedTrack, setSelectedTrack] = useState(0);
   let [searchParams] = useSearchParams();
-console.log(currentTrack)
+
 
   return (
     <div
@@ -41,7 +41,7 @@ console.log(currentTrack)
       {children}
 
       <LikeButton selectedTrack={+track.id} />
-      {searchParams.get("q")?<AddTrackToPlaylist currentTrack={selectedTrack}/>:'' }
+      {searchParams.get("q")?<AddTrackToPlaylist />:'' }
     </div>
   );
 };

@@ -52,7 +52,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   const [subtractTime, setSubtractTime] = useState("");
   const [currentInputValue, setCurrentInputValue] = useState(0);
 
-  const controller = new AbortController();
+
 
 
   useEffect(() => {
@@ -101,6 +101,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
           setCurrentTrack(tracks.find((item) => item.id === id) || null);
         },
         pause: () => {
+          
           audio.pause();
         },
 
