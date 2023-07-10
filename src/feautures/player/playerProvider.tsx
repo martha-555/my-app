@@ -112,7 +112,6 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         back: () => {
           let index =
             tracks.findIndex((item) => currentTrack?.id === item.id) - 1;
-          index--;
           if (index < 0) index = tracks.length - 1;
           setCurrentTrack(tracks[index]);
         },
