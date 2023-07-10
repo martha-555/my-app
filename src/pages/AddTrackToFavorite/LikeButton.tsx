@@ -22,7 +22,7 @@ const LikeButton = ({selectedTrack}:Props) =>{
 const [idLikedList, setidLikedList] = useState<number[]>([])
 const [idLiked,setIdLiked] = useState<number>(0)
 const [lovedTracks, setLovedTracks] = useState<number>()
-let [searchParams] = useSearchParams();
+
 const { authKey } = useContext(authContext);
 const request = useDeezerRequest();
 const playlists:Playlist[] = useFetchUsersPlaylists();
@@ -51,7 +51,7 @@ return(
      <button id={selectedTrack.toString()} onClick={handleClick} className={ idLikedList.includes(+selectedTrack)?classes.isLiked:''}>
           	&#10084;  
             </button>
-            {searchParams.get("q")?<AddTrackToPlaylist currentTrack={selectedTrack}/>:'' }
+          
     </>
 )
 

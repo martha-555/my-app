@@ -10,6 +10,8 @@ import { PlayerContext } from "../../feautures/player/playerProvider";
 import LikeButton from "../../pages/AddTrackToFavorite/LikeButton";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { updateLikedTracks } from "../../utils/updateLikedTracks";
+import { useSearchParams } from "react-router-dom";
+import AddTrackToPlaylist from "../../pages/AddTrackToPlaylist/AddTrackToPlaylist";
 
 type Props = {
   track: TrackData;
@@ -20,6 +22,8 @@ type Props = {
 const Track = ({ track, children }: Props) => {
   const { play, currentTrack, pause, togglePlay } = useContext(PlayerContext);
   const [selectedTrack, setSelectedTrack] = useState(0);
+  let [searchParams] = useSearchParams();
+console.log(currentTrack)
 
   return (
     <div
@@ -37,6 +41,7 @@ const Track = ({ track, children }: Props) => {
       {children}
 
       <LikeButton selectedTrack={+track.id} />
+      {searchParams.get("q")?<AddTrackToPlaylist currentTrack={selectedTrack}/>:'' }
     </div>
   );
 };
