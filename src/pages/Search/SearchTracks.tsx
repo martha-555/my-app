@@ -38,7 +38,7 @@ const searchRequest = useCallback(() => {
   useEffect(() => {
     if (tracks) {
       setError(
-        searchParams.get("q") && tracks.length === 0
+        searchParams.get("q") && tracks?.length === 0
           ? "По Вашому запиту нічого не знайдено"
           : ""
       );

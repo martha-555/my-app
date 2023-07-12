@@ -48,9 +48,9 @@ useEffect(() => {
 
 return(
     <>
-     <button id={selectedTrack.toString()} onClick={handleClick} className={ idLikedList.includes(+selectedTrack)?classes.isLiked:''}>
+     <div id={selectedTrack.toString()} onClick={handleClick} className={ idLikedList.includes(+selectedTrack)?classes.isLiked:''}>
           	&#10084;  
-            </button>
+            </div>
           
     </>
 )

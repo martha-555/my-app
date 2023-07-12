@@ -4,14 +4,10 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { PlayerContext } from "../../feautures/player/playerProvider";
 import classes from "./styles.module.scss";
-import { formatSeconds } from "../../utils/time";
-import classNames from "classnames";
-import { ReactDOM } from "react";
 
 const Player = () => {
   const {

@@ -1,6 +1,6 @@
 /** @format */
 
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TrackData } from "../../types/deezer";
 import Track from "../Track/Track";
 import classes from "./styles.module.scss";
@@ -15,12 +15,16 @@ const Tracklist = ({  tracks, error }: Props) => {
   useEffect(() => {
     setTracklist(tracks);
   }, [tracks]);
+
+  // useEffect(() => {
+  //   document.addEventListener('click',(e) => {
+  //     (e.target as HTMLElement).localName === 'button'? setClickedElement(!clickedElement):setClickedElement(false)})
+  //   },[clickedElement])
+ 
+
   return (
     <div className={classes.container}>
-      {/* {tracks.map((item) => (
-        <Track track={item} key={item.id} />
-      ))} */}
-          {tracks.length  > 0 ? (
+          {tracks?.length  > 0 ? (
         tracks?.map((item) => (
           <Track track={item} key={item.id}/> 
         ))

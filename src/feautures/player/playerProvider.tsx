@@ -51,8 +51,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
   );
   const [subtractTime, setSubtractTime] = useState("");
   const [currentInputValue, setCurrentInputValue] = useState(0);
-  const isPlaying = audio.currentTime > 0 && !audio.paused && !audio.ended 
-  && audio.readyState > audio.HAVE_CURRENT_DATA;
+  
 
 
 
