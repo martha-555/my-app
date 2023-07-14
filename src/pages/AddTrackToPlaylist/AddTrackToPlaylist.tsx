@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import useFetchUsersPlaylists from "../../feautures/api/hooks/deezer/useFetchUsersPlaylists";
+import { Playlist } from "../../types/deezer";
 
 
 type Props ={
@@ -8,7 +10,7 @@ type Props ={
 const AddTrackToPlaylist = ({trackId}:Props) => {
 const [isClicked, setIsClicked] = useState<boolean>(false);
 const [selectedTrack, setSelectedTrack] = useState<number>(0)
-
+const playlists:Playlist[] = useFetchUsersPlaylists();
 
 useEffect(() => {
 

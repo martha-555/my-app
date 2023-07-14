@@ -21,3 +21,8 @@ export type TrackData = {
   id: number;
   title: string;
 };
+
+export type Playlist = {
+  id: number;
+  title:string
+}

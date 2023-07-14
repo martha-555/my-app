@@ -16,12 +16,6 @@ const Tracklist = ({  tracks, error }: Props) => {
     setTracklist(tracks);
   }, [tracks]);
 
-  // useEffect(() => {
-  //   document.addEventListener('click',(e) => {
-  //     (e.target as HTMLElement).localName === 'button'? setClickedElement(!clickedElement):setClickedElement(false)})
-  //   },[clickedElement])
- 
-
   return (
     <div className={classes.container}>
           {tracks?.length  > 0 ? (

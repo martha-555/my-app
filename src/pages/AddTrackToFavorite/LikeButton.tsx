@@ -8,16 +8,15 @@ import { HttpMethod } from "../../feautures/api/types"
 import { updateLikedTracks } from "../../utils/updateLikedTracks"
 import AddTrackToPlaylist from "../AddTrackToPlaylist/AddTrackToPlaylist"
 import { useSearchParams } from "react-router-dom"
+import { Playlist } from "../../types/deezer"
 
 
+// `/playlist/${lovedTracks}/tracks&songs=${selectedTrack}`
 type Props ={
     selectedTrack:number,
 }
 
-type Playlist = {
-    id: number;
-    title:string
-  }
+
 const LikeButton = ({selectedTrack}:Props) =>{
 const [idLikedList, setidLikedList] = useState<number[]>([])
 const [idLiked,setIdLiked] = useState<number>(0)
@@ -38,7 +37,7 @@ useEffect(() => {
   const handleClick = useCallback( () => {
     setIdLiked(selectedTrack); 
     const fetchRequest = async () => {
-      await request(`/playlist/${lovedTracks}/tracks&songs=${selectedTrack}`, idLikedList.includes(selectedTrack) && idLikedList? HttpMethod.DELETE: HttpMethod.POST );
+      await request(`/playlist/tracks&songs=${selectedTrack}`, idLikedList.includes(selectedTrack) && idLikedList? HttpMethod.DELETE: HttpMethod.POST );
       updateLikedTracks({updateState:setidLikedList, request})
     };
     fetchRequest(); 
