@@ -16,7 +16,7 @@ const useFetchUsersPlaylists = () => {
       const response = await request(`/user/me/playlists`);
       const playlistsResponse = await response.json();
 //   console.log(playlistsResponse)
-      setPlaylists(playlistsResponse.data.map((item:any) => ({id: item.id, title: item.title}) ));
+      setPlaylists(playlistsResponse?.data.map((item:any) => ({id: item.id, title: item.title}) ));
     };
 
     fetchRequest();

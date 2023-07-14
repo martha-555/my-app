@@ -11,10 +11,9 @@ import AddTrackToPlaylist from "../../pages/AddTrackToPlaylist/AddTrackToPlaylis
 
 type Props = {
   track: TrackData;
-  children?: any;
 };
 
-const Track = ({ track, children }: Props) => {
+const Track = ({ track }: Props) => {
   const { play, currentTrack, togglePlay } = useContext(PlayerContext);
   let [searchParams] = useSearchParams();
 
@@ -33,8 +32,6 @@ const Track = ({ track, children }: Props) => {
         <span>{track.artist.name}</span>
       </div>
       <div className={classes.duration}>{formatSeconds(track.duration)}</div>
-      {children}
-
       <LikeButton selectedTrack={+track.id} />
     </div>
       {searchParams.get("q")?<AddTrackToPlaylist trackId={track.id} />:'' }
