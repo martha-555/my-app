@@ -32,8 +32,8 @@ const Track = ({ track }: Props) => {
         <span>{track.artist.name}</span>
       </div>
       <div className={classes.duration}>{formatSeconds(track.duration)}</div>
-      <LikeButton selectedTrack={+track.id} />
     </div>
+      <LikeButton selectedTrack={+track.id} />
       {searchParams.get("q")?<AddTrackToPlaylist trackId={track.id} />:'' }
     </div>
   );
