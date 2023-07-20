@@ -1,19 +1,25 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useFetchUsersPlaylists from "../../feautures/api/hooks/deezer/useFetchUsersPlaylists";
-import { Playlist } from "../../types/deezer";
-
+import { Playlist, TrackData } from "../../types/deezer";
+import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
+import { HttpMethod } from "../../feautures/api/types";
+import { parseDeezerTrack } from "../../utils/deezer";
 
 type Props ={
-    trackId:any 
+    trackId:number 
 }
 
 const AddTrackToPlaylist = ({trackId}:Props) => {
 const [isClicked, setIsClicked] = useState<boolean>(false);
 const [selectedTrack, setSelectedTrack] = useState<number>(0)
 const playlists:Playlist[] = useFetchUsersPlaylists();
+const [message, setMessage] = useState<string>('')
+const [show, setShow] = useState(true)
+
+const playlistsWithoutLiked = playlists.filter(item => item.is_loved_track === false )
+const request = useDeezerRequest();
 
 useEffect(() => {
-
 const handleClick = (e:Event) => {
     const target = (e.target as HTMLButtonElement);
     selectedTrack === trackId?  setIsClicked(!isClicked):setIsClicked(true);
@@ -25,10 +31,37 @@ const handleClick = (e:Event) => {
 
 },[isClicked,selectedTrack])
 
+const addSongToPlaylist = useCallback(async (e:React.MouseEvent<HTMLElement>) => {
+  setShow(true)
+        const target = e.target as HTMLElement;
+
+        const response = await request( `/playlist/${target.id}/tracks`);
+        const tracks = await response.json();
+        const parsed:TrackData[] = tracks?.data?.map(parseDeezerTrack); 
+        const idInPlaylist = parsed.filter(item => item.id === trackId);
+
+       idInPlaylist?.length > 0?  setMessage('Вже є у плейлисті'): await request( `/playlist/${target.id}/tracks&songs=${trackId}`, HttpMethod.POST) &&  setMessage('Трек додано');
+
+       
+},[trackId,message,show]) 
+useEffect(() => {
+    const timeId = setTimeout(() => {
+        setShow(false)
+      }, 2000)
+    
+      return () => {
+        clearTimeout(timeId)
+      }
+},[addSongToPlaylist])
+
+
     return(
         <div>  
-            <button id={trackId}  >Додати в плейлист</button>
-          { selectedTrack === trackId && isClicked ? <div>kkkkkkkkk</div>: false } 
+           {show? <div>{message} </div>: null }
+            <button id={trackId.toString()}  >Додати в плейлист</button>
+          { selectedTrack === trackId && isClicked ? <div> {playlistsWithoutLiked.map((item) => 
+            <div id={item.id.toString()} onClick={addSongToPlaylist} key={item.id} >{item.title}</div>
+           )} </div>: false } 
         </div>
     )
 }

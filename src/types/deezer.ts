@@ -24,5 +24,6 @@ export type TrackData = {
 
 export type Playlist = {
   id: number;
-  title:string
+  title:string;
+  is_loved_track:boolean
 }
