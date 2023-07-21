@@ -15,15 +15,19 @@ const [selectedTrack, setSelectedTrack] = useState<number>(0)
 const playlists:Playlist[] = useFetchUsersPlaylists();
 const [message, setMessage] = useState<string>('')
 const [show, setShow] = useState(true)
+const [clickedOption, setclickedOption] = useState<boolean>(false)
+const [clickedPlaylists, setclickedPlaylists] = useState<boolean>(false);
 
-const playlistsWithoutLiked = playlists.filter(item => item.is_loved_track === false )
+const playlistsWithoutLiked = playlists?.filter(item => item.is_loved_track === false )
 const request = useDeezerRequest();
 
 useEffect(() => {
 const handleClick = (e:Event) => {
     const target = (e.target as HTMLButtonElement);
-    selectedTrack === trackId?  setIsClicked(!isClicked):setIsClicked(true);
-  setSelectedTrack(+target.id); 
+    setSelectedTrack(+target.id); 
+    selectedTrack === trackId?  setIsClicked(!isClicked) :setIsClicked(true);
+    selectedTrack === trackId? setclickedOption(!clickedOption) : setIsClicked(true)
+    
 }
   
     document.addEventListener("click", handleClick);
@@ -47,21 +51,23 @@ const addSongToPlaylist = useCallback(async (e:React.MouseEvent<HTMLElement>) =>
 useEffect(() => {
     const timeId = setTimeout(() => {
         setShow(false)
-      }, 2000)
+      }, 3000)
     
       return () => {
         clearTimeout(timeId)
       }
 },[addSongToPlaylist])
 
-
     return(
-        <div>  
+        <div >  
            {show? <div>{message} </div>: null }
-            <button id={trackId.toString()}  >Додати в плейлист</button>
-          { selectedTrack === trackId && isClicked ? <div> {playlistsWithoutLiked.map((item) => 
+           <button id={trackId.toString()} >...</button>
+          { selectedTrack === trackId && isClicked?  <div onClick={() => {setclickedPlaylists(!clickedPlaylists)}} id={trackId.toString()}  >Додати в плейлист
+          </div>:null }
+          
+          {  clickedPlaylists  ? <div> {playlistsWithoutLiked.map((item) => 
             <div id={item.id.toString()} onClick={addSongToPlaylist} key={item.id} >{item.title}</div>
-           )} </div>: false } 
+           )} </div>: false }
         </div>
     )
 }

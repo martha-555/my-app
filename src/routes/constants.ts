@@ -14,5 +14,9 @@ const routes: Routes[] = [
     name: "albums",
     path: "/albums",
   },
+  {
+    name: "playlists",
+    path: "/playlists",
+  },
 ];
 export { routes };
