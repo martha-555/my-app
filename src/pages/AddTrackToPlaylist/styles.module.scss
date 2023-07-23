@@ -1,8 +1,17 @@
+/** @format */
+
 .showList {
-    background: red;
-    height: 20px;
-    width: 50px;
+  background: red;
+  height: 20px;
+  width: 50px;
 }
 .hideList {
-    display: none;
+  display: none;
+}
+.addToPlaylist {
+  border: 1px solid black;
+  width: fit-content;
+}
+.options {
+  border: 1px solid black;
 }
