@@ -7,13 +7,13 @@ import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest"
 import { HttpMethod } from "../../feautures/api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
 import classes from "./styles.module.scss";
+import classNames from "classnames";
 
 type Props = {
   trackId: number;
 };
 
 const TracksOptions = ({ trackId }: Props) => {
-  const [isClicked, setIsClicked] = useState<boolean>(false);
   const [selectedTrack, setSelectedTrack] = useState<number>(0);
   const playlists: Playlist[] = useFetchUsersPlaylists();
   const [message, setMessage] = useState<string>("");
@@ -30,20 +30,18 @@ const TracksOptions = ({ trackId }: Props) => {
     const handleClick = (e: Event) => {
       const target = e.target as HTMLButtonElement;
       setSelectedTrack(+target.id);
-
-      selectedTrack === trackId ? setIsClicked(!isClicked) : setIsClicked(true);
-      selectedTrack === trackId && target.className === "styles_options__HV1mZ"
+      selectedTrack === trackId && target.className === "options"
         ? setclickedOption(!clickedOption)
-        : setIsClicked(true);
+        : setclickedOption(true);
       selectedTrack === trackId &&
-      target.className === "styles_addToPlaylist__pBZNo"
+      target.className === "addToPlaylist"
         ? setclickedPlaylists(!clickedPlaylists)
         : setclickedPlaylists(false);
     };
 
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
-  }, [isClicked, selectedTrack, clickedOption, clickedPlaylists, trackId]);
+  }, [ selectedTrack, clickedOption, clickedPlaylists, trackId]);
 
   const addSongToPlaylist = useCallback(
     async (e: React.MouseEvent<HTMLElement>) => {
@@ -73,15 +71,14 @@ const TracksOptions = ({ trackId }: Props) => {
       clearTimeout(timeId);
     };
   }, [addSongToPlaylist]);
-
   return (
     <div>
       {show ? <div>{message} </div> : null}
-      <button className={classes.options} id={trackId.toString()}>
+      <button className='options' id={trackId.toString()}>
         ...
       </button>
-      {selectedTrack === trackId && isClicked ? (
-        <div className={classes.addToPlaylist} id={trackId.toString()}>
+      {selectedTrack === trackId && clickedOption ? (
+        <div className='addToPlaylist' id={trackId.toString()}>
           Додати в плейлист
         </div>
       ) : null}
