@@ -6,6 +6,7 @@ import classes from './styles.module.scss'
 import { HttpMethod } from "../../feautures/api/types"
 import { updateLikedTracks } from "../../utils/updateLikedTracks"
 
+
 // `/playlist/${lovedTracks}/tracks&songs=${selectedTrack}`
 type Props ={
     selectedTrack:number,
@@ -36,7 +37,7 @@ const request = useDeezerRequest();
 
 return(
     <>
-     <div id={selectedTrack.toString()} onClick={handleClick} className={ idLikedList?.includes(+selectedTrack)?classes.isLiked:''}>
+     <div  onClick={handleClick} className={ idLikedList?.includes(+selectedTrack)?classes.isLiked:classes.notClicked}>
           	&#10084;  
             </div>      
     </>
