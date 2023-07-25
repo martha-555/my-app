@@ -1,12 +1,12 @@
 /** @format */
 import Tracklist from "../../components/Tracklist/Tracklist";
-import useFetchFavoriteTracks from "../../feautures/api/hooks/deezer/useFetchFavoriteTracks";
+import useFetchTrackList from "../../feautures/api/hooks/deezer/useFetchTrackList";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import AddTrackToFavorite from "../AddTrackToFavorite/AddTrackToFavorite";
 
 const FavoriteTracks = () => {
 
-const tracks =  useFetchFavoriteTracks();
+const tracks =  useFetchTrackList( {path:'/user/me/tracks'});
 
   return (
     <div  >
