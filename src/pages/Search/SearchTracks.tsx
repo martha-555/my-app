@@ -15,7 +15,7 @@ const SearchTracks = () => {
   const [tracks, setTracks] = useState<TrackData[]>([]);
   const [error, setError] = useState<string>("");
 
-  let [searchParams, setSearchParams] = useSearchParams({});
+  const [searchParams, setSearchParams] = useSearchParams({});
   const fetchRequest = useDeezerRequest();
 
 const searchRequest = useCallback(() => {
