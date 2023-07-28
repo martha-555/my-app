@@ -2,8 +2,6 @@
 import classes from "./styles.module.scss";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../routes/constants";
-import { useState } from "react";
-import classNames from "classnames";
 
 const Menu = () => {
   const navigate = useNavigate();

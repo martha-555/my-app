@@ -6,10 +6,10 @@ const routes: Routes[] = [
     name: "favorite",
     path: "/favorite",
   },
-  {
-    name: "search",
-    path: "/search",
-  },
+  // {
+  //   name: "search",
+  //   path: "/search",
+  // },
   {
     name: "albums",
     path: "/albums",

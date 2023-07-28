@@ -47,7 +47,8 @@ useEffect(() => {
     }
 
   return (
-    <PageWrapper>
+//  <PageWrapper>
+<div>
       <div className={classes.inputBlock}>
         <input
           type="text"
@@ -64,7 +65,8 @@ useEffect(() => {
         <button onClick={buttonOnClick}>Ok</button>
       </div>
       <Tracklist tracks={tracks} error={error} />
-    </PageWrapper>
+      </div>
+      // </PageWrapper>
   );
 };
 export default SearchTracks;
