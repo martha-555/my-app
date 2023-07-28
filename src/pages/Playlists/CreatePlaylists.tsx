@@ -23,7 +23,6 @@ const CreatePlaylists = () => {
     const [searchParams, setSearchParams] = useSearchParams({});
 
 const handleClick = () => {
-    console.log(name)
     request(name); 
     // updateUsersPlaylists({updateState: setPlaylists,request: deezerRequest})
 }
@@ -37,8 +36,6 @@ useEffect(() => {
 },[selectedPlaylist])
 
 const trackList = useFetchTrackList({path:`/playlist/${selectedPlaylist}`})
-
-console.log({trackList})
 
     return(
         <div>
