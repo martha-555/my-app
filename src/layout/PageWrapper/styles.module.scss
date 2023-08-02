@@ -7,13 +7,12 @@
 
 .content {
   overflow-y: auto;
-  height: 100%;
-  padding: 10px;
   flex: 1;
 }
 
 .rightSide {
   display: flex;
+  height: 100vh;
   flex-direction: column;
   flex: 1;
 }

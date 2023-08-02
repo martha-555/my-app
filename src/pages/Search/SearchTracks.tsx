@@ -8,17 +8,18 @@ import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest"
 import classes from "./styles.module.scss";
 import Tracklist from "../../components/Tracklist/Tracklist";
 
+type Props = {
+  children?:JSX.Element
+}
 
-
-const SearchTracks = () => {
+const SearchTracks = ({children}:Props) => {
   const [tracks, setTracks] = useState<TrackData[]>([]);
   const [error, setError] = useState<string>("");
 const [inputValue, setInputValue] = useState<any>('')
   const [searchParams, setSearchParams] = useSearchParams({});
   const fetchRequest = useDeezerRequest();
 
-const searchRequest = 
-  () => {
+const searchRequest =  () => {
     if (searchParams.get("q")) {
       const requestFetch = async () => {
         const response = await fetchRequest(
@@ -48,7 +49,7 @@ useEffect(() => {
 
   return (
 //  <PageWrapper>
-<div>
+<div className={classes.mainContainer}>
       <div className={classes.inputBlock}>
         <input
           type="text"
@@ -64,7 +65,7 @@ useEffect(() => {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-      <Tracklist tracks={tracks} error={error} />
+     { tracks?.length > 0 || error ? <Tracklist tracks={tracks} error={error} />: children}
       </div>
       // </PageWrapper>
   );

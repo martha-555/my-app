@@ -23,7 +23,7 @@ const useDeezerRequest = () => {
       });
       return response;
     },
-    [makeRequest]
+    [makeRequest,authKey]
   );
 };
 

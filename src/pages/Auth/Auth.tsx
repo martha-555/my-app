@@ -11,8 +11,9 @@ import { HttpMethod } from "../../feautures/api/types";
 const Auth = () => {
   const handleClick = () => {
     window.location.replace(
-      "https://connect.deezer.com/oauth/auth.php?app_id=590024&redirect_uri=http://localhost:3000/login&perms=basic_access,email"
+      "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/login&perms=basic_access,email,manage_library,"
     );
+    
   };
 
   const [searchParams] = useSearchParams();
@@ -25,7 +26,7 @@ const Auth = () => {
       const fetchToken = async () => {
         const response = await requestServer({
           payload: {
-            url: `https://connect.deezer.com/oauth/access_token.php?app_id=590024&secret=6ffab1c4182c63b036ce9d37843ace1e&code=${code}`,
+            url: `https://connect.deezer.com/oauth/access_token.php?app_id=624064&secret=11a5835e77a7d217741adf23c059fa9b&code=${code}`,
             method: HttpMethod.GET,
           },
         });

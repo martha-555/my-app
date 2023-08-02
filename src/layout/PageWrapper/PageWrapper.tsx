@@ -15,8 +15,9 @@ const PageWrapper = ({ children }: Props) => {
     <div className={classes.container}>
       <Menu />
       <div className={classes.rightSide}>
-      <SearchTracks/>
-        <div className={classes.content}>{children}</div>
+      <SearchTracks>
+        <div className={classes.content}>{children} </div>
+        </SearchTracks>
         <Player />
       </div>
     </div>

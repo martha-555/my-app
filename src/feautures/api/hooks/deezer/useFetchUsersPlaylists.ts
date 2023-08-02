@@ -16,8 +16,9 @@ const useFetchUsersPlaylists = () => {
       const response = await request(`/user/me/playlists`);
       const playlistsResponse = await response.json();
       const parsed:Playlist[] = playlistsResponse?.data?.map((item:any) => ({id: item.id, title: item.title, is_loved_track: item.is_loved_track}));
-      const withoutLikedTracks = parsed.filter(item => item.is_loved_track === false)
+      const withoutLikedTracks = parsed?.filter(item => item.is_loved_track === false)
       setPlaylists(withoutLikedTracks);
+      // console.log({playlistsResponse})
     };
 
     fetchRequest();
