@@ -1,7 +1,7 @@
 /** @format */
 
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
@@ -18,35 +18,48 @@ const SearchTracks = ({children}:Props) => {
 const [inputValue, setInputValue] = useState<any>('')
   const [searchParams, setSearchParams] = useSearchParams({});
   const fetchRequest = useDeezerRequest();
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-const searchRequest =  () => {
+const searchRequest = useCallback(
+  () => {
     if (searchParams.get("q")) {
       const requestFetch = async () => {
         const response = await fetchRequest(
           encodeURI(`/search?q=${searchParams.get("q")}`)
-        );
+          );
+   response.status === 200 && setIsLoading(true);
         const list = await response.json();
         setTracks(list.data);
-        if ((searchParams.get("q") !== '') && tracks?.length === 0 && inputValue !== '') setError("По Вашому запиту нічого не знайдено")
+      // if  (list?.data.length === 0 && response.status === 200 && searchParams.get("q") !== null) setError("По Вашому запиту нічого не знайдено") 
+     
+        // if ((searchParams.get("q") !== null) && tracks?.length === 0 && inputValue !== '') setError("По Вашому запиту нічого не знайдено")
       };
-      requestFetch();
-    }
+      requestFetch()
   }
+},[searchParams,tracks]
+) 
 useEffect(() => {
 if(searchParams.get("q")) setInputValue(searchParams.get("q"))
 },[])
 
 useEffect(() => {
   if (searchParams.get("q")) searchRequest();
+  if  (searchParams.get('q') === null) setInputValue('');
  
 },[searchParams])
 
+useEffect(() => {
+  tracks.length === 0 && searchParams.get("q") !== null? setError("По Вашому запиту нічого не знайдено") : setError('')
+},[searchParams,tracks])
 
   const buttonOnClick = () =>{
       if (inputValue)  setSearchParams({ q: inputValue });
-      if ( inputValue === '' && tracks?.length === 0 ) setError("Введіть значення");
-    }
+      inputValue === '' && tracks?.length === 0 ? setError("Введіть значення") : setError('') ;
+  }
 
+// console.log({error})
+// console.log(tracks?.length > 0 && searchParams.get('q') !== null)
+// console.log( (tracks?.length > 0 && searchParams.get('q') !== null ) || error)
   return (
 //  <PageWrapper>
 <div className={classes.mainContainer}>
@@ -65,7 +78,7 @@ useEffect(() => {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-     { tracks?.length > 0 || error ? <Tracklist tracks={tracks} error={error} />: children}
+     { (tracks?.length > 0 && searchParams.get('q') !== null) || error ? <Tracklist tracks={tracks} error={error} />: children}
       </div>
       // </PageWrapper>
   );

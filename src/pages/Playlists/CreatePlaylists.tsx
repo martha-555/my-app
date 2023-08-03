@@ -19,21 +19,18 @@ const CreatePlaylists = () => {
     // const [playlists,setPlaylists] = useState<Playlist[]>([])
     const [tracks, setTracks] = useState<TrackData[]>([]);
     const [searchParams, setSearchParams] = useSearchParams({});
-    
-
+    const trackList =  useFetchTrackList({path:`/playlist/${searchParams.get('playlist')}`});
 
     const handleClick =() => {
-        createPlaylist({name,setState:setIdNewPlaylist,request:deezerRequest}); 
-        
+        createPlaylist({name,setState:setIdNewPlaylist,request:deezerRequest});      
 }
-
-    
+  
 const clickedPlaylist = (e:React.MouseEvent<HTMLElement>) => {
 const playlistId = (e.target as HTMLDivElement).id;
 setSearchParams( {'playlist': playlistId })
 }
 
-const trackList =  useFetchTrackList({path:`/playlist/${searchParams.get('playlist')}`});
+
 
 useEffect(() => {
     if (idNewPlaylist) setSearchParams({'playlist': idNewPlaylist.toString()});
@@ -41,8 +38,8 @@ useEffect(() => {
 
 useEffect(() => {
     fetchUsersPlaylists({request:deezerRequest,setState:setAllPlaylists});
+   searchParams.get('playlist') && trackList?.length === 0? setEmpty('Цей плейлист пустий'): setEmpty('');
 
-   searchParams.get('playlist') && trackList?.length === 0? setEmpty('Цей плейлист пустий'): setEmpty('')
 },[trackList,idNewPlaylist])
     
     return(
@@ -54,7 +51,7 @@ useEffect(() => {
 <div className={classes.playlistsContainer}>
                 </div>
 
-    { allPlaylists?.map((item) =><div id={item.id.toString()} className={classes.playlists} key={item.id} onClick={clickedPlaylist}>{item.title} </div> )}
+    { allPlaylists?.map((item) =><div id={item.id.toString()} className={classes.playlists} key={item.id} onClick={clickedPlaylist}><div>{item.title}</div><button>...</button></div> )}
 </div>
  {trackList?
  <div>

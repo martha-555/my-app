@@ -11,7 +11,7 @@ import { HttpMethod } from "../../feautures/api/types";
 const Auth = () => {
   const handleClick = () => {
     window.location.replace(
-      "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/login&perms=basic_access,email,manage_library,"
+      "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
     );
     
   };
