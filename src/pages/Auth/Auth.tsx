@@ -33,12 +33,12 @@ const Auth = () => {
         const res = await response.text();
         if (res == "wrong code") return;
         const accessToken = res.split("=")[1].split("&");
-
+console.log({accessToken})
         updateAuthKey(accessToken[0]);
       };
       fetchToken();
     }
-  }, []);
+  }, [code]);
   return (
     <div>
       <button onClick={handleClick}>Log in</button>

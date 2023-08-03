@@ -1,7 +1,7 @@
 /** @format */
 
 import { useCallback, useEffect, useState } from "react";
-import useFetchUsersPlaylists from "../../feautures/api/hooks/deezer/useFetchUsersPlaylists";
+import fetchUsersPlaylists from "../../feautures/api/hooks/deezer/fetchUsersPlaylists";
 import { Playlist, TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../../feautures/api/types";
@@ -15,7 +15,8 @@ type Props = {
 
 const TracksOptions = ({ trackId }: Props) => {
   const [selectedTrack, setSelectedTrack] = useState<number>(0);
-  const playlists: Playlist[] = useFetchUsersPlaylists();
+  const [playlists, setPlaylists] = useState<Playlist[]>([])
+  // const playlists: Playlist[] = useFetchUsersPlaylists();
   const [message, setMessage] = useState<string>("");
   const [show, setShow] = useState(true);
   const [clickedOption, setclickedOption] = useState<boolean>(false);
@@ -71,6 +72,12 @@ const TracksOptions = ({ trackId }: Props) => {
       clearTimeout(timeId);
     };
   }, [addSongToPlaylist]);
+
+  useEffect(() => {
+    fetchUsersPlaylists({request,setState:setPlaylists});
+    
+},[])
+
   return (
     <div>
       {show ? <div>{message} </div> : null}

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import useFetchUsersPlaylists from "../../feautures/api/hooks/deezer/useFetchUsersPlaylists"
+import fetchUsersPlaylists from "../../feautures/api/hooks/deezer/fetchUsersPlaylists";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper"
 import createPlaylist from "../../utils/createPlaylist";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
@@ -14,15 +14,17 @@ const CreatePlaylists = () => {
     const [empty,setEmpty] = useState<string>('')
     const [name,setName] = useState<string>('')
     const [idNewPlaylist, setIdNewPlaylist] = useState<number>(0)
+    const [allPlaylists, setAllPlaylists] = useState<Playlist[]>([])
     // const [selectedPlaylist, setSelectedPlaylist] = useState<number>(0);
     // const [playlists,setPlaylists] = useState<Playlist[]>([])
     const [tracks, setTracks] = useState<TrackData[]>([]);
     const [searchParams, setSearchParams] = useSearchParams({});
     
-    const playlists:Playlist[] = useFetchUsersPlaylists();
+
 
     const handleClick =() => {
-        createPlaylist({name,setState:setIdNewPlaylist,request:deezerRequest});  
+        createPlaylist({name,setState:setIdNewPlaylist,request:deezerRequest}); 
+        
 }
 
     
@@ -36,7 +38,10 @@ const trackList =  useFetchTrackList({path:`/playlist/${searchParams.get('playli
 useEffect(() => {
     if (idNewPlaylist) setSearchParams({'playlist': idNewPlaylist.toString()});
 },[idNewPlaylist])
+
 useEffect(() => {
+    fetchUsersPlaylists({request:deezerRequest,setState:setAllPlaylists});
+
    searchParams.get('playlist') && trackList?.length === 0? setEmpty('Цей плейлист пустий'): setEmpty('')
 },[trackList,idNewPlaylist])
     
@@ -49,7 +54,7 @@ useEffect(() => {
 <div className={classes.playlistsContainer}>
                 </div>
 
-    { playlists?.map((item) =><div id={item.id.toString()} className={classes.playlists} key={item.id} onClick={clickedPlaylist}>{item.title} </div> )}
+    { allPlaylists?.map((item) =><div id={item.id.toString()} className={classes.playlists} key={item.id} onClick={clickedPlaylist}>{item.title} </div> )}
 </div>
  {trackList?
  <div>
