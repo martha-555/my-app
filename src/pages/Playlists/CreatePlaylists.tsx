@@ -8,6 +8,7 @@ import classes from './styles.module.scss'
 import useFetchTrackList from "../../feautures/api/hooks/deezer/useFetchTrackList";
 import Tracklist from "../../components/Tracklist/Tracklist";
 import { useSearchParams } from "react-router-dom";
+import DeletePlaylist from "./DeletePlaylist";
 
 const CreatePlaylists = () => {
     const deezerRequest = useDeezerRequest()
@@ -27,8 +28,9 @@ const CreatePlaylists = () => {
 }
   
 const clickedPlaylist = (e:React.MouseEvent<HTMLElement>) => {
-const playlistId = (e.target as HTMLDivElement).id;
-setSearchParams( {'playlist': playlistId })
+    const target = e.target as HTMLDivElement;
+const playlistId = target.id;
+if (target.className.includes('optionButton') === false) setSearchParams( {'playlist': playlistId })
 }
 
 
@@ -49,13 +51,11 @@ useEffect(() => {
 <input value={name} type="text" onKeyUp={(e) =>{ if (e.key === "Enter") handleClick() }} onInput={(e) => {setName((e.target as HTMLInputElement).value)}} />
 <button onClick={handleClick}>create playlist</button>
 <div className={classes.playlistsContainer}>
-                </div>
-
-    { allPlaylists?.map((item) =><div id={item.id.toString()} className={classes.playlists} key={item.id} onClick={clickedPlaylist}><div>{item.title}</div><button>...</button></div> )}
+    { allPlaylists?.map((item) =><div id={item.id.toString()} className={classes.playlists} key={item.id} onClick={clickedPlaylist}><div id={item.id.toString()}>{item.title}</div><DeletePlaylist playlistId={item.id}/> </div> )}
+    </div>
 </div>
  {trackList?
  <div>
-    
     <Tracklist tracks={trackList} error=""/>
  </div>  : null }
  {empty? <div>{empty} </div>: null }

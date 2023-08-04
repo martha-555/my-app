@@ -4,12 +4,50 @@
     padding: 10px;
     display: flex;
     justify-content: space-between;
+    width: 25%;
+    height: 25%;
+    position: relative;
 }
 
 .playlistsContainer {
     display: flex;
+justify-content: space-between;
+height: 80vh;
 
+.playlistName{
+    align-self: center;
+    width: 100%;
+    text-align: center;
+}
+.deleteContainer{
+   align-self: end;
+}
 }
 .hide {
     display: none;
+}
+
+.deleteButtonContainer {
+    display: flex;
+    justify-content: end;
+}
+
+.optionButton {
+    width: fit-content;
+    
+}
+
+.delete{
+padding: 5px;
+top: 43%;
+left: 40%;
+background: rgb(227 227 227);
+border: 1px solid rgb(224, 219, 219);
+position: absolute;
+width: 100%;
+text-wrap: nowrap;
+
+    &:hover {
+    background: rgb(224, 219, 219);
+    }
 }
