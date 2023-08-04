@@ -2,7 +2,6 @@
 
 import { useSearchParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
-import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import classes from "./styles.module.scss";
@@ -30,9 +29,6 @@ const searchRequest = useCallback(
    response.status === 200 && setIsLoading(true);
         const list = await response.json();
         setTracks(list.data);
-      // if  (list?.data.length === 0 && response.status === 200 && searchParams.get("q") !== null) setError("По Вашому запиту нічого не знайдено") 
-     
-        // if ((searchParams.get("q") !== null) && tracks?.length === 0 && inputValue !== '') setError("По Вашому запиту нічого не знайдено")
       };
       requestFetch()
   }
@@ -49,17 +45,14 @@ useEffect(() => {
 },[searchParams])
 
 useEffect(() => {
-  tracks.length === 0 && searchParams.get("q") !== null? setError("По Вашому запиту нічого не знайдено") : setError('')
-},[searchParams,tracks])
+  tracks.length === 0 && searchParams.get("q") !== null && isLoading? setError("По Вашому запиту нічого не знайдено") : setError('')
+},[searchParams,tracks,isLoading])
 
   const buttonOnClick = () =>{
-      if (inputValue)  setSearchParams({ q: inputValue });
-      inputValue === '' && tracks?.length === 0 ? setError("Введіть значення") : setError('') ;
+     inputValue? setSearchParams({ q: inputValue }): setSearchParams({});
+      // searchParams.get('q') === 'empty' ? setError("Введіть значення") : setError('') ;
   }
 
-// console.log({error})
-// console.log(tracks?.length > 0 && searchParams.get('q') !== null)
-// console.log( (tracks?.length > 0 && searchParams.get('q') !== null ) || error)
   return (
 //  <PageWrapper>
 <div className={classes.mainContainer}>

@@ -22,7 +22,8 @@ const CreatePlaylists = () => {
     const trackList =  useFetchTrackList({path:`/playlist/${searchParams.get('playlist')}`});
 
     const handleClick =() => {
-        createPlaylist({name,setState:setIdNewPlaylist,request:deezerRequest});      
+        createPlaylist({name,setState:setIdNewPlaylist,request:deezerRequest}); 
+        setName('')     
 }
   
 const clickedPlaylist = (e:React.MouseEvent<HTMLElement>) => {
@@ -39,14 +40,13 @@ useEffect(() => {
 useEffect(() => {
     fetchUsersPlaylists({request:deezerRequest,setState:setAllPlaylists});
    searchParams.get('playlist') && trackList?.length === 0? setEmpty('Цей плейлист пустий'): setEmpty('');
-
 },[trackList,idNewPlaylist])
     
     return(
         <div className={classes.container}>
             <PageWrapper>
                 <div className={(trackList?.length > 0 && searchParams.get('playlist')) || empty ? classes.hide : ''}>
-<input type="text" onChange={(e) => {setName((e.target as HTMLInputElement).value)}} />
+<input value={name} type="text" onKeyUp={(e) =>{ if (e.key === "Enter") handleClick() }} onInput={(e) => {setName((e.target as HTMLInputElement).value)}} />
 <button onClick={handleClick}>create playlist</button>
 <div className={classes.playlistsContainer}>
                 </div>
@@ -58,7 +58,6 @@ useEffect(() => {
     
     <Tracklist tracks={trackList} error=""/>
  </div>  : null }
- {/* {searchParams.get('playlist') && trackList.length === 0? <div>Плейлист пустий</div>: null } */}
  {empty? <div>{empty} </div>: null }
             </PageWrapper>
         </div>
