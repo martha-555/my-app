@@ -28,7 +28,7 @@ const searchRequest = useCallback(
           );
    response.status === 200 && setIsLoading(true);
         const list = await response.json();
-        setTracks(list.data);
+      setTracks(list.data);
       };
       requestFetch()
   }
@@ -50,9 +50,7 @@ useEffect(() => {
 
   const buttonOnClick = () =>{
      inputValue? setSearchParams({ q: inputValue }): setSearchParams({});
-      // searchParams.get('q') === 'empty' ? setError("Введіть значення") : setError('') ;
   }
-
   return (
 //  <PageWrapper>
 <div className={classes.mainContainer}>
@@ -71,7 +69,7 @@ useEffect(() => {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-     { (tracks?.length > 0 && searchParams.get('q') !== null) || error ? <Tracklist tracks={tracks} error={error} />: children}
+     { searchParams.get('q') !== null || error ? <Tracklist tracks={tracks} error={error} />: children}
       </div>
       // </PageWrapper>
   );

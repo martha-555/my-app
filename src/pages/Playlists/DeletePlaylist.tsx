@@ -15,7 +15,6 @@ const DeletePlaylist = ({playlistId}:Props) => {
     const handleClick = (e:Event) => {
     const target = e.target as HTMLButtonElement
     setcheckedPlaylist(+target.id);
-    console.log(target.className)
    checkedPlaylist === playlistId? setOnClick(!onClick): setOnClick(true);
    target.className.includes('optionButton')? setClassName(true): setClassName(false)
     }
