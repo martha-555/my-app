@@ -6,8 +6,8 @@ import { Playlist, TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../../feautures/api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
-import classes from "./styles.module.scss";
-import classNames from "classnames";
+import { useSearchParams } from "react-router-dom";
+
 
 type Props = {
   trackId: number;
@@ -21,6 +21,8 @@ const TracksOptions = ({ trackId }: Props) => {
   const [show, setShow] = useState(true);
   const [clickedOption, setclickedOption] = useState<boolean>(false);
   const [clickedPlaylists, setclickedPlaylists] = useState<boolean>(false);
+  const[searchParams] = useSearchParams();
+
 
   const playlistsWithoutLiked = playlists?.filter(
     (item) => item.is_loved_track === false
@@ -89,7 +91,7 @@ const TracksOptions = ({ trackId }: Props) => {
           Додати в плейлист
         </div>
       ) : null}
-
+{searchParams.get('playlist') && selectedTrack === trackId && clickedOption? <div>Видалити з плейлиста</div> : null}
       {clickedPlaylists && selectedTrack === trackId ? (
         <div>
           {playlistsWithoutLiked.map((item) => (

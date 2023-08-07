@@ -7,7 +7,7 @@ import classes from "./styles.module.scss";
 import { PlayerContext } from "../../feautures/player/playerProvider";
 import LikeButton from "../../pages/AddTrackToFavorite/LikeButton";
 import { useSearchParams } from "react-router-dom";
-import TracksOptions from "../../pages/AddTrackToPlaylist/TracksOptions";
+import TracksOptions from "../../pages/AddAndDeleteTracksFromPlaylist/TracksOptions";
 
 type Props = {
   track: TrackData;
@@ -15,7 +15,7 @@ type Props = {
 
 const Track = ({ track }: Props) => {
   const { play, currentTrack, togglePlay } = useContext(PlayerContext);
-  let [searchParams] = useSearchParams();
+
 
   return (
     <div>
@@ -33,7 +33,7 @@ const Track = ({ track }: Props) => {
         <div className={classes.duration}>{formatSeconds(track.duration)}</div>
       </div>
       <LikeButton selectedTrack={+track.id} />
-      {searchParams.get("q") ? <TracksOptions trackId={track.id} /> : ""}
+      <TracksOptions trackId={track.id} /> 
     </div>
   );
 };
