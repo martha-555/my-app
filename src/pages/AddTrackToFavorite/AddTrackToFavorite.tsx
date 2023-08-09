@@ -14,8 +14,8 @@ const AddTrackToFavorite = ({ tracks, error }: Props) => {
 
   return (
     <div>
-      {tracks.length  > 0 ? (
-        tracks?.map((item) => (
+      {tracks?.length  > 0 ? (
+        tracks.map((item) => (
           <Track track={item} key={item.id}/> 
         ))
       ) : (

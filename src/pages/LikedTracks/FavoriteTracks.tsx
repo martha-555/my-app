@@ -7,7 +7,6 @@ import AddTrackToFavorite from "../AddTrackToFavorite/AddTrackToFavorite";
 const FavoriteTracks = () => {
 
 const tracks =  useFetchTrackList( {path:'/user/me/tracks'});
-
   return (
     <div  >
     <PageWrapper >

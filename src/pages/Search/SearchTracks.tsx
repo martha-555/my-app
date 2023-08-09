@@ -1,7 +1,7 @@
 /** @format */
 
 import { useSearchParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import classes from "./styles.module.scss";
@@ -12,47 +12,39 @@ type Props = {
 }
 
 const SearchTracks = ({children}:Props) => {
+
   const [tracks, setTracks] = useState<TrackData[]>([]);
   const [error, setError] = useState<string>("");
-const [inputValue, setInputValue] = useState<any>('')
+  const [inputValue, setInputValue] = useState<any>('')
   const [searchParams, setSearchParams] = useSearchParams({});
   const fetchRequest = useDeezerRequest();
-  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-const searchRequest = useCallback(
-  () => {
+  useEffect(() => {
     if (searchParams.get("q")) {
+
       const requestFetch = async () => {
-        const response = await fetchRequest(
+      const response = await fetchRequest(
           encodeURI(`/search?q=${searchParams.get("q")}`)
           );
-   response.status === 200 && setIsLoading(true);
-        const list = await response.json();
-      setTracks(list.data);
+          const list = await response.json();
+      list.data.length === 0 && searchParams.get("q")? setError("По Вашому запиту нічого не знайдено") : setError('');
+    setTracks(list.data)
       };
       requestFetch()
   }
-},[searchParams,tracks]
-) 
-useEffect(() => {
-if(searchParams.get("q")) setInputValue(searchParams.get("q"))
-},[])
+  },[searchParams,fetchRequest])
+
 
 useEffect(() => {
-  if (searchParams.get("q")) searchRequest();
-  if  (searchParams.get('q') === null) setInputValue('');
- 
+  searchParams.get("q")? setInputValue(searchParams.get("q")): setInputValue('')
 },[searchParams])
 
-useEffect(() => {
-  tracks.length === 0 && searchParams.get("q") !== null && isLoading? setError("По Вашому запиту нічого не знайдено") : setError('')
-},[searchParams,tracks,isLoading])
 
   const buttonOnClick = () =>{
      inputValue? setSearchParams({ q: inputValue }): setSearchParams({});
   }
+
   return (
-//  <PageWrapper>
 <div className={classes.mainContainer}>
       <div className={classes.inputBlock}>
         <input
@@ -69,9 +61,9 @@ useEffect(() => {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-     { searchParams.get('q') !== null || error ? <Tracklist tracks={tracks} error={error} />: children}
+      
+     { searchParams.get('q')  ? <Tracklist tracks={tracks} error={error} />: children}
       </div>
-      // </PageWrapper>
   );
 };
 export default SearchTracks;
