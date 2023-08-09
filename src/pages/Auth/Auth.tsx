@@ -18,20 +18,20 @@ const Auth = () => {
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
   const { updateAuthKey } = useContext(authContext);
-  const requestServer = useBackendRequest();
+  const [makeRequest] = useBackendRequest<string>();
 
   useEffect(() => {
     if (code) {
       const fetchToken = async () => {
-        const response = await requestServer({
+        const response = await makeRequest({
           payload: {
             url: `https://connect.deezer.com/oauth/access_token.php?app_id=590024&secret=6ffab1c4182c63b036ce9d37843ace1e&code=${code}`,
             method: HttpMethod.GET,
           },
-        });
-        const res = await response.text();
-        if (res == "wrong code") return;
-        const accessToken = res.split("=")[1].split("&");
+        }, async (response) => response.text());
+
+        if (response === "wrong code") return;
+        const accessToken = response.split("=")[1].split("&");
 
         updateAuthKey(accessToken[0]);
       };
