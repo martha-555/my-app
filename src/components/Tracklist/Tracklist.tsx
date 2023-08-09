@@ -7,25 +7,19 @@ import classes from "./styles.module.scss";
 import { PlayerContext } from "../../feautures/player/playerProvider";
 type Props = {
   tracks: TrackData[];
-  error: string;
 };
 
-const Tracklist = ({  tracks, error }: Props) => {
+const Tracklist = ({ tracks }: Props) => {
   const { setTracklist } = useContext(PlayerContext);
   useEffect(() => {
     setTracklist(tracks);
   }, [tracks]);
 
- 
   return (
     <div className={classes.container}>
-          {tracks?.length  > 0 ? (
-        tracks?.map((item) => (
-          <Track track={item} key={item.id}/> 
-        ))
-      ) : (
-        <div>{error} </div>
-      )}
+      {tracks?.map((item) => (
+        <Track track={item} key={item.id} />
+      ))}
     </div>
   );
 };
