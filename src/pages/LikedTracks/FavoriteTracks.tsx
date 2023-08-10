@@ -12,12 +12,14 @@ import Track from "../../components/Track";
 import Tracklist from "../../components/Tracklist/Tracklist";
 
 const FavoriteTracks = () => {
-  const tracks = useFetchFavoriteTracks();
-  console.log({ tracks });
+  const {data, isLoading} = useFetchFavoriteTracks();
+  console.log({ data });
 
   return (
     <PageWrapper>
-      <Tracklist tracks={tracks} />
+      {
+        isLoading ? <span>loading...</span> : <Tracklist tracks={data} />
+      }
     </PageWrapper>
   );
 };

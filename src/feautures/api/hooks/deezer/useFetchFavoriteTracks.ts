@@ -1,24 +1,21 @@
 /** @format */
 
-import { useContext, useEffect, useState } from "react";
-import { authContext } from "../../../auth/authProvider";
+import { useEffect } from "react";
 import useDeezerRequest from "./useDeezerRequest";
 import { TrackData } from "../../../../types/deezer";
 import { parseDeezerTrack } from "../../../../utils/deezer";
+import {BackendRequestState} from "../useBackendRequest";
 
-const useFetchFavoriteTracks = () => {
-  const { authKey } = useContext(authContext);
-  const request = useDeezerRequest();
-  const [tracks, setTracks] = useState<TrackData[]>([]);
+const useFetchFavoriteTracks = (): BackendRequestState<TrackData[]> => {
+  const [makeDeezerRequest, state] = useDeezerRequest<TrackData[]>();
+
   useEffect(() => {
-    const fetchRequest = async () => {
-      const response = await request(`/user/me/tracks`);
-      const trackList = await response.json();
-      setTracks(trackList.data.map(parseDeezerTrack));
-    };
+    makeDeezerRequest({path: `/user/me/tracks`, parser: async (response) => {
+        const trackList = await response.json();
+        return trackList.data.map(parseDeezerTrack);
+      }})
+  }, [ makeDeezerRequest]);
 
-    fetchRequest();
-  }, [authKey, request]);
-  return tracks;
+  return state;
 };
 export default useFetchFavoriteTracks;

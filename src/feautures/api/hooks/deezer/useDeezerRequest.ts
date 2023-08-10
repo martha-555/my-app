@@ -1,30 +1,34 @@
 /** @format */
 
 import { useCallback, useContext } from "react";
-import { HttpMethod } from "../../types";
-import useBackendRequest from "../useBackendRequest";
+import { HttpMethod} from "../../types";
+import useBackendRequest, {BackendRequestState, BackendResponseParser} from "../useBackendRequest";
 import { authContext } from "../../../auth/authProvider";
 
 const DEEZER_API_URL = "https://api.deezer.com";
 
-const useDeezerRequest = () => {
-  const makeRequest = useBackendRequest();
+type RequestMaker<Data> = (params: {path: string,  method?: HttpMethod, parser: BackendResponseParser<Data>}) => Promise<Data>;
+type UseDeezerRequestReturn<Data> = [RequestMaker<Data>, BackendRequestState<Data>];
+
+const useDeezerRequest = <Data>(): UseDeezerRequestReturn<Data> => {
+  const [makeRequest, state] = useBackendRequest<Data>();
   const { authKey } = useContext(authContext);
 
-  return useCallback(
-    async (path: string, method: HttpMethod = HttpMethod.GET) => {
-      const response = makeRequest({
+  const makeDeezerRequest = useCallback<RequestMaker<Data>>(
+    async ({path, parser, method = HttpMethod.GET}) => {
+      return makeRequest({
         payload: {
           method: method, // /search?q=123  /tracks
           url: ` ${DEEZER_API_URL}${path}${
             path.includes("?") ? "&" : "?"
           }access_token=${authKey} `,
         },
-      });
-      return response;
+      }, parser);
     },
     [makeRequest]
   );
+
+  return [makeDeezerRequest, state];
 };
 
 export default useDeezerRequest;
