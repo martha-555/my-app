@@ -51,12 +51,12 @@ const CreatePlaylists = () => {
     // setName("");
   };
 
-  const clickedPlaylist = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLDivElement;
-    const playlistId = target.id;
-    if (target.className.includes("optionButton") === false)
-      setSearchParams({ playlist: playlistId });
-  };
+  // const clickedPlaylist = (e: React.MouseEvent<HTMLElement>) => {
+  //   const target = e.target as HTMLDivElement;
+  //   const playlistId = target.id;
+  //   if (target.className.includes("optionButton") === false)
+  //     setSearchParams({ playlist: playlistId });
+  // };
 
   useEffect(() => {
     // trackList?.length === 0 && searchParams.get("playlist")? setEmpty("Цей плейлист пустий") : setEmpty('');

@@ -18,6 +18,7 @@ import FavoriteTracks from "./pages/LikedTracks/FavoriteTracks";
 import PlayerProvider from "./feautures/player/playerProvider";
 import CreatePlaylists from "./pages/Playlists/CreatePlaylists";
 import LikedTracksProvider from "./feautures/likedTracks/likedTracksProvider";
+import Playlists from "./pages/Playlists/Playlists";
 
 const authRouters = createBrowserRouter([
   {
@@ -34,7 +35,7 @@ const authRouters = createBrowserRouter([
   // },
   {
     path: "/playlists",
-    element: <CreatePlaylists />,
+    element: <Playlists />,
   },
   {
     path: "*",
