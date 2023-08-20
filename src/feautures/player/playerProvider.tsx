@@ -40,20 +40,16 @@ export const PlayerContext = createContext<PlayerContextType>({
 
 const audio: HTMLAudioElement = new Audio();
 
-
 const PlayerProvider = (props: { children: ReactElement }) => {
   const [tracks, setTracks] = useState<TrackData[]>([]);
   const [currentTrack, setCurrentTrack] = useState<TrackData | null>(null);
   const [paused, setPaused] = useState(true);
-  const getMp3 = useGetMp3();
+  const [getMp3] = useGetMp3();
   const [currentTime, setCurrentTime] = useState<string | number>(
     audio.currentTime
   );
   const [subtractTime, setSubtractTime] = useState("");
   const [currentInputValue, setCurrentInputValue] = useState(0);
-  
-
-
 
   useEffect(() => {
     if (currentTrack) {
@@ -67,23 +63,22 @@ const PlayerProvider = (props: { children: ReactElement }) => {
       const response = await getMp3(
         `${currentTrack?.artist.name} ${currentTrack?.title}`
       );
-      const json = await response.json();
-      audio.src = await json.data.mp3;
-      const playPromise = audio.play();
-  
-      if (playPromise !== undefined || null) {
-        playPromise.then(_ => {
-    
-         audio.play()
-        })
-        .catch(error => {
-          console.log(error)
-        });
-      }     
-    };
-    
 
-   currentTrack && callBack() ;
+      audio.src = response;
+      const playPromise = audio.play();
+
+      if (playPromise !== undefined || null) {
+        playPromise
+          .then((_) => {
+            audio.play();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    };
+
+    currentTrack && callBack();
   }, [currentTrack]);
   useEffect(() => {
     audio.onpause = () => setPaused(true);
@@ -94,12 +89,10 @@ const PlayerProvider = (props: { children: ReactElement }) => {
     <PlayerContext.Provider
       value={{
         play: (id) => {
-      
           setCurrentTrack(tracks.find((item) => item.id === id) || null);
         },
         pause: () => {
-         
-          if (currentTrack && audio.readyState === 4)  audio.pause();
+          if (currentTrack && audio.readyState === 4) audio.pause();
         },
 
         next: () => {
@@ -119,7 +112,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
             audio.currentTime = (currentTrack?.duration * eventValue) / 100;
         },
         subtractTime,
-      
+
         setTracklist: (items) => {
           setTracks(items);
         },
@@ -127,7 +120,6 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         togglePlay: () => {
           if (currentTrack && audio.readyState === 4) {
             audio.paused ? audio.play() : audio.pause();
-          
           }
         },
         paused,

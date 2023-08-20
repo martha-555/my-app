@@ -1,11 +1,12 @@
 /** @format */
 
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import classes from "./styles.module.scss";
 import Tracklist from "../../components/Tracklist/Tracklist";
+import { LikedTracksContext } from "../../feautures/likedTracks/likedTracksProvider";
 
 type Props = {
   children?: JSX.Element;
@@ -20,17 +21,20 @@ const SearchTracks = ({ children }: Props) => {
 
   useEffect(() => {
     if (searchParams.get("q")) {
-      const requestFetch = async () => {
+      const searchRequest = async () => {
         const response = await fetchRequest({
           path: encodeURI(`/search?q=${searchParams.get("q")}`),
-          parser: (response) => response.json(),
+          parser: async (response) => {
+            const json = await response.json();
+            return json.data;
+          },
         });
         response.length === 0 && searchParams.get("q")
           ? setError("По Вашому запиту нічого не знайдено")
           : setError("");
         setTracks(response);
       };
-      requestFetch();
+      searchRequest();
     }
   }, [searchParams, fetchRequest]);
 
@@ -61,8 +65,8 @@ const SearchTracks = ({ children }: Props) => {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-
       {searchParams.get("q") ? <Tracklist tracks={tracks} /> : children}
+      {error ? <div>{error} </div> : null}
     </div>
   );
 };

@@ -16,7 +16,6 @@ type Props = {
 const Track = ({ track }: Props) => {
   const { play, currentTrack, togglePlay } = useContext(PlayerContext);
 
-
   return (
     <div>
       <div
@@ -32,8 +31,8 @@ const Track = ({ track }: Props) => {
         </div>
         <div className={classes.duration}>{formatSeconds(track.duration)}</div>
       </div>
-      <LikeButton selectedTrack={+track.id} />
-      <TracksOptions trackId={track.id} /> 
+      <LikeButton selectedTrack={+track.id} track={track} />
+      <TracksOptions trackId={track.id} />
     </div>
   );
 };

@@ -1,12 +1,18 @@
 /** @format */
+import { async } from "q";
 import { HttpMethod } from "../../types";
-import useBackendRequest from "../useBackendRequest";
+import useBackendRequest, { BackendRequestState } from "../useBackendRequest";
 
-const useGetMp3 = () => {
-  const [makeRequest] = useBackendRequest<string>();
+type ReturnType = [
+  (query: string) => Promise<string>,
+  BackendRequestState<string>
+];
 
-  return async (query: string, method: HttpMethod = HttpMethod.GET) => {
-    const response = await makeRequest(
+const useGetMp3 = (): ReturnType => {
+  const [makeRequest, state] = useBackendRequest<string>();
+
+  const getMp3 = async (query: string) => {
+    return makeRequest(
       {
         type: "Mp3",
         payload: {
@@ -15,11 +21,12 @@ const useGetMp3 = () => {
       },
       async (response) => {
         const json = await response.json();
-        console.log(json);
-        return json;
+        return json.mp3;
       }
     );
   };
+
+  return [getMp3, state];
 };
 
 export default useGetMp3;

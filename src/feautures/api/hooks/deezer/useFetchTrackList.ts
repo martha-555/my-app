@@ -4,21 +4,31 @@ import { useEffect } from "react";
 import useDeezerRequest from "./useDeezerRequest";
 import { TrackData } from "../../../../types/deezer";
 import { parseDeezerTrack } from "../../../../utils/deezer";
-import { BackendRequestState } from "../useBackendRequest";
+import {
+  BackendRequestState,
+  UseBackendRequestReturn,
+} from "../useBackendRequest";
 
-const useFetchFavoriteTracks = (): BackendRequestState<TrackData[]> => {
+type TrackListId = "me" | string;
+type ReturnType = [
+  (id: TrackListId) => Promise<TrackData[]>,
+  BackendRequestState<TrackData[]>
+];
+
+const useFetchTracklist = (): ReturnType => {
   const [makeDeezerRequest, state] = useDeezerRequest<TrackData[]>();
 
-  useEffect(() => {
+  const makeTracklistRequest = (id: TrackListId) =>
     makeDeezerRequest({
-      path: `/user/me/tracks`,
+      path: id === "me" ? `/user/me/tracks` : `/playlist/${id}`,
+
+      // path: `/user/me/tracks`,
       parser: async (response) => {
         const trackList = await response.json();
         return trackList.data.map(parseDeezerTrack);
       },
     });
-  }, [makeDeezerRequest]);
 
-  return state;
+  return [makeTracklistRequest, state];
 };
-export default useFetchFavoriteTracks;
+export default useFetchTracklist;
