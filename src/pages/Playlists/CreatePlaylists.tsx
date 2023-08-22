@@ -1,6 +1,6 @@
 /** @format */
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import fetchUsersPlaylists from "../../feautures/api/hooks/deezer/fetchUsersPlaylists";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import createPlaylist from "../../utils/createPlaylist";
@@ -14,6 +14,7 @@ import DeletePlaylist from "./DeletePlaylist";
 import SearchTracks from "../Search/SearchTracks";
 import { HttpMethod } from "../../feautures/api/types";
 import { async } from "q";
+import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
 
 type Props = {
   trackList: TrackData[];
@@ -29,26 +30,11 @@ const CreatePlaylists = () => {
   // const [trackList, settracklist] = useState<TrackData[]>([])
   const [makeTrackListRequest] = useFetchTrackList();
   const [makeDeezerRequest] = useDeezerRequest();
+  const {createPlaylist} = useContext(PlaylistsContext)
 
-  useEffect(() => {
-    makeDeezerRequest({
-      path: `/user/me/playlists`,
-      parser: async (response) => await response.json(),
-    });
-  }, []);
 
-  const handleClick = () => {
-    makeDeezerRequest({
-      path: `/user/me/playlists&title=${name}`,
-      parser: async () => null,
-      method: HttpMethod.POST,
-    });
-    // createPlaylist({
-    //   name,
-    //   setState: setIdNewPlaylist,
-    //   request: request(),
-    // });
-    // setName("");
+  const handleClick = (e: any) => {
+   createPlaylist(name)
   };
 
   // const clickedPlaylist = (e: React.MouseEvent<HTMLElement>) => {
@@ -84,7 +70,7 @@ const CreatePlaylists = () => {
 
   return (
     <div className={classes.container}>
-      <PageWrapper>
+      {/* <PageWrapper> */}
         <div
         //   className={
         //     (trackList?.length > 0 && searchParams.get("playlist")) || empty
@@ -97,14 +83,14 @@ const CreatePlaylists = () => {
               value={name}
               type="text"
               onKeyUp={(e) => {
-                if (e.key === "Enter") handleClick();
+                if (e.key === "Enter") handleClick(e);
               }}
               onInput={(e) => {
                 setName((e.target as HTMLInputElement).value);
               }}
             />
             <button onClick={handleClick}>create playlist</button>
-            <div className={classes.playlistsContainer}>
+            <div >
               {/* {allPlaylists?.map((item) => (
                 <div
                   id={item.id.toString()}
@@ -121,12 +107,12 @@ const CreatePlaylists = () => {
               ))} */}
             </div>
           </div>{" "}
-          :<div></div>
+          <div></div>
         </div>
 
         {/* <Tracklist tracks={trackList} error={empty} /> */}
         {/* {empty? <div>{empty} </div>: null } */}
-      </PageWrapper>
+      {/* </PageWrapper> */}
     </div>
   );
 };

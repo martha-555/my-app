@@ -19,6 +19,7 @@ import PlayerProvider from "./feautures/player/playerProvider";
 import CreatePlaylists from "./pages/Playlists/CreatePlaylists";
 import LikedTracksProvider from "./feautures/likedTracks/likedTracksProvider";
 import Playlists from "./pages/Playlists/Playlists";
+import PlaylistsProvider from "./feautures/playlists/playlistsProvider";
 
 const authRouters = createBrowserRouter([
   {
@@ -65,11 +66,13 @@ function App() {
   return (
     <div>
       <AuthProvider>
+        <PlaylistsProvider>
         <LikedTracksProvider>
           <PlayerProvider>
             <AppRoutes />
           </PlayerProvider>
         </LikedTracksProvider>
+        </PlaylistsProvider>
       </AuthProvider>
     </div>
   );

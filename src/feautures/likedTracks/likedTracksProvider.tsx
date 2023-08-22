@@ -4,6 +4,7 @@ import React, { ReactElement, createContext, useEffect, useState } from "react";
 import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
+import { parseDeezerTrack } from "../../utils/deezer";
 
 type LikedTracksType = {
   favoriteTracks: TrackData[];
@@ -30,7 +31,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
         path: `/user/me/tracks`,
         parser: async (response) => {
           const json = await response.json();
-          return json.data;
+          return json.data.map(parseDeezerTrack);
         },
       });
       setFavoriteTracks(tracks);

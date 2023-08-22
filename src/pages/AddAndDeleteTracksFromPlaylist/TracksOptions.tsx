@@ -1,6 +1,6 @@
 /** @format */
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import fetchUsersPlaylists from "../../feautures/api/hooks/deezer/fetchUsersPlaylists";
 import { Playlist } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
@@ -8,14 +8,16 @@ import { useSearchParams } from "react-router-dom";
 import AddSongToPlaylist from "./AddSongToPlaylist";
 import DeleteSongFromPlaylist from "./DeleteSongFromPlaylist";
 import classes from "./styles.module.scss";
+import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
 
 type Props = {
   trackId: number;
+  name: string
 };
 
-const TracksOptions = ({ trackId }: Props) => {
+const TracksOptions = ({ trackId,name }: Props) => {
   const [selectedTrack, setSelectedTrack] = useState<number>(0);
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
+
   const [message, setMessage] = useState<string>("");
   const [showMessage, setshowMessage] = useState(true);
   const [showOptions, setShowOptions] = useState(true);
@@ -23,10 +25,7 @@ const TracksOptions = ({ trackId }: Props) => {
   const [clickedPlaylists, setclickedPlaylists] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
   const request = useDeezerRequest();
-
-  const playlistsWithoutLiked = playlists?.filter(
-    (item) => item.is_loved_track === false
-  );
+  const {playlists} = useContext(PlaylistsContext);
 
   useEffect(() => {
     const handleClick = (e: Event) => {
@@ -38,7 +37,7 @@ const TracksOptions = ({ trackId }: Props) => {
 
       if (selectedTrack === trackId && target.className === "addToPlaylist") {
         setclickedPlaylists(!clickedPlaylists);
-        setclickedOption(false);
+        // setclickedOption(false);
       } else {
         setclickedPlaylists(false);
       }
@@ -56,18 +55,19 @@ const TracksOptions = ({ trackId }: Props) => {
     // fetchUsersPlaylists({request,setState:setPlaylists});
   }, []);
 
+
   return (
     <div>
       {showMessage ? <div>{message} </div> : null}
-      <button className="options" id={trackId.toString()}>
+      <button className="options" id={trackId.toString()} >
         ...
       </button>
       <div>
-        {selectedTrack === trackId && clickedOption ? (
+        {/* {selectedTrack === trackId && clickedOption ? (
           <div className="addToPlaylist" id={trackId.toString()}>
             Додати в плейлист
           </div>
-        ) : null}
+        ) : null} */}
         {searchParams.get("playlist") &&
         selectedTrack === trackId &&
         clickedOption ? (
@@ -77,21 +77,23 @@ const TracksOptions = ({ trackId }: Props) => {
           />
         ) : null}
       </div>
-      {clickedPlaylists && selectedTrack === trackId ? (
+      { selectedTrack === trackId && clickedOption ? (
         <div>
           <div id={trackId.toString()} className={classes.backArrow}>
             &#x21E6;
           </div>
-          {playlistsWithoutLiked.map((item) => (
+          
             <AddSongToPlaylist
-              key={item.id}
-              id={item.id}
-              title={item.title}
+              key={trackId}
+              id={trackId}
+              title={name}
               setshowMessage={setshowMessage}
               trackId={trackId}
               setMessage={setMessage}
+              clickedPlaylist={clickedPlaylists}
+              clickedOption={clickedOption}
             />
-          ))}
+          
         </div>
       ) : (
         false

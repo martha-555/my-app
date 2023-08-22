@@ -12,7 +12,7 @@ const useGetMp3 = (): ReturnType => {
   const [makeRequest, state] = useBackendRequest<string>();
 
   const getMp3 = async (query: string) => {
-    return makeRequest(
+    return await makeRequest(
       {
         type: "Mp3",
         payload: {
@@ -21,7 +21,7 @@ const useGetMp3 = (): ReturnType => {
       },
       async (response) => {
         const json = await response.json();
-        return json.mp3;
+        return json.data.mp3;
       }
     );
   };
