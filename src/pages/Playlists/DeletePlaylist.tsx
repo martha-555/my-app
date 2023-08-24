@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import classes from "./styles.module.scss";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../../feautures/api/types";
-import fetchUsersPlaylists from "../../feautures/api/hooks/deezer/fetchUsersPlaylists";
-import { async } from "q";
+
 
 type Props = {
   playlistId: number;

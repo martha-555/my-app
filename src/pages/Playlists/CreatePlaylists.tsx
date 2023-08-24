@@ -1,13 +1,11 @@
 /** @format */
 
 import { useContext, useEffect, useState } from "react";
-import fetchUsersPlaylists from "../../feautures/api/hooks/deezer/fetchUsersPlaylists";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import createPlaylist from "../../utils/createPlaylist";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { Playlist, TrackData } from "../../types/deezer";
 import classes from "./styles.module.scss";
-import useFetchTrackList from "../../feautures/api/hooks/deezer/useFetchTrackList";
 import Tracklist from "../../components/Tracklist/Tracklist";
 import { useSearchParams } from "react-router-dom";
 import DeletePlaylist from "./DeletePlaylist";
@@ -28,7 +26,6 @@ const CreatePlaylists = () => {
   const [allPlaylists, setAllPlaylists] = useState<Playlist[]>([]);
   const [searchParams, setSearchParams] = useSearchParams({});
   // const [trackList, settracklist] = useState<TrackData[]>([])
-  const [makeTrackListRequest] = useFetchTrackList();
   const [makeDeezerRequest] = useDeezerRequest();
   const {createPlaylist} = useContext(PlaylistsContext)
 

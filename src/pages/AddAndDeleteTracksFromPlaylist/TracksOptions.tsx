@@ -1,7 +1,6 @@
 /** @format */
 
 import { useContext, useEffect, useState } from "react";
-import fetchUsersPlaylists from "../../feautures/api/hooks/deezer/fetchUsersPlaylists";
 import { Playlist } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { useSearchParams } from "react-router-dom";
@@ -25,7 +24,7 @@ const TracksOptions = ({ trackId,name }: Props) => {
   const [clickedPlaylists, setclickedPlaylists] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
   const request = useDeezerRequest();
-  const {playlists} = useContext(PlaylistsContext);
+  const {playlists,getTracklist} = useContext(PlaylistsContext);
 
   useEffect(() => {
     const handleClick = (e: Event) => {
@@ -37,7 +36,7 @@ const TracksOptions = ({ trackId,name }: Props) => {
 
       if (selectedTrack === trackId && target.className === "addToPlaylist") {
         setclickedPlaylists(!clickedPlaylists);
-        // setclickedOption(false);
+        setclickedOption(false);
       } else {
         setclickedPlaylists(false);
       }
@@ -45,29 +44,39 @@ const TracksOptions = ({ trackId,name }: Props) => {
       setTimeout(() => {
         setshowMessage(false);
       }, 4000);
+
     };
 
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
+
+    
   }, [selectedTrack, clickedOption, clickedPlaylists, trackId]);
 
   useEffect(() => {
     // fetchUsersPlaylists({request,setState:setPlaylists});
   }, []);
 
+const addToPlaylist = async (e:any) => {
+  const target = e.target
+  const track = await  getTracklist(+target.id)
+
+  console.log({track})
+}
+
 
   return (
     <div>
-      {showMessage ? <div>{message} </div> : null}
+      { <div>{message} </div> }
       <button className="options" id={trackId.toString()} >
         ...
       </button>
       <div>
-        {/* {selectedTrack === trackId && clickedOption ? (
+        {selectedTrack === trackId && clickedOption ? (
           <div className="addToPlaylist" id={trackId.toString()}>
             Додати в плейлист
           </div>
-        ) : null} */}
+        ) : null}
         {searchParams.get("playlist") &&
         selectedTrack === trackId &&
         clickedOption ? (
@@ -77,27 +86,20 @@ const TracksOptions = ({ trackId,name }: Props) => {
           />
         ) : null}
       </div>
-      { selectedTrack === trackId && clickedOption ? (
+  
+      { selectedTrack === trackId && clickedPlaylists ? (
         <div>
           <div id={trackId.toString()} className={classes.backArrow}>
             &#x21E6;
-          </div>
-          
-            <AddSongToPlaylist
-              key={trackId}
-              id={trackId}
-              title={name}
-              setshowMessage={setshowMessage}
-              trackId={trackId}
-              setMessage={setMessage}
-              clickedPlaylist={clickedPlaylists}
-              clickedOption={clickedOption}
-            />
-          
+          </div> 
+          <div>{playlists.map(item => (
+            <div onClick={addToPlaylist} id={item.id.toString()} key={item.id}  >{item.title} </div>
+          ))} </div>
         </div>
       ) : (
         false
       )}
+       
     </div>
   );
 };

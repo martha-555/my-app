@@ -12,25 +12,27 @@ type Props = {
   id: number;
   title: string;
   trackId: number;
-  setshowMessage: React.Dispatch<React.SetStateAction<boolean>>;
-  setMessage: React.Dispatch<React.SetStateAction<string>>;
-  clickedPlaylist:any;
-  clickedOption:any
+  
+  clickedPlaylist:boolean;
+  clickedOption:boolean
 
 };
 
 const AddSongToPlaylist = ({
   id,
   title,
-  setshowMessage,
   trackId,
-  setMessage,
+
   clickedOption,
   clickedPlaylist
 }: Props) => {
 
+  const [inTracklist, setInTracklist] = useState<TrackData[]>([]);
+  const [showMessage, setshowMessage] = useState(false);
+  const [message, setMessage] = useState<string>("");
   const [requestAction] = useDeezerRequest();
   const [request] = useDeezerRequest<TrackData[]>()
+  const [clickedId, setClicedId] = useState(0)
   const [addClicked, setAddClicked] = useState<boolean>(false);
   const {playlists} = useContext(PlaylistsContext);
 
@@ -39,16 +41,26 @@ const AddSongToPlaylist = ({
   }
 
   const addSong =(e: React.SyntheticEvent) => {
+    setshowMessage(true)
     const target = e.target as  HTMLDivElement;
+    setClicedId(+target.id)
     const returnTracklist = async () => {
       const tracksInPlaylist = await request({path:`/playlist/${target.id}/tracks`,parser: async (response) =>{const json = await response.json();return json.data.map(parseDeezerTrack) } });
-   
-          console.log(tracksInPlaylist)
+      setInTracklist(tracksInPlaylist.filter((item) => item.id === trackId));
     }
-    returnTracklist()
-requestAction({path:`/playlist/${target.id}/tracks&songs=${trackId}`,method:HttpMethod.POST,parser: async () => null});
 
+    inTracklist?.length > 0
+    ? setMessage("Вже є у плейлисті")
+    : requestAction({path:`/playlist/${target.id}/tracks&songs=${trackId}`,method:HttpMethod.POST,parser: async () => null});setMessage("Трек додано");
+    returnTracklist()
+    // if (target.className.includes("backArrow")) setclickedOption(true);
+    // setTimeout(() => {
+    //   setshowMessage(false);
+    // }, 4000);
   }
+
+
+
     // async (e: React.MouseEvent<HTMLElement>) => {
       // setshowMessage(true);
       // const target = e.target as HTMLElement;
@@ -63,12 +75,12 @@ requestAction({path:`/playlist/${target.id}/tracks&songs=${trackId}`,method:Http
       //       HttpMethod.POST
       //     )) && setMessage("Трек додано");
     // },
-  
 
   return (
     <div id={id.toString()}  key={id}>
-      {clickedPlaylist === false?<div onClick={clickAddButton} className="addToPlaylist" id={trackId.toString()}>
-            Додати в плейлист
+     {showMessage? <div id={id.toString()} >333 </div>: null}
+      {clickedPlaylist === false && clickedOption  ?<div onClick={clickAddButton} className="addToPlaylist" id={trackId.toString()}>
+            Додати в плейлист 
           </div>: null}
      
           { clickedPlaylist ? <div>{playlists.map(item => (
