@@ -1,7 +1,7 @@
 /** @format */
 
 import { useContext, useEffect, useState } from "react";
-import { Playlist } from "../../types/deezer";
+import { Playlist, TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { useSearchParams } from "react-router-dom";
 import AddSongToPlaylist from "./AddSongToPlaylist";
@@ -10,31 +10,32 @@ import classes from "./styles.module.scss";
 import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
 
 type Props = {
-  trackId: number;
-  name: string
+  track: TrackData
+
 };
 
-const TracksOptions = ({ trackId,name }: Props) => {
+const TracksOptions = ({ track }: Props) => {
   const [selectedTrack, setSelectedTrack] = useState<number>(0);
 
   const [message, setMessage] = useState<string>("");
   const [showMessage, setshowMessage] = useState(true);
-  const [showOptions, setShowOptions] = useState(true);
+  const [show, setShow] = useState(true);
+
   const [clickedOption, setclickedOption] = useState<boolean>(false);
   const [clickedPlaylists, setclickedPlaylists] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
   const request = useDeezerRequest();
-  const {playlists,getTracklist} = useContext(PlaylistsContext);
+  const {playlists,getTracks, trackList, addToPlaylist} = useContext(PlaylistsContext);
 
   useEffect(() => {
     const handleClick = (e: Event) => {
       const target = e.target as HTMLButtonElement;
       setSelectedTrack(+target.id);
-      selectedTrack === trackId && target.className === "options"
+      selectedTrack === track.id && target.className === "options"
         ? setclickedOption(!clickedOption)
         : setclickedOption(true);
 
-      if (selectedTrack === trackId && target.className === "addToPlaylist") {
+      if (selectedTrack === track.id && target.className === "addToPlaylist") {
         setclickedPlaylists(!clickedPlaylists);
         setclickedOption(false);
       } else {
@@ -51,49 +52,64 @@ const TracksOptions = ({ trackId,name }: Props) => {
     return () => document.removeEventListener("click", handleClick);
 
     
-  }, [selectedTrack, clickedOption, clickedPlaylists, trackId]);
+  }, [selectedTrack, clickedOption, clickedPlaylists, track.id]);
+ 
+  
+  const addSongToPlaylist = async   (e:any) => {
 
+    const target = e.target
+  const tracks:TrackData[] = await  getTracks(target.id);
+// const isInPlaylist = tracks.find((item) => item.id === track.id)
+// console.log(tracks.find((item) => item.id === track.id ))
+// console.log(tracks)
+//  if (isInPlaylist) {
+//   setMessage('Вже є у плейлисті') ; 
+//  } else {
+//   addToPlaylist(track, target.id); setMessage('Трек додано');
+// }  
+  }
+  
   useEffect(() => {
-    // fetchUsersPlaylists({request,setState:setPlaylists});
-  }, []);
+    const timeId = setTimeout(() => {
+      setShow(false);
+    }, 3000);
 
-const addToPlaylist = async (e:any) => {
-  const target = e.target
-  const track = await  getTracklist(+target.id)
+    return () => {
+      clearTimeout(timeId);
+    };
+  }, [message]);
 
-  console.log({track})
-}
 
 
   return (
     <div>
-      { <div>{message} </div> }
-      <button className="options" id={trackId.toString()} >
+      {show? <div>{message} </div>: null }
+      <button className="options" id={track.id.toString()} >
         ...
       </button>
       <div>
-        {selectedTrack === trackId && clickedOption ? (
-          <div className="addToPlaylist" id={trackId.toString()}>
+        {selectedTrack === track.id && clickedOption ? (
+          <div className="addToPlaylist" id={track.id.toString()}>
             Додати в плейлист
           </div>
         ) : null}
         {searchParams.get("playlist") &&
-        selectedTrack === trackId &&
+        selectedTrack === track.id &&
         clickedOption ? (
           <DeleteSongFromPlaylist
-            trackId={trackId}
+            trackId={track.id}
             playlistId={searchParams.get("playlist")}
           />
         ) : null}
       </div>
   
-      { selectedTrack === trackId && clickedPlaylists ? (
+      { selectedTrack === track.id && clickedPlaylists ? (
         <div>
-          <div id={trackId.toString()} className={classes.backArrow}>
+          <div id={track.id.toString()} className={classes.backArrow}>
             &#x21E6;
           </div> 
           <div>{playlists.map(item => (
-            <div onClick={addToPlaylist} id={item.id.toString()} key={item.id}  >{item.title} </div>
+            <div onClick={addSongToPlaylist} id={item.id.toString()} key={item.id}  >{item.title} </div>
           ))} </div>
         </div>
       ) : (

@@ -32,7 +32,7 @@ const Track = ({ track }: Props) => {
         <div className={classes.duration}>{formatSeconds(track.duration)}</div>
       </div>
       <LikeButton selectedTrack={+track.id} track={track} />
-      <TracksOptions trackId={track.id} name={track.title} />
+      <TracksOptions track={track} />
     </div>
   );
 };
