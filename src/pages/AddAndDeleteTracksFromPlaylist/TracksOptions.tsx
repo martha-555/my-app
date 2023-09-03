@@ -1,6 +1,6 @@
 /** @format */
 
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Playlist, TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { useSearchParams } from "react-router-dom";
@@ -10,8 +10,7 @@ import classes from "./styles.module.scss";
 import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
 
 type Props = {
-  track: TrackData
-
+  track: TrackData;
 };
 
 const TracksOptions = ({ track }: Props) => {
@@ -25,7 +24,8 @@ const TracksOptions = ({ track }: Props) => {
   const [clickedPlaylists, setclickedPlaylists] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
   const request = useDeezerRequest();
-  const {playlists,getTracks, trackList, addToPlaylist} = useContext(PlaylistsContext);
+  const { playlists, getTracks, trackList, addToPlaylist } =
+    useContext(PlaylistsContext);
 
   useEffect(() => {
     const handleClick = (e: Event) => {
@@ -45,52 +45,54 @@ const TracksOptions = ({ track }: Props) => {
       setTimeout(() => {
         setshowMessage(false);
       }, 4000);
-
     };
 
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
-
-    
   }, [selectedTrack, clickedOption, clickedPlaylists, track.id]);
- 
-  
-  const addSongToPlaylist = async   (e:any) => {
 
-    const target = e.target
-  const tracks:TrackData[] = await  getTracks(target.id);
-// const isInPlaylist = tracks.find((item) => item.id === track.id)
-// console.log(tracks.find((item) => item.id === track.id ))
-// console.log(tracks)
-//  if (isInPlaylist) {
-//   setMessage('Вже є у плейлисті') ; 
-//  } else {
-//   addToPlaylist(track, target.id); setMessage('Трек додано');
-// }  
-  }
-  
+  const addSongToPlaylist = useCallback(
+    async (e: any) => {
+      setShow(true);
+      const target = e.target;
+      const tracks: TrackData[] = await getTracks(target.id);
+      const isInPlaylist = tracks.find((item) => item.id === track.id);
+
+      if (isInPlaylist) {
+        setMessage("Вже є у плейлисті");
+      } else {
+        addToPlaylist(track, target.id);
+        setMessage("Трек додано");
+      }
+    },
+    [message, show]
+  );
+
   useEffect(() => {
     const timeId = setTimeout(() => {
       setShow(false);
-    }, 3000);
+    }, 2000);
 
     return () => {
       clearTimeout(timeId);
     };
-  }, [message]);
+  }, [addSongToPlaylist]);
 
-
+  const deleteSongFromPlaylist = () => {};
 
   return (
     <div>
-      {show? <div>{message} </div>: null }
-      <button className="options" id={track.id.toString()} >
+      {show ? <div>{message} </div> : null}
+      <button className="options" id={track.id.toString()}>
         ...
       </button>
       <div>
         {selectedTrack === track.id && clickedOption ? (
-          <div className="addToPlaylist" id={track.id.toString()}>
-            Додати в плейлист
+          <div>
+            <div className="addToPlaylist" id={track.id.toString()}>
+              Додати в плейлист
+            </div>
+            <div onClick={deleteSongFromPlaylist}>Видалити з плейлиста</div>
           </div>
         ) : null}
         {searchParams.get("playlist") &&
@@ -102,20 +104,27 @@ const TracksOptions = ({ track }: Props) => {
           />
         ) : null}
       </div>
-  
-      { selectedTrack === track.id && clickedPlaylists ? (
+
+      {selectedTrack === track.id && clickedPlaylists ? (
         <div>
           <div id={track.id.toString()} className={classes.backArrow}>
             &#x21E6;
-          </div> 
-          <div>{playlists.map(item => (
-            <div onClick={addSongToPlaylist} id={item.id.toString()} key={item.id}  >{item.title} </div>
-          ))} </div>
+          </div>
+          <div>
+            {playlists.map((item) => (
+              <div
+                onClick={addSongToPlaylist}
+                id={item.id.toString()}
+                key={item.id}
+              >
+                {item.title}{" "}
+              </div>
+            ))}{" "}
+          </div>
         </div>
       ) : (
         false
       )}
-       
     </div>
   );
 };
