@@ -7,14 +7,16 @@ import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
 import path from "path";
 
+
 type PlaylistsType = {
-  getTracks: (playlistId: number) => any;
+  getTracks: (playlistId: any ) => any;
   playlists: Playlist[];
   createPlaylist: (name: string) => void;
   removePlaylist: (name: string, playlist: Playlist) => void;
   addToPlaylist: (track: TrackData, currentPlaylist: number) => void;
   deleteFromPlaylist: (track: TrackData, currentPlaylist: number) => void;
   trackList: TrackData[];
+  isLoading: boolean
 };
 
 export const PlaylistsContext = createContext<PlaylistsType>({
@@ -25,6 +27,7 @@ export const PlaylistsContext = createContext<PlaylistsType>({
   addToPlaylist: (track, currentPlaylist) => {},
   deleteFromPlaylist: (track, currentPlaylist) => {},
   trackList: [],
+  isLoading: false,
 });
 
 const PlaylistsProvider = (props: { children: ReactElement }) => {
@@ -32,10 +35,9 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [actionRequest, state] = useDeezerRequest();
   const [responseId] = useDeezerRequest<number>();
 
-  const [trackList, setTrackList] = useState<any>([]);
+  const [trackList, setTrackList] = useState<TrackData[]>([]);
   const [playlistsId, setPlaylistsId] = useState<number>(0);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
-  // const [playlistId,setPlaylistId] = useState<number>(0)
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -55,23 +57,35 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
       );
     };
     fetchRequest();
+
   }, []);
 
   useEffect(() => {
-    // console.log(playlistsId)
-    //  if (playlistsId) { const fetchRequest = async () => {
-    //       const tracks = await actionRequest({path:`/playlist/${playlistsId}/tracks`,parser: async (response) =>{const json = await response.json(); return json?.data?.map(parseDeezerTrack) } });
-    //      setTrackList({...trackList,[playlistsId]: tracks});
-    //     }
-    //     fetchRequest()}
-  }, [playlistsId, trackList]);
 
-  // console.log(trackList[playlistsId]);
+//     const fetchRequest = async () => {
+     
+//     if (playlistsId) { const tracks = await actionRequest({
+//         path: `/playlist/${playlistsId}/tracks`,
+//         parser: async (response) => {
+//           const json = await response.json();
+//           return json?.data?.map(parseDeezerTrack);
+//         },
+//       })
+//       const upd:any = [];
+//       upd[playlistsId] ??=[];
+//       upd[playlistsId] = (tracks)
+//      setTrackList({ ...trackList, ...upd} );
+// }
+//     };
+
+ 
+//      fetchRequest();
+  }, [playlistsId]);
   return (
     <PlaylistsContext.Provider
       value={{
         playlists,
-
+        isLoading:state.isLoading,
         getTracks: (currentPlaylist) => {
           setPlaylistsId(currentPlaylist);
           const fetchRequest = async () => {
@@ -81,20 +95,11 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
                 const json = await response.json();
                 return json?.data?.map(parseDeezerTrack);
               },
-            });
-            setTrackList({ ...trackList, [currentPlaylist]: tracks });
-
-            // if (typeof tracks === "string") {
-            //   const nextTracks = await actionRequest({
-            //     path: tracks,
-            //     parser: async (res) => {
-            //       const allTracks = await res.json();
-            //       return allTracks?.data.map(parseDeezerTrack);
-            //     },
-            //   });
-            //   console.log(nextTracks);
-            //   return nextTracks;
-            // }
+            })
+            const upd:any = [];
+                  upd[currentPlaylist] ??=[];
+                  upd[currentPlaylist] = tracks;
+                 setTrackList({ ...trackList, ...upd} );
 
             return tracks;
           };
@@ -104,18 +109,22 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
         trackList,
 
         addToPlaylist: (track, currentPlaylist) => {
+
           actionRequest({
             path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}`,
             method: HttpMethod.POST,
             parser: async () => null,
           });
-          const upd: any = { ...trackList[currentPlaylist] };
-          upd.push(track);
-          console.log({ upd });
-          setTrackList({ ...trackList, track });
+          
+          const upd: any = [];
+          upd[currentPlaylist] ??=[];
+          upd[currentPlaylist]={...trackList[currentPlaylist],...track};
+          // setTrackList({ ...trackList,  ...upd });
+         
         },
 
         deleteFromPlaylist: (track, currentPlaylist) => {
+          console.log({trackList});
           actionRequest({
             path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}`,
             method: HttpMethod.DELETE,

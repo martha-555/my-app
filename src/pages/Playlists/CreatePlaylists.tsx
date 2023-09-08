@@ -31,7 +31,8 @@ const CreatePlaylists = () => {
 
 
   const handleClick = (e: any) => {
-   createPlaylist(name)
+   createPlaylist(name);
+   setName('')
   };
 
   // const clickedPlaylist = (e: React.MouseEvent<HTMLElement>) => {
