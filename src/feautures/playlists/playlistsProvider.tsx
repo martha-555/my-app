@@ -5,17 +5,19 @@ import { Playlist, TrackData } from "../../types/deezer";
 import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
-import path from "path";
 
+type UpdateTracklist = {
+  [key:number]: TrackData[]
+}
 
 type PlaylistsType = {
-  getTracks: (playlistId: any ) => any;
+  getTracks: (currentPlaylist: number ) => Promise<TrackData[]>;
   playlists: Playlist[];
   createPlaylist: (name: string) => void;
   removePlaylist: (name: string, playlist: Playlist) => void;
   addToPlaylist: (track: TrackData, currentPlaylist: number) => void;
-  deleteFromPlaylist: (track: TrackData, currentPlaylist: number) => void;
-  trackList: TrackData[];
+  deleteFromPlaylist: (track: TrackData, currentPlaylist: number| null) => void;
+  trackList: UpdateTracklist;
   isLoading: boolean
 };
 
@@ -23,7 +25,7 @@ export const PlaylistsContext = createContext<PlaylistsType>({
   playlists: [],
   createPlaylist: (name) => {},
   removePlaylist: (name, playlist) => {},
-  getTracks: (playlistId) => {},
+  getTracks: async (currentPlaylist) =>  [],
   addToPlaylist: (track, currentPlaylist) => {},
   deleteFromPlaylist: (track, currentPlaylist) => {},
   trackList: [],
@@ -33,9 +35,11 @@ export const PlaylistsContext = createContext<PlaylistsType>({
 const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [deezerRequest] = useDeezerRequest<Playlist[]>();
   const [actionRequest, state] = useDeezerRequest();
+  const [returnResponse] = useDeezerRequest<TrackData[]>();
+
   const [responseId] = useDeezerRequest<number>();
 
-  const [trackList, setTrackList] = useState<TrackData[]>([]);
+  const [trackList, setTrackList] = useState<UpdateTracklist>([]);
   const [playlistsId, setPlaylistsId] = useState<number>(0);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
@@ -61,7 +65,6 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   }, []);
 
   useEffect(() => {
-
 //     const fetchRequest = async () => {
      
 //     if (playlistsId) { const tracks = await actionRequest({
@@ -86,26 +89,27 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
       value={{
         playlists,
         isLoading:state.isLoading,
-        getTracks: (currentPlaylist) => {
+
+
+        getTracks:  (currentPlaylist) => {
           setPlaylistsId(currentPlaylist);
           const fetchRequest = async () => {
-            const tracks = await actionRequest({
+            const tracks = await returnResponse({
               path: `/playlist/${currentPlaylist}/tracks`,
               parser: async (response) => {
                 const json = await response.json();
                 return json?.data?.map(parseDeezerTrack);
               },
             })
-            const upd:any = [];
-                  upd[currentPlaylist] ??=[];
-                  upd[currentPlaylist] = tracks;
-                 setTrackList({ ...trackList, ...upd} );
+            if (currentPlaylist)   setTrackList( {...trackList, [currentPlaylist]: tracks});
 
             return tracks;
           };
 
           return fetchRequest();
         },
+
+
         trackList,
 
         addToPlaylist: (track, currentPlaylist) => {
@@ -114,22 +118,25 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
             path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}`,
             method: HttpMethod.POST,
             parser: async () => null,
-          });
-          
-          const upd: any = [];
-          upd[currentPlaylist] ??=[];
-          upd[currentPlaylist]={...trackList[currentPlaylist],...track};
-          // setTrackList({ ...trackList,  ...upd });
-         
+          }); 
         },
 
         deleteFromPlaylist: (track, currentPlaylist) => {
-          console.log({trackList});
-          actionRequest({
-            path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}`,
-            method: HttpMethod.DELETE,
-            parser: async () => null,
-          });
+      if (currentPlaylist) {
+        actionRequest({
+          path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}`,
+          method: HttpMethod.DELETE,
+          parser: async () => null,
+        });
+
+
+const upd = trackList[currentPlaylist];
+// let a = [];
+const a = upd.filter((item) => +item.id !== +track.id)
+
+
+setTrackList({...trackList, [currentPlaylist]: a})
+      }
         },
         createPlaylist: (name) => {
           const requestFunction = async () => {

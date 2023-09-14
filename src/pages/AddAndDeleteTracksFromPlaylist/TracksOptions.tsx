@@ -18,13 +18,15 @@ const TracksOptions = ({ track }: Props) => {
 
   const [message, setMessage] = useState<string>("");
   const [showMessage, setshowMessage] = useState(true);
+  const [deleteTrack, setDeleteTrack] = useState<boolean>(false)
   const [show, setShow] = useState(true);
   const [isInPlaylist, setIsInPlaylist] = useState<any>('')
   const [playlistId, setPlaylistsId] = useState<number>(0)
 const [clickFunction, setClickFunction] = useState<any>(() =>{})
   const [clickedOption, setclickedOption] = useState<boolean>(false);
-  const [clickedPlaylists, setclickedPlaylists] = useState<boolean>(false);
-  const [searchParams] = useSearchParams();
+  const [clickedAddButton, setclickedAddButton] = useState<boolean>(false);
+  const [clickedDeleteButton, setClickedDeleteButton] = useState<boolean>(false)
+  const [searchParams] = useSearchParams({});
   const [request, state] = useDeezerRequest();
   const { playlists, getTracks, trackList, addToPlaylist,deleteFromPlaylist } =
     useContext(PlaylistsContext);
@@ -33,17 +35,23 @@ const [clickFunction, setClickFunction] = useState<any>(() =>{})
   useEffect(() => {
     const handleClick = (e: Event) => {
       const target = e.target as HTMLButtonElement;
-      if( target.className.includes('addToPlaylist')) setClickFunction( () => () =>  addSongToPlaylist(e));
-     if (target.className.includes('deleteFromPlaylist')) setClickFunction(() => deleteSongFromPlaylist);
+  
       setSelectedTrack(+target.id);
+     
       selectedTrack === track.id && target.className === "options"
         ? setclickedOption(!clickedOption)
         : setclickedOption(true);
-      if (selectedTrack === track.id && (target.className.includes('addToPlaylist') || target.className.includes('deleteFromPlaylist')))  {
-        setclickedPlaylists(!clickedPlaylists);
+      if (target.className.includes('addToPlaylist'))  {
+        setclickedAddButton(!clickedAddButton);
         setclickedOption(false);
       } else {
-        setclickedPlaylists(false);
+        setclickedAddButton(false);
+      }
+      if (target.className.includes('deleteFromPlaylist'))  {
+        setDeleteTrack(!clickedAddButton);
+        setclickedOption(false);
+      } else {
+        setDeleteTrack(false);
       }
       if (target.className.includes("backArrow")) setclickedOption(true);
       setTimeout(() => {
@@ -53,23 +61,23 @@ const [clickFunction, setClickFunction] = useState<any>(() =>{})
 
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
-  }, [selectedTrack, clickedOption, clickedPlaylists, track.id]);
+  }, [selectedTrack, clickedOption, clickedAddButton,deleteTrack, track.id]);
 
   const addSongToPlaylist = async (e: any) => {
-    console.log(clickFunction)
     setShow(true);
     const target = e.target;
  const tracks = await getTracks(target.id);
-      const isInPlaylist =  tracks?.find((item:any) => item.id === track.id);
-
+      const isInPlaylist =  tracks?.find((item) => item.id === track.id);
+console.log(isInPlaylist)
       setPlaylistsId(target.id)
       if (isInPlaylist) {
-        setMessage("Вже є у плейлисті");
+        setMessage("Вже є у плейлисті")
       } else {
-        addToPlaylist(track, target.id);
+        // addToPlaylist(track, target.id);
         setMessage("Трек додано");
-      }
+      } 
     }
+    
 
   useEffect(() => {
     const timeId = setTimeout(() => {
@@ -81,6 +89,11 @@ const [clickFunction, setClickFunction] = useState<any>(() =>{})
     };
   }, [getTracks]);
 
+  useEffect(() => {
+console.log({message})
+  },[])
+  
+
 // useEffect(() => {
  
 //      if( trackList[playlistId] ){
@@ -89,12 +102,12 @@ const [clickFunction, setClickFunction] = useState<any>(() =>{})
 //     //  console.log(inPlaylist)
 //     }
 // },[playlistId])
-console.log(clickFunction)
+
   const deleteSongFromPlaylist = (e:any) => {
     const target = e.target;
-    deleteFromPlaylist(track, target.id)
+    deleteFromPlaylist(track, Number(searchParams.get('playlist')))
   };
-console.log({addSongToPlaylist})
+
   return (
     <div>
       {show ? <div>{message} </div> : null}
@@ -116,27 +129,30 @@ console.log({addSongToPlaylist})
           
         ) : null}
       </div>
-
-      {selectedTrack === track.id && clickedPlaylists ? (
+      {selectedTrack === track.id && (clickedAddButton || deleteTrack)? (
         <div>
           <div id={track.id.toString()} className={classes.backArrow}>
             &#x21E6;
           </div>
           <div>
-            {playlists.map((item) => (
-              <div
-                onClick={ clickFunction }
-                id={item.id.toString()}
-                key={item.id}
-              >
-                {item.title}{" "}
-              </div>
-            ))}{" "}
+     
           </div>
         </div>
       ) : (
         false
       )}
+         {selectedTrack === track.id && clickedAddButton? playlists.map((item) => (
+              <div
+                onClick={ addSongToPlaylist }
+                id={item.id.toString()}
+                key={item.id}
+              >
+                {item.title}
+              </div>
+            )) : null }
+{deleteTrack && selectedTrack === track.id? <div id={track.id.toString()} onClick={deleteSongFromPlaylist} >Видалити трек?</div>: null }
+ 
+          
     </div>
   );
 };
