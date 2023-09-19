@@ -16,14 +16,13 @@ type PlaylistsType = {
   playlists: Playlist[];
   createPlaylist: (name: string) => void;
   removePlaylist: (name: string, playlist: Playlist) => void;
-  addToPlaylist: (track: TrackData, currentPlaylist: number) => void;
+  addToPlaylist: (track: number, currentPlaylist: number) => void;
   deleteFromPlaylist: (
     track: TrackData,
     currentPlaylist: number | null
   ) => void;
   trackList: UpdateTracklist;
   isLoading: boolean;
-  test: string;
 };
 
 export const PlaylistsContext = createContext<PlaylistsType>({
@@ -35,7 +34,6 @@ export const PlaylistsContext = createContext<PlaylistsType>({
   deleteFromPlaylist: (track, currentPlaylist) => {},
   trackList: [],
   isLoading: false,
-  test: "",
 });
 
 const PlaylistsProvider = (props: { children: ReactElement }) => {
@@ -111,13 +109,9 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
         },
 
         trackList,
-        test,
         addToPlaylist: (track, currentPlaylist) => {
-          settest("test");
-          console.log(trackList);
-          // const isInPlaylist = tracks?.find((item) => item.id === track.id);
           actionRequest({
-            path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}`,
+            path: `/playlist/${currentPlaylist}/tracks&songs=${track}`,
             method: HttpMethod.POST,
             parser: async () => null,
           });

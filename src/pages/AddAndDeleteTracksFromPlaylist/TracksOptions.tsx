@@ -15,16 +15,17 @@ type Props = {
 
 const TracksOptions = ({ track }: Props) => {
   const [selectedTrack, setSelectedTrack] = useState<number>(0);
-
+const [trackId, setTrackId] = useState<number>(0)
   const [message, setMessage] = useState<string>("");
   const [showMessage, setshowMessage] = useState(true);
   const [deleteTrack, setDeleteTrack] = useState<boolean>(false);
   const [show, setShow] = useState(true);
-  const [isInPlaylist, setIsInPlaylist] = useState<any>("");
+  const [addToPlaylistId, setAddToPlaylistId] = useState<number>(0);
   const [parsedPlaylists, setParsedPlaylists] = useState<Playlist[]>([]);
   const [clickFunction, setClickFunction] = useState<any>(() => {});
   const [clickedOption, setclickedOption] = useState<boolean>(false);
   const [clickedAddButton, setclickedAddButton] = useState<boolean>(false);
+
   const [clickedDeleteButton, setClickedDeleteButton] =
     useState<boolean>(false);
   const [searchParams] = useSearchParams({});
@@ -35,7 +36,6 @@ const TracksOptions = ({ track }: Props) => {
     trackList,
     addToPlaylist,
     deleteFromPlaylist,
-    test,
   } = useContext(PlaylistsContext);
 
   useEffect(() => {
@@ -76,31 +76,40 @@ const TracksOptions = ({ track }: Props) => {
 
   const addSongToPlaylist = async (e: any) => {
     setShow(true);
+    setTrackId(track.id);
     const target = e.target;
+    setAddToPlaylistId(target.id)
     const tracks = await getTracks(target.id);
     const isInPlaylist = tracks?.find((item) => item.id === track.id);
     // console.log(isInPlaylist);
     isInPlaylist ? setMessage("Вже є у плейлисті") : setMessage("Трек додано");
-
-    if (isInPlaylist === undefined) {
-      addToPlaylist(track, target.id);
-    }
+    // if (isInPlaylist === undefined) {
+    //   setMessage(test)
+    //   addToPlaylist(track, target.id);
+    // }
   };
+  
 
-  console.log(test);
+ 
   useEffect(() => {
     const timeId = setTimeout(() => {
       setShow(false);
+      if (message === 'Трек додано') {
+        addToPlaylist(trackId, addToPlaylistId);
+      }
     }, 2000);
 
     return () => {
       clearTimeout(timeId);
     };
-  }, [getTracks]);
+  }, [trackId,show,addToPlaylistId]);
+
+
+
 
   useEffect(() => {
-    // console.log({ message });
-  }, []);
+  
+  }, [trackId,message]);
 
   // useEffect(() => {
 
@@ -118,7 +127,7 @@ const TracksOptions = ({ track }: Props) => {
 
   return (
     <div>
-      {show ? <div>{test} </div> : null}
+      {show  ? <div>{message} </div> : null}
       <button className="options" id={track.id.toString()}>
         ...
       </button>
