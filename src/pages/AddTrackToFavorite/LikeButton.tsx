@@ -22,9 +22,9 @@ const LikeButton = ({ selectedTrack, track }: Props) => {
 
   useEffect(() => {
     for (let i = 0; i < favoriteTracks?.length; i++) {
-      // console.log(favoriteTracks[i])
-      // setidLikedList(favoriteTracks[i]?.map((item) => item.id));
     }
+    // console.log(favoriteTracks[i])
+    setidLikedList(favoriteTracks?.map((item) => item.id));
    
   }, [favoriteTracks]);
 

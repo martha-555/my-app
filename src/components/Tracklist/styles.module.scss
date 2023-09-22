@@ -7,3 +7,11 @@
   flex-direction: column;
   width: 100%;
 }
+
+.flexPages {
+  display: flex;
+  justify-content: space-evenly;
+}
+.clickedPage {
+  color: red;
+}
