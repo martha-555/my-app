@@ -5,6 +5,7 @@ import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
+import { splicedTracks } from "../../utils/splicedTracks";
 
 type LikedTracksType = {
   favoriteTracks: TrackData[];
@@ -38,7 +39,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
     };
     fetchRequest();
   }, []);
-
+console.log(favoriteTracks)
   return (
     <LikedTracksContext.Provider
       value={{
@@ -52,8 +53,9 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
             parser: async () => null,
           });
           const upd: TrackData[] = [];
-          upd.push(...favoriteTracks, track);
+          upd.push({...favoriteTracks, ...track});
           setFavoriteTracks(upd);
+          console.log(upd)
         },
 
         removeTrack: (id, track) => {
@@ -65,6 +67,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
           const upd: TrackData[] = favoriteTracks.filter(
             (item) => item.id !== track.id
           );
+          console.log(favoriteTracks)
           setFavoriteTracks(upd);
         },
       }}

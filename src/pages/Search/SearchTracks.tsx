@@ -1,22 +1,24 @@
 /** @format */
 
 import { useSearchParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import classes from "./styles.module.scss";
 import Tracklist from "../../components/Tracklist/Tracklist";
-import { LikedTracksContext } from "../../feautures/likedTracks/likedTracksProvider";
+import { splicedTracks } from "../../utils/splicedTracks";
 
 type Props = {
   children?: JSX.Element;
 };
 
 const SearchTracks = ({ children }: Props) => {
-  const [tracks, setTracks] = useState<TrackData[]>([]);
+
   const [error, setError] = useState<string>("");
-  const [inputValue, setInputValue] = useState<any>("");
+  const [inputValue, setInputValue] = useState<string | null>('');
   const [searchParams, setSearchParams] = useSearchParams({});
+  const [page, setPage] = useState<number>(0)
+  const [tracks, settracks] = useState<TrackData[]>([])
   const [fetchRequest] = useDeezerRequest<TrackData[]>();
 
   useEffect(() => {
@@ -29,13 +31,15 @@ const SearchTracks = ({ children }: Props) => {
             return json.data;
           },
         });
-        response.length === 0 && searchParams.get("q")
+        const spliced = splicedTracks(response)
+        settracks(response);
+        spliced.length === 0 && searchParams.get("q")
           ? setError("По Вашому запиту нічого не знайдено")
           : setError("");
-        setTracks(response);
       };
       searchRequest();
     }
+    
   }, [searchParams, fetchRequest]);
 
   useEffect(() => {
@@ -48,13 +52,18 @@ const SearchTracks = ({ children }: Props) => {
     inputValue ? setSearchParams({ q: inputValue }) : setSearchParams({});
   };
 
+//   const showPage = (e: React.MouseEvent<HTMLElement>) => {
+//    const target = e.target as HTMLDivElement;
+// setPage(+target.id);
+//   }
+
   return (
     <div className={classes.mainContainer}>
       <div className={classes.inputBlock}>
         <input
           type="text"
           placeholder="search"
-          value={inputValue}
+          value={inputValue || ''}
           onKeyUp={(e) => {
             if (e.key === "Enter") buttonOnClick();
           }}
@@ -67,6 +76,9 @@ const SearchTracks = ({ children }: Props) => {
       </div>
       {searchParams.get("q") ? <Tracklist tracks={tracks} /> : children}
       {error ? <div>{error} </div> : null}
+      <div className={classes.flexPages}>
+     {/* {tracks.map((item,index) =>  <div className={page === index? classes.clickedPage: ''} key={index} id={index.toString()} onClick={showPage} >{index + 1} </div>  )} */}
+      </div>
     </div>
   );
 };

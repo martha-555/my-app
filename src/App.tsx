@@ -9,7 +9,7 @@ import { HttpMethod } from "./feautures/api/types";
 import PageWrapper from "./layout/PageWrapper/PageWrapper";
 import { Navigate, Route, Router, Routes } from "react-router";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Albums from "./pages/Albums/Albums";
+import Albums from "./pages/Recommendations/Recommendations";
 import SearchTracks from "./pages/Search/SearchTracks";
 import Auth from "./pages/Auth/Auth";
 import useIsAuthorize from "./feautures/auth/hooks/useIsAuthorize";
@@ -20,6 +20,9 @@ import CreatePlaylists from "./pages/Playlists/CreatePlaylists";
 import LikedTracksProvider from "./feautures/likedTracks/likedTracksProvider";
 import Playlists from "./pages/Playlists/Playlists";
 import PlaylistsProvider from "./feautures/playlists/playlistsProvider";
+import Recommendations from "./pages/Recommendations/Recommendations";
+import TracksOptions from "./pages/AddAndDeleteTracksFromPlaylist/TracksOptions";
+import TracksProvider from "./feautures/Tracks/TracksProvider";
 
 const authRouters = createBrowserRouter([
   {
@@ -27,8 +30,8 @@ const authRouters = createBrowserRouter([
     element: <FavoriteTracks />,
   },
   {
-    path: "/albums",
-    element: <Albums />,
+    path: "/recommendations",
+    element: <Recommendations />,
   },
   // {
   //   path: "/search",
@@ -65,6 +68,7 @@ function App() {
 
   return (
     <div>
+      <TracksProvider>
       <AuthProvider>
         <PlaylistsProvider>
         <LikedTracksProvider>
@@ -74,6 +78,7 @@ function App() {
         </LikedTracksProvider>
         </PlaylistsProvider>
       </AuthProvider>
+      </TracksProvider>
     </div>
   );
 }

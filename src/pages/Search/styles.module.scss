@@ -4,3 +4,10 @@
 .mainContainer {
     height: 100%;
 }
+.flexPages {
+    display: flex;
+    justify-content: space-evenly;
+}
+.clickedPage {
+    color: red;
+}
