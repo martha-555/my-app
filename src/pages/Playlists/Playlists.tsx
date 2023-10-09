@@ -31,6 +31,7 @@ const Playlists = () => {
         : setEmpty("");
     };
     trackslistRequest();
+ 
   }, [searchParams, trackList[currentPlaylist]?.length]);
 
   return (

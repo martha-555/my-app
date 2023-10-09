@@ -21,6 +21,11 @@ export type TrackData = {
   id: number;
   title: string;
 };
+export type ResponseTrackData = {
+  data: TrackData[];
+  next: string;
+  total: number
+}
 
 export type Playlist = {
   id: number;
