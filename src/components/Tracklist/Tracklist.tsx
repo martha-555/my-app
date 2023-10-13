@@ -12,7 +12,7 @@ import useNextTracksRequest from "../../feautures/api/hooks/deezer/useNextTracks
 
 type Props = {
   tracks: TrackData[] ;
-  next?: string
+  next?: Function
 };
 
 const Tracklist = ({ tracks,next }: Props) => {
@@ -22,6 +22,7 @@ const Tracklist = ({ tracks,next }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [clicked, setClicked] = useState<boolean>(false)
   const [arrIndex, setArrIndex] = useState<number>(0);
+  const [nextData, setNextData] = useState<TrackData[]>([])
   const [request] = useNextTracksRequest<ResponseTrackData>()
   const page = Number (searchParams?.get('page'))
 
@@ -32,8 +33,7 @@ const Tracklist = ({ tracks,next }: Props) => {
     const spliced = getSplicedTracks(copyTracks);
     setSplicedTracks(spliced);
   }
-  }, [tracks]);
-
+}, [tracks]);
 
 useEffect(() => {
     if (splicedTracks[page-1]?.length === undefined && splicedTracks?.length > 0 ) {
@@ -43,16 +43,31 @@ useEffect(() => {
   },[splicedTracks[page-1]?.length])
 
   
-  const showPage = (e: React.MouseEvent<HTMLElement>) => {
-    console.log(next)
+  const asyncFunc = async () => { 
+  if (next) {
+    const nextList = await next();
+     // console.log({nextList});
+   setNextData(nextList.data)
+   return nextList;
+  } 
+  
+ }
+
+ const showPage = (e: React.MouseEvent<HTMLElement>) => {
+    return asyncFunc();
+ 
     setClicked(true)
     const target = e.target as HTMLDivElement;
     searchParams.set('page',(+target.id+ 1).toString());
     setSearchParams(searchParams);
- 
+
     // setArrIndex(+target.id)
  const index = getSelectedPage(+target.id)
    }
+
+   useEffect(() => {
+  console.log(nextData)
+},[nextData])
 
   return (
     <div className={classes.container}>

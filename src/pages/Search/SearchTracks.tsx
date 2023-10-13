@@ -22,7 +22,7 @@ const SearchTracks = ({ children }: Props) => {
   const [inputValue, setInputValue] = useState<string | null>('');
   const [searchParams, setSearchParams] = useSearchParams();
   const [tracks, settracks] = useState<TrackData[]>([])
-  const [nextTracks, setNextTracks] = useState<string>('');
+  const [nextTracksUrl, setNextTracksUrl] = useState<string>('');
   const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
   const [request] = useNextTracksRequest<ResponseTrackData>()
   const [backendRequest] = useBackendRequest()
@@ -35,14 +35,12 @@ const SearchTracks = ({ children }: Props) => {
           path: encodeURI(`/search?q=${searchParams.get("q")}`),
           parser: async (response) => {
             const json = await response.json();
-            setNextTracks(json.next)
+            setNextTracksUrl(json.next)
             return json;
           },
         });
 
-if (response.next) {
-  const tracks = await nextTracksRequest({path: response.next, parser: async(res:any) => {const json = res.json();return json},request:backendRequest})
-  console.log(tracks)
+
   // const next = async() => { 
 //   const a = await request({path: response.next, parser: async(res) => {const json = res.json();return json}});
 //   console.log({a});
@@ -51,7 +49,7 @@ if (response.next) {
 // next()
 // console.log(next)
 
-}
+
        if (state.isLoading === false) settracks(response.data);
         response.data.length === 0 && searchParams.get("q")
           ? setError("По Вашому запиту нічого не знайдено")
@@ -73,7 +71,15 @@ if (response.next) {
    if (inputValue){ setSearchParams( {'q': inputValue} )}
 
   };
+const getNextTracks = async () => {
+  if (nextTracksUrl) {
+    const tracklist = await nextTracksRequest({path: nextTracksUrl, parser: async(res:any) => {const json = res.json();return json},request:backendRequest})
 
+    return tracklist
+  }
+}
+useEffect(() => {
+},[tracks])
   return (
     <div className={classes.mainContainer}>
       <div className={classes.inputBlock}>
@@ -91,7 +97,7 @@ if (response.next) {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-      {searchParams.get("q") && state.isLoading === false ? <Tracklist next={nextTracks} tracks={tracks} /> : children}
+      {searchParams.get("q") && state.isLoading === false ? <Tracklist next={getNextTracks} tracks={tracks} /> : children}
       {error ? <div>{error} </div> : null}
       <div className={classes.flexPages}>
       </div>
