@@ -20,6 +20,7 @@ const SearchTracks = ({ children }: Props) => {
 
   const [error, setError] = useState<string>("");
   const [inputValue, setInputValue] = useState<string | null>('');
+ 
   const [searchParams, setSearchParams] = useSearchParams();
   const [tracks, settracks] = useState<TrackData[]>([])
   const [nextTracksUrl, setNextTracksUrl] = useState<string>('');
@@ -73,13 +74,19 @@ const SearchTracks = ({ children }: Props) => {
   };
 const getNextTracks = async () => {
   if (nextTracksUrl) {
-    const tracklist = await nextTracksRequest({path: nextTracksUrl, parser: async(res:any) => {const json = res.json();return json},request:backendRequest})
+    const tracklist = await nextTracksRequest({path: nextTracksUrl, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
 
-    return tracklist
-  }
+console.log({tracklist})
+    // const a =  () => {
+
+      // }
+      // a()
+      return tracklist
+    }
 }
 useEffect(() => {
-},[tracks])
+
+},[nextTracksUrl])
   return (
     <div className={classes.mainContainer}>
       <div className={classes.inputBlock}>

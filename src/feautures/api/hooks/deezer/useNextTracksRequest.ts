@@ -20,7 +20,7 @@ const useNextTracksRequest =  <Data>():UseDeezerRequestReturn<Data> => {
     const makeNextRequest = useCallback<RequestMaker<Data>>(async ({ path, parser, method = HttpMethod.GET }) => {
         return makeRequest({
             payload: {
-              method: method, // /search?q=123  /tracks
+              method: method, 
               url: `${path}${
                 path.includes("?") ? "&" : "?"
               }`,

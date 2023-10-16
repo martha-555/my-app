@@ -6,6 +6,7 @@ type Props = {
     request: Function
 }
 
+
 const nextTracksRequest = ({ path, parser, request }: Props) => {
     const makeNextRequest = async () => {
      const tracks = await request({
@@ -19,7 +20,7 @@ const nextTracksRequest = ({ path, parser, request }: Props) => {
           parser);
           return tracks
     }
-  return  makeNextRequest()
+   return makeNextRequest()
 }
 
 export default nextTracksRequest;

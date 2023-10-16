@@ -46,15 +46,15 @@ useEffect(() => {
   const asyncFunc = async () => { 
   if (next) {
     const nextList = await next();
-     // console.log({nextList});
-   setNextData(nextList.data)
+     console.log({nextList});
+   setNextData(nextList?.data)
    return nextList;
   } 
   
  }
 
  const showPage = (e: React.MouseEvent<HTMLElement>) => {
-    return asyncFunc();
+  
  
     setClicked(true)
     const target = e.target as HTMLDivElement;
@@ -62,11 +62,12 @@ useEffect(() => {
     setSearchParams(searchParams);
 
     // setArrIndex(+target.id)
- const index = getSelectedPage(+target.id)
+ const index = getSelectedPage(+target.id);
+  // asyncFunc();
    }
 
    useEffect(() => {
-  console.log(nextData)
+  // console.log(nextData)
 },[nextData])
 
   return (
