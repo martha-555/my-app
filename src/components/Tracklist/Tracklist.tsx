@@ -9,13 +9,15 @@ import { TracksContext } from "../../feautures/Tracks/TracksProvider";
 import { getSplicedTracks } from "../../utils/splicedTracks";
 import { useSearchParams } from "react-router-dom";
 import useNextTracksRequest from "../../feautures/api/hooks/deezer/useNextTracksRequest";
+import nextTracksRequest from "../../utils/nextTracksRequest";
+import useBackendRequest from "../../feautures/api/hooks/useBackendRequest";
 
 type Props = {
   tracks: TrackData[] ;
-  next?: Function
+  nextTracks?: Function
 };
 
-const Tracklist = ({ tracks,next }: Props) => {
+const Tracklist = ({ tracks,nextTracks }: Props) => {
   const { setTracklist } = useContext(PlayerContext);
   const {getSelectedPage} = useContext(TracksContext)
   const [splicedTracks, setSplicedTracks] = useState<TrackData[][]>([])
@@ -23,7 +25,8 @@ const Tracklist = ({ tracks,next }: Props) => {
   const [clicked, setClicked] = useState<boolean>(false)
   const [arrIndex, setArrIndex] = useState<number>(0);
   const [nextData, setNextData] = useState<TrackData[]>([])
-  const [request] = useNextTracksRequest<ResponseTrackData>()
+  const [request] = useNextTracksRequest<ResponseTrackData>();
+  const [backendRequest] = useBackendRequest()
   const page = Number (searchParams?.get('page'))
 
   useEffect(() => {
@@ -43,18 +46,9 @@ useEffect(() => {
   },[splicedTracks[page-1]?.length])
 
   
-  const asyncFunc = async () => { 
-  if (next) {
-    const nextList = await next();
-     console.log({nextList});
-   setNextData(nextList?.data)
-   return nextList;
-  } 
-  
- }
 
  const showPage = (e: React.MouseEvent<HTMLElement>) => {
-  
+ if (nextTracks) nextTracks()
  
     setClicked(true)
     const target = e.target as HTMLDivElement;
@@ -69,6 +63,14 @@ useEffect(() => {
    useEffect(() => {
   // console.log(nextData)
 },[nextData])
+
+// const getNextTracks = async () => {
+//   if (nextTracks) {
+//     const tracklist = await nextTracksRequest({path: nextTracksUrl, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
+// console.log({tracklist})
+//       return tracklist
+//     }
+// }
 
   return (
     <div className={classes.container}>

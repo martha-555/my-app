@@ -20,13 +20,13 @@ const SearchTracks = ({ children }: Props) => {
 
   const [error, setError] = useState<string>("");
   const [inputValue, setInputValue] = useState<string | null>('');
- 
+  const [backendRequest] = useBackendRequest()
   const [searchParams, setSearchParams] = useSearchParams();
   const [tracks, settracks] = useState<TrackData[]>([])
   const [nextTracksUrl, setNextTracksUrl] = useState<string>('');
   const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
   const [request] = useNextTracksRequest<ResponseTrackData>()
-  const [backendRequest] = useBackendRequest()
+
   const {getSelectedPage} = useContext(TracksContext)
 
   useEffect(() => {
@@ -42,15 +42,6 @@ const SearchTracks = ({ children }: Props) => {
         });
 
 
-  // const next = async() => { 
-//   const a = await request({path: response.next, parser: async(res) => {const json = res.json();return json}});
-//   console.log({a});
-//   return a;
-// } 
-// next()
-// console.log(next)
-
-
        if (state.isLoading === false) settracks(response.data);
         response.data.length === 0 && searchParams.get("q")
           ? setError("По Вашому запиту нічого не знайдено")
@@ -59,7 +50,7 @@ const SearchTracks = ({ children }: Props) => {
       searchRequest();
     }
     
-  }, [searchParams, fetchRequest]);
+  }, [searchParams.get('q')]);
 
   useEffect(() => {
     searchParams.get("q")
@@ -75,18 +66,17 @@ const SearchTracks = ({ children }: Props) => {
 const getNextTracks = async () => {
   if (nextTracksUrl) {
     const tracklist = await nextTracksRequest({path: nextTracksUrl, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
-
-console.log({tracklist})
-    // const a =  () => {
-
-      // }
-      // a()
-      return tracklist
+const data: TrackData[] = tracklist.data;
+      const additionalTracks = [];
+      additionalTracks.push(...tracks,...data)
+settracks(additionalTracks)
     }
 }
-useEffect(() => {
 
-},[nextTracksUrl])
+useEffect(() => {
+console.log({tracks})
+},[tracks])
+
   return (
     <div className={classes.mainContainer}>
       <div className={classes.inputBlock}>
@@ -104,7 +94,7 @@ useEffect(() => {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-      {searchParams.get("q") && state.isLoading === false ? <Tracklist next={getNextTracks} tracks={tracks} /> : children}
+      {searchParams.get("q") && state.isLoading === false ? <Tracklist nextTracks={getNextTracks} tracks={tracks} /> : children}
       {error ? <div>{error} </div> : null}
       <div className={classes.flexPages}>
       </div>
