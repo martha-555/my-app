@@ -48,10 +48,10 @@ useEffect(() => {
   
 
  const showPage = (e: React.MouseEvent<HTMLElement>) => {
+   const target = e.target as HTMLDivElement;
  if (nextTracks) nextTracks()
- 
+
     setClicked(true)
-    const target = e.target as HTMLDivElement;
     searchParams.set('page',(+target.id+ 1).toString());
     setSearchParams(searchParams);
 
@@ -61,8 +61,9 @@ useEffect(() => {
    }
 
    useEffect(() => {
+    console.log(splicedTracks)
   // console.log(nextData)
-},[nextData])
+},[splicedTracks])
 
 // const getNextTracks = async () => {
 //   if (nextTracks) {
@@ -80,7 +81,7 @@ useEffect(() => {
         </div>
       ))}
       <div className={classes.flexPages}>
-       {splicedTracks.length > 1? splicedTracks?.map((item,index) =>  <div className={page - 1 === index || (page === 0 && page === index) ? classes.clickedPage: ''}  key={index} id={index.toString()} onClick={showPage} >{index + 1} </div>  ): null}
+       {splicedTracks.length > 1 ? splicedTracks?.map((item,index) =>  <div className={page - 1 === index || (page === 0 && page === index) ? classes.clickedPage: ''}  key={index} id={index.toString()} onClick={showPage} >{index + 1} </div>  ): null }
       </div>
     </div>
   );

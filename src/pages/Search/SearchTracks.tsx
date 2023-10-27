@@ -36,6 +36,7 @@ const SearchTracks = ({ children }: Props) => {
           path: encodeURI(`/search?q=${searchParams.get("q")}`),
           parser: async (response) => {
             const json = await response.json();
+    
             setNextTracksUrl(json.next)
             return json;
           },
@@ -64,17 +65,20 @@ const SearchTracks = ({ children }: Props) => {
 
   };
 const getNextTracks = async () => {
-  if (nextTracksUrl) {
+  const splitNextUrl = nextTracksUrl.split('=');
+  if (nextTracksUrl && +splitNextUrl[3] === tracks.length ) {
     const tracklist = await nextTracksRequest({path: nextTracksUrl, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
 const data: TrackData[] = tracklist.data;
       const additionalTracks = [];
       additionalTracks.push(...tracks,...data)
-settracks(additionalTracks)
+settracks(additionalTracks);
+setNextTracksUrl(tracklist.next)
     }
 }
 
 useEffect(() => {
-console.log({tracks})
+//   console.log(nextTracksUrl)
+// console.log({tracks})
 },[tracks])
 
   return (
