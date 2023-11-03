@@ -8,6 +8,7 @@ import classes from "./styles.module.scss";
 import Tracklist from "../../components/Tracklist/Tracklist";
 import nextTracksRequest from "../../utils/nextTracksRequest";
 import useBackendRequest from "../../feautures/api/hooks/useBackendRequest";
+import { getNextTracks } from "../../utils/updateNextTracks";
 
 type Props = {
   children?: JSX.Element;
@@ -67,6 +68,7 @@ const data: TrackData[] = tracklist.data;
 settracks(data);
     }
 }
+
 
   return (
     <div className={classes.mainContainer}>

@@ -31,6 +31,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
         path: `/user/me/tracks`,
         parser: async (response) => {
           const json = await response.json();
+          console.log(json)
           return json.data.map(parseDeezerTrack);
         },
       });
