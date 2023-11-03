@@ -1,14 +1,11 @@
 /** @format */
 
 import { useSearchParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ResponseTrackData, TrackData } from "../../types/deezer";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import classes from "./styles.module.scss";
 import Tracklist from "../../components/Tracklist/Tracklist";
-import { getSplicedTracks } from "../../utils/splicedTracks";
-import TracksProvider, { TracksContext } from "../../feautures/Tracks/TracksProvider";
-import useNextTracksRequest from "../../feautures/api/hooks/deezer/useNextTracksRequest";
 import nextTracksRequest from "../../utils/nextTracksRequest";
 import useBackendRequest from "../../feautures/api/hooks/useBackendRequest";
 
@@ -24,10 +21,8 @@ const SearchTracks = ({ children }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [tracks, settracks] = useState<TrackData[]>([])
   const [nextTracksUrl, setNextTracksUrl] = useState<string>('');
+  const [total, setTotal] = useState<number>(0)
   const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
-  const [request] = useNextTracksRequest<ResponseTrackData>()
-
-  const {getSelectedPage} = useContext(TracksContext)
 
   useEffect(() => {
     if (searchParams.get("q")) {
@@ -36,7 +31,7 @@ const SearchTracks = ({ children }: Props) => {
           path: encodeURI(`/search?q=${searchParams.get("q")}`),
           parser: async (response) => {
             const json = await response.json();
-    
+           setTotal(json.total)
             setNextTracksUrl(json.next)
             return json;
           },
@@ -62,24 +57,16 @@ const SearchTracks = ({ children }: Props) => {
   const buttonOnClick = () => {
   //  if (inputValue){ searchParams.set( 'q', inputValue ); setSearchParams(searchParams)};
    if (inputValue){ setSearchParams( {'q': inputValue} )}
-
   };
-const getNextTracks = async () => {
-  const splitNextUrl = nextTracksUrl.split('=');
-  if (nextTracksUrl && +splitNextUrl[3] === tracks.length ) {
-    const tracklist = await nextTracksRequest({path: nextTracksUrl, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
+
+  const getNextTracks = async (page:number) => {
+  const newUrl = nextTracksUrl.slice(0, nextTracksUrl.length-2);
+  if (nextTracksUrl) {
+    const tracklist = await nextTracksRequest({path: `${newUrl}${(page-1)*25}&limit=25`, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
 const data: TrackData[] = tracklist.data;
-      const additionalTracks = [];
-      additionalTracks.push(...tracks,...data)
-settracks(additionalTracks);
-setNextTracksUrl(tracklist.next)
+settracks(data);
     }
 }
-
-useEffect(() => {
-//   console.log(nextTracksUrl)
-// console.log({tracks})
-},[tracks])
 
   return (
     <div className={classes.mainContainer}>
@@ -98,8 +85,8 @@ useEffect(() => {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-      {searchParams.get("q") && state.isLoading === false ? <Tracklist nextTracks={getNextTracks} tracks={tracks} /> : children}
-      {error ? <div>{error} </div> : null}
+      {searchParams.get("q") && state.isLoading === false ?  <Tracklist total={total} nextTracks={getNextTracks} tracks={tracks} />: children}
+      {error && searchParams.get('q')? <div>{error} </div> : null}
       <div className={classes.flexPages}>
       </div>
     </div>

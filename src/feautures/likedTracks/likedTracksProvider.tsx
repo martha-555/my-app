@@ -5,7 +5,6 @@ import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
-import { getSplicedTracks } from "../../utils/splicedTracks";
 
 type LikedTracksType = {
   favoriteTracks: TrackData[];
