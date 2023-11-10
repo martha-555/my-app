@@ -55,55 +55,60 @@ setPageList(pages)
   }
 }, [tracks]);
 
-useEffect(() => {
-    if (splicedTracks[page-1]?.length === undefined && splicedTracks?.length > 0 ) {
-   page > 0?  searchParams.set('page',(page).toString()) :  searchParams.set('page',(page+1).toString());
-    }
+// useEffect(() => {
+//     if (splicedTracks[page-1]?.length === undefined && splicedTracks?.length > 0 ) {
+//    page > 0?  searchParams.set('page',(page).toString()) :  searchParams.set('page',(page+1).toString());
+//     }
    
-    setSearchParams(searchParams)
-  },[splicedTracks[page]?.length])
+//     setSearchParams(searchParams)
+//   },[splicedTracks[page]?.length])
 
   
 
- const showPage = (e: React.MouseEvent<HTMLElement>) => {
-   const target = e.target as HTMLDivElement;
- if (nextTracks) nextTracks(+target.id);
+//  const showPage = (e: React.MouseEvent<HTMLElement>) => {
+//    const target = e.target as HTMLDivElement;
+//  if (nextTracks) nextTracks(+target.id);
 
-    setClicked(true)
-    searchParams.set('page',(+target.id).toString());
-    setSearchParams(searchParams);
+//     setClicked(true)
+//     searchParams.set('page',(+target.id).toString());
+//     setSearchParams(searchParams);
 
-    // setArrIndex(+target.id)
- const index = getSelectedPage(+target.id);
-  // asyncFunc();
-   }
+//     // setArrIndex(+target.id)
+//  const index = getSelectedPage(+target.id);
+//   // asyncFunc();
+//    }
 
    useEffect(() => {
-    // console.log(pageList)
-    // console.log(splicedTracks)
-  // console.log(nextData)
-},[tracks])
 
-// const getNextTracks = async () => {
-//   if (nextTracks) {
-//     const tracklist = await nextTracksRequest({path: nextTracksUrl, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
-// console.log({tracklist})
-//       return tracklist
-//     }
-// }
+},[])
+
+const scrollFunc = (e:any) => {
+  // console.log('повна висота документа', e.target.scrollHeight);
+  // console.log('висота док. мінус прокрутка',e.target.clientHeight)
+  // console.log('к-сть пікселів, прокручених від верху', e.target.scrollTop);
+  const allHeight = e.target.scrollHeight;
+  const availableHeight = e.target.clientHeight;
+  const scrollTop = e.target.scrollTop;
+  const scrollBottom = allHeight - availableHeight - scrollTop;
+  let percent: number = Math.round(Number(((scrollBottom * 100) / allHeight).toFixed(2)));
+
+  if (percent == 5  && nextTracks ) {
+    nextTracks();
+    e.target.scrollTo({top:10})
+  }
+  // console.log(((scrollBottom * 100) / allHeight).toFixed(2) + '%')
+}
+
   return (
-    <div className={classes.container}>
+    <div className={classes.tracklistContainer} onScroll={scrollFunc}  >
       { tracks?.map((item) => (
         <div key={item.id}>
           <Track track={item}  />
         </div>
       ))}
-      <div className={classes.flexPages}>
-       {/* {splicedTracks.length > 1? splicedTracks?.map((item,index) =>  <div className={page - 1 === index || (page === 0 && page === index) ? classes.clickedPage: ''}  key={index} id={index.toString()} onClick={showPage} >{index + 1 < 6 ? index+1 : null} </div>  ): null }
-      {splicedTracks.length > 5? <span>...</span>: null}
-       {splicedTracks.length > 8? splicedTracks.map((item,index) => <div key={index} >{index + 1 > splicedTracks.length - 3? index+1:null  } </div> ): null } */}
+      {/* <div className={classes.flexPages}>
        {pageList.map((item, index) => <div className={page === index+1 || (page === 0 && page === index) ? classes.clickedPage: ''} key={index} onClick={showPage} id={(index + 1).toString()}>{item} </div> )}
-      </div>
+      </div> */}
     </div>
   );
 };

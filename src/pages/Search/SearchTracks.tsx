@@ -22,6 +22,7 @@ const SearchTracks = ({ children }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [tracks, settracks] = useState<TrackData[]>([])
   const [nextTracksUrl, setNextTracksUrl] = useState<string>('');
+  const [nextTracks, setnextTracks] = useState<TrackData[]>([])
   const [total, setTotal] = useState<number>(0)
   const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
 
@@ -47,28 +48,37 @@ const SearchTracks = ({ children }: Props) => {
       searchRequest();
     }
     
+
   }, [searchParams.get('q')]);
 
   useEffect(() => {
     searchParams.get("q")
       ? setInputValue(searchParams.get("q"))
       : setInputValue("");
-  }, [searchParams]);
+    }, [searchParams.get('q')]);
+
 
   const buttonOnClick = () => {
   //  if (inputValue){ searchParams.set( 'q', inputValue ); setSearchParams(searchParams)};
    if (inputValue){ setSearchParams( {'q': inputValue} )}
   };
 
-  const getNextTracks = async (page:number) => {
+  const getNextTracks = async () => {
   const newUrl = nextTracksUrl.slice(0, nextTracksUrl.length-2);
   if (nextTracksUrl) {
-    const tracklist = await nextTracksRequest({path: `${newUrl}${(page-1)*25}&limit=25`, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
+    console.log({tracks})
+console.log(tracks.length)
+    const tracklist = await nextTracksRequest({path: `${newUrl}${tracks.length+1}&limit=3`, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
 const data: TrackData[] = tracklist.data;
-settracks(data);
-    }
+data.push(...tracks);
+setnextTracks(data)
+// console.log(data)
 }
+}
+useEffect(() => {
+  settracks(nextTracks);
 
+},[nextTracks])
 
   return (
     <div className={classes.mainContainer}>
