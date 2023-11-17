@@ -91,12 +91,11 @@ const scrollFunc = (e:any) => {
   const scrollTop = e.target.scrollTop;
   const scrollBottom = allHeight - availableHeight - scrollTop;
   let percent: number = Math.round(Number(((scrollBottom * 100) / allHeight).toFixed(2)));
-
-  if (percent == 5  && nextTracks ) {
+  if (percent <= 5  && nextTracks ) {
     nextTracks();
-    e.target.scrollTo({top:10})
+    e.target.scrollTo(0,0)
   }
-  // console.log(((scrollBottom * 100) / allHeight).toFixed(2) + '%')
+
 }
 
   return (

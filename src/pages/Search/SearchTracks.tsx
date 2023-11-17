@@ -30,7 +30,7 @@ const SearchTracks = ({ children }: Props) => {
     if (searchParams.get("q")) {
       const searchRequest = async () => {
         const response = await fetchRequest({
-          path: encodeURI(`/search?q=${searchParams.get("q")}&order=TRACK_ASC`),
+          path: encodeURI(`/search?q=${searchParams.get("q")}`),
           parser: async (response) => {
             const json = await response.json();
            setTotal(json.total)
@@ -65,28 +65,19 @@ const SearchTracks = ({ children }: Props) => {
 
   const getNextTracks = async () => {
     const newUrl = nextTracksUrl.slice(0, nextTracksUrl.length-2);
-  
-  if (nextTracksUrl) {
-//     console.log({tracks})
+  if (nextTracksUrl && state.isLoading === false) {
 const tracklist = await nextTracksRequest({path: `${newUrl}${tracks.length}&limit=3`, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
-// console.log('getNextTracks',tracks.length)
-const data: TrackData[] = tracklist.data;
-data.push(...tracks);
-setnextTracks(data)
-// console.log(data)
+const ids = tracks.map(item => item.id);
+
+const data: TrackData[] = tracklist.data.filter((item:any) => ids.includes(item.id) === false )
+data.push(...tracks)
+settracks(data);
+
 }
 }
-useEffect(() => {
-  settracks(nextTracks);
-
-},[nextTracks])
 
 useEffect(() => {
-console.log({tracks})
-// const a = tracks.map((item)=> item.id);
-// console.log(a.sort((a,b) => a-b));
-// const b = new Set(a);
-// console.log({b})
+  console.log({tracks})
 },[tracks])
 
   return (
