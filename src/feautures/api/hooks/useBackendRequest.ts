@@ -35,7 +35,7 @@ const useBackendRequest = <Data>(): UseBackendRequestReturn<Data> => {
           "Content-Type": "application/json",
         },
       });
-     
+
       const parsedData = await parser(data);
 
       setData(parsedData);

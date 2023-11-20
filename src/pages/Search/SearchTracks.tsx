@@ -9,21 +9,22 @@ import Tracklist from "../../components/Tracklist/Tracklist";
 import nextTracksRequest from "../../utils/nextTracksRequest";
 import useBackendRequest from "../../feautures/api/hooks/useBackendRequest";
 import { getNextTracks } from "../../utils/updateNextTracks";
+import { connect } from "http2";
+import connectWithoutDuplicates from "../../utils/connectWithoutDuplicates";
 
 type Props = {
   children?: JSX.Element;
 };
 
 const SearchTracks = ({ children }: Props) => {
-
   const [error, setError] = useState<string>("");
-  const [inputValue, setInputValue] = useState<string | null>('');
-  const [backendRequest] = useBackendRequest()
+  const [inputValue, setInputValue] = useState<string | null>("");
+  const [backendRequest, nextTracksState] = useBackendRequest();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [tracks, settracks] = useState<TrackData[]>([])
-  const [nextTracksUrl, setNextTracksUrl] = useState<string>('');
-  const [nextTracks, setnextTracks] = useState<TrackData[]>([])
-  const [total, setTotal] = useState<number>(0)
+  const [tracks, settracks] = useState<TrackData[]>([]);
+  const [nextTracksUrl, setNextTracksUrl] = useState<string>("");
+  const [nextTracks, setnextTracks] = useState<TrackData[]>([]);
+  const [total, setTotal] = useState<number>(0);
   const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
 
   useEffect(() => {
@@ -33,52 +34,51 @@ const SearchTracks = ({ children }: Props) => {
           path: encodeURI(`/search?q=${searchParams.get("q")}`),
           parser: async (response) => {
             const json = await response.json();
-           setTotal(json.total)
-            setNextTracksUrl(json.next)
+            setNextTracksUrl(json.next);
             return json;
           },
         });
 
-
-       if (state.isLoading === false) settracks(response.data);
+        if (state.isLoading === false) settracks(response.data);
         response.data.length === 0 && searchParams.get("q")
           ? setError("По Вашому запиту нічого не знайдено")
           : setError("");
       };
       searchRequest();
     }
-    
-
-  }, [searchParams.get('q')]);
+  }, [searchParams.get("q")]);
 
   useEffect(() => {
     searchParams.get("q")
       ? setInputValue(searchParams.get("q"))
       : setInputValue("");
-    }, [searchParams.get('q')]);
-
+  }, [searchParams.get("q")]);
 
   const buttonOnClick = () => {
-  //  if (inputValue){ searchParams.set( 'q', inputValue ); setSearchParams(searchParams)};
-   if (inputValue){ setSearchParams( {'q': inputValue} )}
+    //  if (inputValue){ searchParams.set( 'q', inputValue ); setSearchParams(searchParams)};
+    if (inputValue) {
+      setSearchParams({ q: inputValue });
+    }
   };
 
   const getNextTracks = async () => {
-    const newUrl = nextTracksUrl.slice(0, nextTracksUrl.length-2);
-  if (nextTracksUrl && state.isLoading === false) {
-const tracklist = await nextTracksRequest({path: `${newUrl}${tracks.length}&limit=3`, parser: async(res:any) => {const json = res.json();return json},request:backendRequest});
-const ids = tracks.map(item => item.id);
+    const newUrl = nextTracksUrl.slice(0, nextTracksUrl.length - 2);
+    if (nextTracksUrl && !nextTracksState.isLoading) {
+      const newTracks = await nextTracksRequest({
+        path: `${newUrl}${tracks.length}&limit=30`,
+        parser: async (res: any) => {
+          const json = res.json();
+          return json;
+        },
+        request: backendRequest,
+      });
+      settracks(connectWithoutDuplicates(tracks, newTracks.data));
+    }
+  };
 
-const data: TrackData[] = tracklist.data.filter((item:any) => ids.includes(item.id) === false )
-data.push(...tracks)
-settracks(data);
-
-}
-}
-
-useEffect(() => {
-  console.log({tracks})
-},[tracks])
+  useEffect(() => {
+    console.log({ tracks });
+  }, [tracks]);
 
   return (
     <div className={classes.mainContainer}>
@@ -86,7 +86,7 @@ useEffect(() => {
         <input
           type="text"
           placeholder="search"
-          value={inputValue || ''}
+          value={inputValue || ""}
           onKeyUp={(e) => {
             if (e.key === "Enter") buttonOnClick();
           }}
@@ -97,10 +97,13 @@ useEffect(() => {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-      {searchParams.get("q") && state.isLoading === false ?  <Tracklist total={total} nextTracks={getNextTracks} tracks={tracks} />: children}
-      {error && searchParams.get('q')? <div>{error} </div> : null}
-      <div className={classes.flexPages}>
-      </div>
+      {searchParams.get("q") && state.isLoading === false ? (
+        <Tracklist total={total} nextTracks={getNextTracks} tracks={tracks} />
+      ) : (
+        children
+      )}
+      {error && searchParams.get("q") ? <div>{error} </div> : null}
+      <div className={classes.flexPages}></div>
     </div>
   );
 };
