@@ -1,6 +1,6 @@
 /** @format */
 
-import { useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import { ResponseTrackData, TrackData } from "../../types/deezer";
 import Track from "../Track/Track";
 import classes from "./styles.module.scss";
@@ -15,10 +15,10 @@ import { PagesContext } from "../../feautures/pages/pagesProvider";
 type Props = {
   tracks: TrackData[];
   nextTracks?: Function;
-  total?: number;
+  emptyState: ReactNode;
 };
 
-const Tracklist = ({ tracks, nextTracks, total }: Props) => {
+const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
   const { setTracklist } = useContext(PlayerContext);
   const { getSelectedPage } = useContext(TracksContext);
   const [splicedTracks, setSplicedTracks] = useState<TrackData[][]>([]);
@@ -30,81 +30,32 @@ const Tracklist = ({ tracks, nextTracks, total }: Props) => {
   const [backendRequest] = useBackendRequest();
   const [pageList, setPageList] = useState<number[]>([]);
   const page = Number(searchParams?.get("page"));
-  // const {getPages} = useContext(PagesContext);
-
-  useEffect(() => {
-    // console.log({total})
-    if (total) {
-      const ceilPages = Math.ceil(total / 25);
-      const pages = [];
-      let i = 1;
-      while (i <= ceilPages) {
-        pages.push(i);
-        i++;
-      }
-      setPageList(pages);
-    }
-  }, [total]);
-
-  useEffect(() => {
-    setTracklist(tracks);
-    if (tracks) {
-      // const copyTracks = [...tracks];
-      // const spliced = getPages(tracks)
-      // setSplicedTracks(spliced);
-    }
-  }, [tracks]);
-
-  // useEffect(() => {
-  //     if (splicedTracks[page-1]?.length === undefined && splicedTracks?.length > 0 ) {
-  //    page > 0?  searchParams.set('page',(page).toString()) :  searchParams.set('page',(page+1).toString());
-  //     }
-
-  //     setSearchParams(searchParams)
-  //   },[splicedTracks[page]?.length])
-
-  //  const showPage = (e: React.MouseEvent<HTMLElement>) => {
-  //    const target = e.target as HTMLDivElement;
-  //  if (nextTracks) nextTracks(+target.id);
-
-  //     setClicked(true)
-  //     searchParams.set('page',(+target.id).toString());
-  //     setSearchParams(searchParams);
-
-  //     // setArrIndex(+target.id)
-  //  const index = getSelectedPage(+target.id);
-  //   // asyncFunc();
-  //    }
 
   useEffect(() => {}, []);
 
-  const scrollFunc = (e: any) => {
+  const scrollFunc: React.UIEventHandler<HTMLDivElement> = (e) => {
     // console.log('повна висота документа', e.target.scrollHeight);
     // console.log('висота док. мінус прокрутка',e.target.clientHeight)
     // console.log('к-сть пікселів, прокручених від верху', e.target.scrollTop);
-    const allHeight = e.target.scrollHeight;
-    const availableHeight = e.target.clientHeight;
-    const scrollTop = e.target.scrollTop;
+    const target = e.target as HTMLDivElement;
+    const allHeight = target.scrollHeight;
+    const availableHeight = target.clientHeight;
+    const scrollTop = target.scrollTop;
     const scrollBottom = allHeight - availableHeight - scrollTop;
-    let percent: number = Math.round(
+    let percent = Math.round(
       Number(((scrollBottom * 100) / allHeight).toFixed(2))
     );
-    if (percent <= 5 && nextTracks) {
+    if (percent <= 2 && nextTracks) {
       nextTracks();
-      // e.target.scrollTo(0,0)
     }
   };
 
   return (
     <div className={classes.tracklistContainer} onScroll={scrollFunc}>
       {tracks?.map((item) => (
-        <div key={item.id}>
-          <Track track={item} />
-        </div>
+        <Track key={item.id} track={item} />
       ))}
-      {/* <div className={classes.flexPages}>
-       {pageList.map((item, index) => <div className={page === index+1 || (page === 0 && page === index) ? classes.clickedPage: ''} key={index} onClick={showPage} id={(index + 1).toString()}>{item} </div> )}
-      </div> */}
+      {tracks.length ? null : emptyState}
     </div>
   );
 };

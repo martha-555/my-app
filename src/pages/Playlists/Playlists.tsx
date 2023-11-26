@@ -31,7 +31,6 @@ const Playlists = () => {
         : setEmpty("");
     };
     trackslistRequest();
- 
   }, [searchParams, trackList[currentPlaylist]?.length]);
 
   return (
@@ -42,7 +41,10 @@ const Playlists = () => {
           <div>Loading...</div>
         ) : currentPlaylist ? (
           trackList[currentPlaylist]?.length > 0 && currentPlaylist ? (
-            <Tracklist tracks={trackList[currentPlaylist]} />
+            <Tracklist
+              emptyState="Плейлист пустий"
+              tracks={trackList[currentPlaylist]}
+            />
           ) : (
             <div>{empty} </div>
           )

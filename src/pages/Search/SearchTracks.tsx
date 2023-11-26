@@ -16,11 +16,14 @@ type Props = {
   children?: JSX.Element;
 };
 
-const SearchTracks = ({ children }: Props) => {
+const SearchTracks = () => {
   const [error, setError] = useState<string>("");
-  const [inputValue, setInputValue] = useState<string | null>("");
-  const [backendRequest, nextTracksState] = useBackendRequest();
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [inputValue, setInputValue] = useState<string | null>(
+    searchParams.get("q")
+  );
+  const [backendRequest, nextTracksState] = useBackendRequest();
   const [tracks, settracks] = useState<TrackData[]>([]);
   const [nextTracksUrl, setNextTracksUrl] = useState<string>("");
   const [nextTracks, setnextTracks] = useState<TrackData[]>([]);
@@ -28,25 +31,25 @@ const SearchTracks = ({ children }: Props) => {
   const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
 
   useEffect(() => {
-    if (searchParams.get("q")) {
-      const searchRequest = async () => {
-        const response = await fetchRequest({
-          path: encodeURI(`/search?q=${searchParams.get("q")}`),
-          parser: async (response) => {
-            const json = await response.json();
-            setNextTracksUrl(json.next);
-            return json;
-          },
-        });
-
-        if (state.isLoading === false) settracks(response.data);
-        response.data.length === 0 && searchParams.get("q")
-          ? setError("По Вашому запиту нічого не знайдено")
-          : setError("");
-      };
-      searchRequest();
+    if (inputValue) {
+      // const searchRequest = async () => {
+      //   const response = await fetchRequest({
+      //     path: encodeURI(`/search?q=${searchParams.get("q")}`),
+      //     parser: async (response) => {
+      //       const json = await response.json();
+      //       setNextTracksUrl(json.next);
+      //       return json;
+      //     },
+      //   });
+      //   if (state.isLoading === false) settracks(response.data);
+      //   response.data.length === 0 && searchParams.get("q")
+      //     ? setError("По Вашому запиту нічого не знайдено")
+      //     : setError("");
+      // };
+      // searchRequest();
+      getNextTracks();
     }
-  }, [searchParams.get("q")]);
+  }, [inputValue]);
 
   useEffect(() => {
     searchParams.get("q")
@@ -55,29 +58,29 @@ const SearchTracks = ({ children }: Props) => {
   }, [searchParams.get("q")]);
 
   const buttonOnClick = () => {
-    //  if (inputValue){ searchParams.set( 'q', inputValue ); setSearchParams(searchParams)};
     if (inputValue) {
       setSearchParams({ q: inputValue });
     }
   };
 
   const getNextTracks = async () => {
-    const newUrl = nextTracksUrl.slice(0, nextTracksUrl.length - 2);
-    if (nextTracksUrl && !nextTracksState.isLoading) {
-      const newTracks = await nextTracksRequest({
-        path: `${newUrl}${tracks.length}&limit=30`,
-        parser: async (res: any) => {
-          const json = res.json();
+    if (!state.isLoading) {
+      const response = await fetchRequest({
+        path: encodeURI(
+          `/search?q=${inputValue}&index=${tracks.length}&limit=30`
+        ),
+        parser: async (response) => {
+          const json = await response.json();
+          setNextTracksUrl(json.next);
           return json;
         },
-        request: backendRequest,
       });
-      settracks(connectWithoutDuplicates(tracks, newTracks.data));
+      settracks(connectWithoutDuplicates(tracks, response.data));
     }
   };
 
   useEffect(() => {
-    console.log({ tracks });
+    console.log(JSON.parse(JSON.stringify(tracks)));
   }, [tracks]);
 
   return (
@@ -97,12 +100,11 @@ const SearchTracks = ({ children }: Props) => {
         />
         <button onClick={buttonOnClick}>Ok</button>
       </div>
-      {searchParams.get("q") && state.isLoading === false ? (
-        <Tracklist total={total} nextTracks={getNextTracks} tracks={tracks} />
-      ) : (
-        children
-      )}
-      {error && searchParams.get("q") ? <div>{error} </div> : null}
+      <Tracklist
+        nextTracks={getNextTracks}
+        tracks={tracks}
+        emptyState="По Вашому запиту нічого не знайдено"
+      />
       <div className={classes.flexPages}></div>
     </div>
   );

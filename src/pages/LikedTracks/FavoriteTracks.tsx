@@ -13,12 +13,14 @@ const FavoriteTracks = () => {
   return (
     <PageWrapper>
       <div>
-
-      {isLoading ? (
-        <span>loading...</span>
-      ) : (
-        <Tracklist tracks={favoriteTracks} />
-      )}
+        {isLoading ? (
+          <span>loading...</span>
+        ) : (
+          <Tracklist
+            emptyState="У Вас немає улюблених треків"
+            tracks={favoriteTracks}
+          />
+        )}
       </div>
     </PageWrapper>
   );
