@@ -16,23 +16,11 @@ type Props = {
   tracks: TrackData[];
   nextTracks?: Function;
   emptyState: ReactNode;
+  isLoading?: boolean
 };
 
-const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
-  const { setTracklist } = useContext(PlayerContext);
-  const { getSelectedPage } = useContext(TracksContext);
-  const [splicedTracks, setSplicedTracks] = useState<TrackData[][]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [clicked, setClicked] = useState<boolean>(false);
-  const [arrIndex, setArrIndex] = useState<number>(0);
-  const [nextData, setNextData] = useState<TrackData[]>([]);
-  const [request] = useNextTracksRequest<ResponseTrackData>();
-  const [backendRequest] = useBackendRequest();
-  const [pageList, setPageList] = useState<number[]>([]);
-  const page = Number(searchParams?.get("page"));
-
-  useEffect(() => {}, []);
-
+const Tracklist = ({ tracks, nextTracks, emptyState, isLoading }: Props) => {
+ 
   const scrollFunc: React.UIEventHandler<HTMLDivElement> = (e) => {
     // console.log('повна висота документа', e.target.scrollHeight);
     // console.log('висота док. мінус прокрутка',e.target.clientHeight)
@@ -55,7 +43,7 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
       {tracks?.map((item) => (
         <Track key={item.id} track={item} />
       ))}
-      {tracks.length ? null : emptyState}
+      { !isLoading && tracks.length == 0? emptyState: null}
     </div>
   );
 };

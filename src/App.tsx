@@ -34,10 +34,10 @@ const authRouters = createBrowserRouter([
     path: "/recommendations",
     element: <Recommendations />,
   },
-  // {
-  //   path: "/search",
-  //   element: <SearchTracks />,
-  // },
+  {
+    path: "/search",
+    element: <SearchTracks />,
+  },
   {
     path: "/playlists",
     element: <Playlists />,
