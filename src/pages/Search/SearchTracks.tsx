@@ -49,12 +49,12 @@ useEffect(() => {
     <div className={classes.mainContainer}>
       <div className={classes.inputBlock}>
       </div>
-     <Tracklist
+    {!state.isLoading? <Tracklist
         nextTracks={getNextTracks}
         tracks={tracks}
         emptyState="По Вашому запиту нічого не знайдено"
         isLoading={state.isLoading}
-      />
+      />: null}
       <div className={classes.flexPages}></div>
     </div>
     </PageWrapper>

@@ -38,12 +38,17 @@ const Tracklist = ({ tracks, nextTracks, emptyState, isLoading }: Props) => {
     }
   };
 
+  useEffect(() => {
+    console.log({isLoading});
+  },[isLoading])
+console.log({tracks})
+
   return (
     <div className={classes.tracklistContainer} onScroll={scrollFunc}>
       {tracks?.map((item) => (
         <Track key={item.id} track={item} />
       ))}
-      { !isLoading && tracks.length == 0? emptyState: null}
+      {tracks?.length == 0 && !isLoading? emptyState: null}
     </div>
   );
 };
