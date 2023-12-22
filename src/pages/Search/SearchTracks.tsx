@@ -14,6 +14,7 @@ const SearchTracks = () => {
   const [tracks, settracks] = useState<TrackData[]>([]);
   const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
  
+ 
   const initialTracks = async () => {
     const response = await searchTracksRequest(0);
      settracks(response || [])

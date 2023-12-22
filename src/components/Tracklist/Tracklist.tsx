@@ -1,6 +1,6 @@
 /** @format */
 
-import { ReactNode, useContext, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { ResponseTrackData, TrackData } from "../../types/deezer";
 import Track from "../Track/Track";
 import classes from "./styles.module.scss";
@@ -14,13 +14,13 @@ import { PagesContext } from "../../feautures/pages/pagesProvider";
 
 type Props = {
   tracks: TrackData[];
-  nextTracks?: Function;
+  nextTracks?: IntersectionObserverCallback;
   emptyState: ReactNode;
   isLoading?: boolean
 };
 
 const Tracklist = ({ tracks, nextTracks, emptyState, isLoading }: Props) => {
- 
+const ref = useRef(null)
   const scrollFunc: React.UIEventHandler<HTMLDivElement> = (e) => {
     // console.log('повна висота документа', e.target.scrollHeight);
     // console.log('висота док. мінус прокрутка',e.target.clientHeight)
@@ -34,17 +34,33 @@ const Tracklist = ({ tracks, nextTracks, emptyState, isLoading }: Props) => {
       Number(((scrollBottom * 100) / allHeight).toFixed(2))
     );
     if (percent <= 2 && nextTracks) {
-      nextTracks();
+      // nextTracks();
     }
   };
 
-  useEffect(() => {
-    console.log({isLoading});
-  },[isLoading])
-console.log({tracks})
+  
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0
+    }
+    const callBack = () => {
+      console.log(5);
+   
+    }
+    
+    useEffect(() => {
+   if (nextTracks)  { const observer = new IntersectionObserver(nextTracks,options);
+      if (ref.current) observer.observe(ref.current);
+      return () => {
+        if(ref.current) observer.unobserve(ref.current);
+      }}
+
+  },[ref,options])
+
 
   return (
-    <div className={classes.tracklistContainer} onScroll={scrollFunc}>
+    <div ref={ref} className={classes.tracklistContainer} >
       {tracks?.map((item) => (
         <Track key={item.id} track={item} />
       ))}
