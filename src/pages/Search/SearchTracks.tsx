@@ -11,16 +11,15 @@ import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 
 const SearchTracks = () => {
   const [searchParams] = useSearchParams();
-  const [tracks, settracks] = useState<TrackData[]>([]);
+  const [tracks, settracks] = useState<TrackData[] | undefined>(undefined);
   const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
-  const [response, setResponse] = useState(false);
 
   const initialTracks = async () => {
     const response = await searchTracksRequest(0);
-    settracks(response || []);
+    settracks(response);
   };
   useEffect(() => {
-    settracks([]);
+   if (tracks) settracks(undefined);
     initialTracks();
   }, [searchParams.get("q")]);
 
@@ -34,21 +33,21 @@ const SearchTracks = () => {
         return json;
       },
     });
-    if (!state.isLoading) setResponse(true);
     return response.data;
   };
 
   const getNextTracks = async () => {
-    const data = await searchTracksRequest(tracks.length);
-    if (data) settracks(connectWithoutDuplicates(tracks, data));
+   if (tracks) {const data = await searchTracksRequest(tracks.length);
+     settracks(connectWithoutDuplicates(tracks, data));
+  };
+   
   };
 
-  useEffect(() => {}, [state.isLoading]);
   return (
     <PageWrapper>
       <div className={classes.mainContainer}>
         <div className={classes.inputBlock}></div>
-        {response ? (
+        { tracks ? (
           <Tracklist
             nextTracks={getNextTracks}
             tracks={tracks}

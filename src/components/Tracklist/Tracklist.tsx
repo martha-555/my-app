@@ -28,7 +28,7 @@ const Tracklist = ({ tracks, nextTracks, emptyState, isLoading }: Props) => {
       {tracks?.map((item) => (
         <Track key={item.id} ref={ref} track={item} />
       ))}
-      {tracks?.length == 0 && !isLoading ? emptyState : null}
+      {tracks?.length == 0  ? emptyState : null}
     </div>
   );
 };
