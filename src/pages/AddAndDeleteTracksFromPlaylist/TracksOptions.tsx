@@ -90,8 +90,7 @@ response()
     };
   }, [message, trackId, addToPlaylistId]);
 
-  const deleteSongFromPlaylist = (e: any) => {
-    const target = e.target;
+  const deleteSongFromPlaylist = () => {
     deleteFromPlaylist(track, Number(searchParams.get("playlist")));
   };
 

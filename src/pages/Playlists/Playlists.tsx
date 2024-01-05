@@ -39,32 +39,22 @@ const Playlists = () => {
       <CreatePlaylists />
       <div className={classes.playlistsContainer}>
         {isLoading ? 
-
-          <div>Loading...</div>
-         : currentPlaylist && trackList? (
-        
-            <Tracklist
+          <div>Loading...</div> : null
+        }
+        {currentPlaylist && trackList? <Tracklist
             nextTracks={nextTracksRequest}
               emptyState="Плейлист пустий"
-              tracks={trackList}
-            />
-      
-        ) 
-        
-        : (
-          playlists?.map((item) => (
-            <div
-              id={item.id.toString()}
-              className={classes.playlists}
-              key={item.id}
-              onClick={clickedPlaylist}
-            >
-              <div id={item.id.toString()}>{item.title}</div>
-            </div>
-          ))
-        )
-        
-        }
+               tracks={trackList}
+            />:     playlists?.map((item) => (
+                   <div
+                     id={item.id.toString()}
+                     className={classes.playlists}
+                     key={item.id}
+                    onClick={clickedPlaylist}
+                   >
+                    <div id={item.id.toString()}>{item.title}</div>
+                  </div>
+                 ))}
       </div>
     </PageWrapper>
   );
