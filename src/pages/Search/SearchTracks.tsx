@@ -11,7 +11,7 @@ import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 
 const SearchTracks = () => {
   const [searchParams] = useSearchParams();
-  const [tracks, settracks] = useState<TrackData[] | undefined>(undefined);
+  const [tracks, settracks] = useState<TrackData[] | null>(null);
   const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
 
   const initialTracks = async () => {
@@ -19,7 +19,7 @@ const SearchTracks = () => {
     settracks(response);
   };
   useEffect(() => {
-   if (tracks) settracks(undefined);
+   if (tracks) settracks(null);
     initialTracks();
   }, [searchParams.get("q")]);
 

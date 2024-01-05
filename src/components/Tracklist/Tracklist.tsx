@@ -25,7 +25,7 @@ const Tracklist = ({ tracks, nextTracks, emptyState, isLoading }: Props) => {
 
   return (
     <div className={classes.tracklistContainer}>
-      {tracks?.map((item) => (
+      { tracks?.map((item) => (
         <Track key={item.id} ref={ref} track={item} />
       ))}
       {tracks?.length == 0  ? emptyState : null}

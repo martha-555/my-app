@@ -34,12 +34,13 @@ const AddSongToPlaylist = ({
   const [request] = useDeezerRequest<TrackData[]>()
   const [clickedId, setClicedId] = useState(0)
   const [addClicked, setAddClicked] = useState<boolean>(false);
-  const {playlists} = useContext(PlaylistsContext);
+  const {playlists, trackList} = useContext(PlaylistsContext);
 
   const clickAddButton = ( ) => {
     setAddClicked(!addClicked)
   }
 
+  console.log({trackList})
   const addSong =(e: React.SyntheticEvent) => {
     setshowMessage(true)
     const target = e.target as  HTMLDivElement;

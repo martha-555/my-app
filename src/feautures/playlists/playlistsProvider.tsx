@@ -6,44 +6,57 @@ import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
 import { useLocation, useSearchParams } from "react-router-dom";
+import connectWithoutDuplicates from "../../utils/connectWithoutDuplicates";
+import { error } from "console";
 
 type UpdateTracklist = {
   [key: number]: TrackData[];
 };
+type errorResponse = {
+  [key:string]: {
+    code: number;
+    message: string;
+    type: string
+  }
+}
 
 type PlaylistsType = {
-  getTracks: (currentPlaylist: number) => Promise<TrackData[]>;
+  getTracks: (currentPlaylist: number, indexForRequest?:number) => void;
   playlists: Playlist[];
   createPlaylist: (name: string) => void;
   removePlaylist: (name: string, playlist: Playlist) => void;
-  addToPlaylist: (track: number, currentPlaylist: number) => void;
+  addToPlaylist: (track: number, currentPlaylist: number) => Promise<errorResponse | boolean>;
   deleteFromPlaylist: (
     track: TrackData,
     currentPlaylist: number | null
   ) => void;
-  trackList: UpdateTracklist;
+  trackList: TrackData[];
   isLoading: boolean;
+  isLoadingResponse: boolean
 };
 
 export const PlaylistsContext = createContext<PlaylistsType>({
   playlists: [],
   createPlaylist: (name) => {},
   removePlaylist: (name, playlist) => {},
-  getTracks: async (currentPlaylist) => [],
-  addToPlaylist: (track, currentPlaylist) => {},
+  getTracks: async (currentPlaylist,indexForRequest) => [],
+  addToPlaylist: async (track, currentPlaylist) => false,
   deleteFromPlaylist: (track, currentPlaylist) => {},
   trackList: [],
   isLoading: false,
-});
+  isLoadingResponse: true
+  });
 
 const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [deezerRequest] = useDeezerRequest<Playlist[]>();
   const [actionRequest, state] = useDeezerRequest();
-  const [returnResponse] = useDeezerRequest<TrackData[]>();
+  const [retutnTracks] = useDeezerRequest<TrackData[]>();
+  const [returnResponse, isLoadingResponse] = useDeezerRequest<errorResponse | boolean>();
+
   const [responseId] = useDeezerRequest<number>();
-  const [trackList, setTrackList] = useState<UpdateTracklist>([]);
-  const [playlistsId, setPlaylistsId] = useState<number>(0);
+  const [trackList, setTrackList] = useState<TrackData[]>([]);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const [playlistsId, setPlaylistsId] = useState<number>(0);
   const [test, settest] = useState<string>("");
 
   useEffect(() => {
@@ -61,7 +74,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
       });
       setPlaylists(
         playlistsResponse?.filter(
-          (item) => item.is_loved_track === false && item.id !== playlistsId
+          (item) => item.is_loved_track === false
         )
       );
     };
@@ -85,36 +98,51 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
     //     };
     //      fetchRequest();
   }, [playlistsId]);
+  // console.log({trackList})
+ 
   return (
     <PlaylistsContext.Provider
       value={{
         playlists,
+        isLoadingResponse:isLoadingResponse.isLoading,
         isLoading: state.isLoading,
-        getTracks: (currentPlaylist) => {
-          const fetchRequest = async () => {
-            const tracks = await returnResponse({
-              path: `/playlist/${currentPlaylist}/tracks`,
-              parser: async (response) => {
-                const json = await response.json();
-                return json?.data?.map(parseDeezerTrack);
-              },
-            });
-            if (currentPlaylist)
-              setTrackList({ ...trackList, [currentPlaylist]: tracks });
+        getTracks: (currentPlaylist,indexForRequest) => {
+          if (currentPlaylist) {
 
-            return tracks;
-          };
-
-          return fetchRequest();
+            const fetchRequest = async () => {
+              const tracks = await retutnTracks({
+                path: `/playlist/${currentPlaylist}/tracks${indexForRequest? `&index=${indexForRequest}`: '' }`,
+                parser: async (response) => {
+                  const json = await response.json();
+                  return json?.data?.map(parseDeezerTrack);
+                },
+              
+              });
+              // console.log(tracks)
+              if (currentPlaylist) {
+            
+              }
+              setTrackList( connectWithoutDuplicates(trackList,tracks) );
+              // setTrackList({ ...trackList, [currentPlaylist]: tracks });
+              
+              
+              return tracks;
+            };
+            
+            return fetchRequest();
+          }
         },
-
+        
+        
         trackList,
         addToPlaylist: (track, currentPlaylist) => {
-          actionRequest({
+       const a = async () => await returnResponse({
             path: `/playlist/${currentPlaylist}/tracks&songs=${track}`,
             method: HttpMethod.POST,
-            parser: async () => null,
+            parser: async (response) => {const code = await response.json(); return code},
+            
           });
+         return a()
         },
 
         deleteFromPlaylist: (track, currentPlaylist) => {
@@ -124,12 +152,11 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
               method: HttpMethod.DELETE,
               parser: async () => null,
             });
-
-            const upd = trackList[currentPlaylist];
-            // let a = [];
-            const updateTracks = upd.filter((item) => +item.id !== +track.id);
-
-            setTrackList({ ...trackList, [currentPlaylist]: updateTracks });
+                if (trackList) {
+                 const upd = trackList;
+             const updateTracks = trackList.filter((item) => +item.id !== +track.id);
+              setTrackList( updateTracks);
+                  }
           }
         },
         createPlaylist: (name) => {

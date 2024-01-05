@@ -1,6 +1,5 @@
 /** @format */
 
-import { async } from "q";
 import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../../feautures/api/types";
 

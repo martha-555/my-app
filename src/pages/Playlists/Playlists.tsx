@@ -8,12 +8,13 @@ import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
 import CreatePlaylists from "./CreatePlaylists";
 import Tracklist from "../../components/Tracklist/Tracklist";
+import { compileFunction } from "vm";
 
 const Playlists = () => {
   const [searchParams, setSearchParams] = useSearchParams({});
   const { playlists, getTracks, isLoading, trackList } =
     useContext(PlaylistsContext);
-  const [empty, setEmpty] = useState<string>("");
+
   const currentPlaylist = Number(searchParams.get("playlist"));
 
   const clickedPlaylist = async (e: React.MouseEvent<HTMLElement>) => {
@@ -23,32 +24,34 @@ const Playlists = () => {
       setSearchParams({ playlist: playlistId });
   };
 
+  
   useEffect(() => {
-    const trackslistRequest = async () => {
-      const list = await getTracks(currentPlaylist);
-      isLoading === false && currentPlaylist && list?.length === 0
-        ? setEmpty("Цей плейлист пустий")
-        : setEmpty("");
-    };
-    trackslistRequest();
-  }, [searchParams, trackList[currentPlaylist]?.length]);
+    getTracks(currentPlaylist);
+  }, [currentPlaylist]);
+
+
+  const nextTracksRequest = () => {
+ if (trackList) getTracks(currentPlaylist,trackList.length)
+  }
 
   return (
     <PageWrapper>
       <CreatePlaylists />
       <div className={classes.playlistsContainer}>
-        {isLoading ? (
+        {isLoading ? 
+
           <div>Loading...</div>
-        ) : currentPlaylist ? (
-          trackList[currentPlaylist]?.length > 0 && currentPlaylist ? (
+         : currentPlaylist && trackList? (
+        
             <Tracklist
+            nextTracks={nextTracksRequest}
               emptyState="Плейлист пустий"
-              tracks={trackList[currentPlaylist]}
+              tracks={trackList}
             />
-          ) : (
-            <div>{empty} </div>
-          )
-        ) : (
+      
+        ) 
+        
+        : (
           playlists?.map((item) => (
             <div
               id={item.id.toString()}
@@ -59,7 +62,9 @@ const Playlists = () => {
               <div id={item.id.toString()}>{item.title}</div>
             </div>
           ))
-        )}
+        )
+        
+        }
       </div>
     </PageWrapper>
   );

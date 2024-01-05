@@ -1,11 +1,8 @@
 /** @format */
 
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Playlist, TrackData } from "../../types/deezer";
-import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import { useSearchParams } from "react-router-dom";
-import AddSongToPlaylist from "./AddSongToPlaylist";
-import DeleteSongFromPlaylist from "./DeleteSongFromPlaylist";
 import classes from "./styles.module.scss";
 import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
 
@@ -22,21 +19,16 @@ const [trackId, setTrackId] = useState<number>(0)
   const [show, setShow] = useState(true);
   const [addToPlaylistId, setAddToPlaylistId] = useState<number>(0);
   const [parsedPlaylists, setParsedPlaylists] = useState<Playlist[]>([]);
-  const [clickFunction, setClickFunction] = useState<any>(() => {});
   const [clickedOption, setclickedOption] = useState<boolean>(false);
   const [clickedAddButton, setclickedAddButton] = useState<boolean>(false);
-
-  const [clickedDeleteButton, setClickedDeleteButton] =
-    useState<boolean>(false);
   const [searchParams] = useSearchParams({});
-  const [request, state] = useDeezerRequest();
+
   const {
     playlists,
-    getTracks,
-    trackList,
     addToPlaylist,
     deleteFromPlaylist,
-  } = useContext(PlaylistsContext);
+    isLoadingResponse
+      } = useContext(PlaylistsContext);
 
   useEffect(() => {
     const handleClick = (e: Event) => {
@@ -79,46 +71,24 @@ const [trackId, setTrackId] = useState<number>(0)
     setTrackId(track.id);
     const target = e.target;
     setAddToPlaylistId(target.id)
-    const tracks = await getTracks(target.id);
-    const isInPlaylist = tracks?.find((item) => item.id === track.id);
-    // console.log(isInPlaylist);
-    isInPlaylist ? setMessage("Вже є у плейлисті") : setMessage("Трек додано");
-    // if (isInPlaylist === undefined) {
-    //   setMessage(test)
-    //   addToPlaylist(track, target.id);
-    // }
-  };
-  
 
+const response = async () => {
+  const code = await addToPlaylist(track.id, target.id);
+  console.log(code);
+  typeof code == "boolean" ? setMessage ("Трек додано"):  setMessage('Вже є у плейлисті')
+}
+response()
+};
  
   useEffect(() => {
     const timeId = setTimeout(() => {
       setShow(false);
-      if (message === 'Трек додано') {
-        addToPlaylist(trackId, addToPlaylistId);
-      }
     }, 2000);
 
     return () => {
       clearTimeout(timeId);
     };
-  }, [trackId,show,addToPlaylistId]);
-
-
-
-
-  useEffect(() => {
-  
-  }, [trackId,message]);
-
-  // useEffect(() => {
-
-  //      if( trackList[playlistId] ){
-  //        const inPlaylist =Object.values( trackList[playlistId])?.find((item:any) => item.id === track.id);
-  //      if (inPlaylist) setIsInPlaylist(true);
-  //     //  console.log(inPlaylist)
-  //     }
-  // },[playlistId])
+  }, [message, trackId, addToPlaylistId]);
 
   const deleteSongFromPlaylist = (e: any) => {
     const target = e.target;
@@ -127,7 +97,7 @@ const [trackId, setTrackId] = useState<number>(0)
 
   return (
     <div>
-      {show  ? <div>{message} </div> : null}
+      {show && !isLoadingResponse ? <div>{message} </div> : null}
       <button className="options" id={track.id.toString()}>
         ...
       </button>
