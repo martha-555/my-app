@@ -4,17 +4,15 @@ import Tracklist from "../../components/Tracklist/Tracklist";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { LikedTracksContext } from "../../feautures/likedTracks/likedTracksProvider";
 import { useLocation } from "react-router";
+import { authContext } from "../../feautures/auth/authProvider";
 
 const FavoriteTracks = () => {
   const { favoriteTracks, isLoading } = useContext(LikedTracksContext);
-  // useEffect(() => {
-  //   makeRequest("me");
-  // }, []);
-const location = useLocation();
+
   return (
     <PageWrapper>
       <div>
-        {isLoading &&location.pathname == '/favorite'? (
+        {isLoading ? (
           <span>loading...</span>
         ) : (
           <Tracklist

@@ -1,6 +1,12 @@
 /** @format */
 
-import React, { ReactElement, createContext, useEffect, useState } from "react";
+import React, {
+  ReactElement,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
@@ -32,13 +38,13 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
         parser: async (response) => {
           const json = await response.json();
           // console.log(json)
-          return json.data.map(parseDeezerTrack);
+          return json.data?.map(parseDeezerTrack);
         },
       });
       setFavoriteTracks(tracks);
     };
     fetchRequest();
-  }, []);
+  }, [favoriteTracksRequest]);
 
   return (
     <LikedTracksContext.Provider
@@ -63,7 +69,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
             method: HttpMethod.DELETE,
             parser: async () => null,
           });
-          const upd: TrackData[] = favoriteTracks.filter(
+          const upd: TrackData[] = favoriteTracks?.filter(
             (item) => item.id !== track.id
           );
           setFavoriteTracks(upd);

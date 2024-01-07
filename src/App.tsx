@@ -21,9 +21,6 @@ import LikedTracksProvider from "./feautures/likedTracks/likedTracksProvider";
 import Playlists from "./pages/Playlists/Playlists";
 import PlaylistsProvider from "./feautures/playlists/playlistsProvider";
 import Recommendations from "./pages/Recommendations/Recommendations";
-import TracksOptions from "./pages/AddAndDeleteTracksFromPlaylist/TracksOptions";
-import TracksProvider from "./feautures/Tracks/TracksProvider";
-import PagesProvider from "./feautures/pages/pagesProvider";
 
 const authRouters = createBrowserRouter([
   {
@@ -69,19 +66,15 @@ function App() {
 
   return (
     <div>
-      <PagesProvider>
-      <TracksProvider>
       <AuthProvider>
         <PlaylistsProvider>
-        <LikedTracksProvider>
-          <PlayerProvider>
-            <AppRoutes />
-          </PlayerProvider>
-        </LikedTracksProvider>
+          <LikedTracksProvider>
+            <PlayerProvider>
+              <AppRoutes />
+            </PlayerProvider>
+          </LikedTracksProvider>
         </PlaylistsProvider>
       </AuthProvider>
-      </TracksProvider>
-      </PagesProvider>
     </div>
   );
 }

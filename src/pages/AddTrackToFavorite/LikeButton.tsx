@@ -4,7 +4,6 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import classes from "./styles.module.scss";
 import { LikedTracksContext } from "../../feautures/likedTracks/likedTracksProvider";
 import { TrackData } from "../../types/deezer";
-import { TracksContext } from "../../feautures/Tracks/TracksProvider";
 
 // `/playlist/${lovedTracks}/tracks&songs=${selectedTrack}`
 type Props = {
@@ -17,15 +16,11 @@ const LikeButton = ({ selectedTrack, track }: Props) => {
   const [idLiked, setIdLiked] = useState<number>(0);
   const { favoriteTracks, addTrack, removeTrack } =
     useContext(LikedTracksContext);
-    const {selectedPage} = useContext(TracksContext)
-    
 
   useEffect(() => {
-    for (let i = 0; i < favoriteTracks?.length; i++) {
-    }
+    for (let i = 0; i < favoriteTracks?.length; i++) {}
     // console.log(favoriteTracks[i])
     setidLikedList(favoriteTracks?.map((item) => item.id));
-   
   }, [favoriteTracks]);
 
   const handleClick = useCallback(() => {

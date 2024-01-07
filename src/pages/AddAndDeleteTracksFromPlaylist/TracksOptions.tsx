@@ -12,7 +12,7 @@ type Props = {
 
 const TracksOptions = ({ track }: Props) => {
   const [selectedTrack, setSelectedTrack] = useState<number>(0);
-const [trackId, setTrackId] = useState<number>(0)
+  const [trackId, setTrackId] = useState<number>(0);
   const [message, setMessage] = useState<string>("");
   const [showMessage, setshowMessage] = useState(true);
   const [deleteTrack, setDeleteTrack] = useState<boolean>(false);
@@ -23,12 +23,8 @@ const [trackId, setTrackId] = useState<number>(0)
   const [clickedAddButton, setclickedAddButton] = useState<boolean>(false);
   const [searchParams] = useSearchParams({});
 
-  const {
-    playlists,
-    addToPlaylist,
-    deleteFromPlaylist,
-    isLoadingResponse
-      } = useContext(PlaylistsContext);
+  const { playlists, addToPlaylist, deleteFromPlaylist, isLoadingResponse } =
+    useContext(PlaylistsContext);
 
   useEffect(() => {
     const handleClick = (e: Event) => {
@@ -70,16 +66,17 @@ const [trackId, setTrackId] = useState<number>(0)
     setShow(true);
     setTrackId(track.id);
     const target = e.target;
-    setAddToPlaylistId(target.id)
+    setAddToPlaylistId(target.id);
 
-const response = async () => {
-  const code = await addToPlaylist(track.id, target.id);
-  console.log(code);
-  typeof code == "boolean" ? setMessage ("Трек додано"):  setMessage('Вже є у плейлисті')
-}
-response()
-};
- 
+    const response = async () => {
+      const code = await addToPlaylist(track.id, target.id);
+      typeof code == "boolean"
+        ? setMessage("Трек додано")
+        : setMessage("Вже є у плейлисті");
+    };
+    response();
+  };
+
   useEffect(() => {
     const timeId = setTimeout(() => {
       setShow(false);

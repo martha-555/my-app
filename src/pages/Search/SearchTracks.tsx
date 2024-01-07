@@ -12,14 +12,14 @@ import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 const SearchTracks = () => {
   const [searchParams] = useSearchParams();
   const [tracks, settracks] = useState<TrackData[] | null>(null);
-  const [fetchRequest, state] = useDeezerRequest<ResponseTrackData>();
+  const [fetchRequest] = useDeezerRequest<ResponseTrackData>();
 
   const initialTracks = async () => {
     const response = await searchTracksRequest(0);
     settracks(response);
   };
   useEffect(() => {
-   if (tracks) settracks(null);
+    if (tracks) settracks(null);
     initialTracks();
   }, [searchParams.get("q")]);
 
@@ -37,21 +37,20 @@ const SearchTracks = () => {
   };
 
   const getNextTracks = async () => {
-   if (tracks) {const data = await searchTracksRequest(tracks.length);
-     settracks(connectWithoutDuplicates(tracks, data));
-  };
-   
+    if (tracks) {
+      const data = await searchTracksRequest(tracks.length);
+      settracks(connectWithoutDuplicates(tracks, data));
+    }
   };
 
   return (
     <PageWrapper>
       <div className={classes.mainContainer}>
         <div className={classes.inputBlock}></div>
-        { tracks ? (
+        {tracks ? (
           <Tracklist
             nextTracks={getNextTracks}
             tracks={tracks}
-            isLoading={state.isLoading}
             emptyState="По Вашому запиту нічого не знайдено"
           />
         ) : null}

@@ -8,11 +8,10 @@ import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
 import CreatePlaylists from "./CreatePlaylists";
 import Tracklist from "../../components/Tracklist/Tracklist";
-import { compileFunction } from "vm";
 
 const Playlists = () => {
   const [searchParams, setSearchParams] = useSearchParams({});
-  const { playlists, getTracks, isLoading, trackList } =
+  const { playlists, getInitialTracks, getNextTracks, isLoading, trackList } =
     useContext(PlaylistsContext);
 
   const currentPlaylist = Number(searchParams.get("playlist"));
@@ -24,37 +23,41 @@ const Playlists = () => {
       setSearchParams({ playlist: playlistId });
   };
 
-  
   useEffect(() => {
-    getTracks(currentPlaylist);
+    getInitialTracks(currentPlaylist);
   }, [currentPlaylist]);
 
-
   const nextTracksRequest = () => {
- if (trackList) getTracks(currentPlaylist,trackList.length)
-  }
-
+    if (trackList) getNextTracks(currentPlaylist, trackList.length);
+  };
+  useEffect(() => {
+    console.log({ trackList });
+  }, [trackList]);
   return (
     <PageWrapper>
       <CreatePlaylists />
       <div className={classes.playlistsContainer}>
-        {isLoading ? 
-          <div>Loading...</div> : null
-        }
-        {currentPlaylist && trackList? <Tracklist
+        {isLoading ? <div>Loading...</div> : null}
+
+        {currentPlaylist && trackList ? (
+          <Tracklist
             nextTracks={nextTracksRequest}
-              emptyState="Плейлист пустий"
-               tracks={trackList}
-            />:     playlists?.map((item) => (
-                   <div
-                     id={item.id.toString()}
-                     className={classes.playlists}
-                     key={item.id}
-                    onClick={clickedPlaylist}
-                   >
-                    <div id={item.id.toString()}>{item.title}</div>
-                  </div>
-                 ))}
+            emptyState="Цей плейлист пустий"
+            tracks={trackList}
+          />
+        ) : null}
+        {!searchParams.get("playlist")
+          ? playlists?.map((item) => (
+              <div
+                id={item.id.toString()}
+                className={classes.playlists}
+                key={item.id}
+                onClick={clickedPlaylist}
+              >
+                <div id={item.id.toString()}>{item.title}</div>
+              </div>
+            ))
+          : null}
       </div>
     </PageWrapper>
   );
