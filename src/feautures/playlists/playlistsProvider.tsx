@@ -109,10 +109,6 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
     return tracks;
   };
 
-  useEffect(() => {
-    if (trackList) setTrackList(null);
-  }, [playlistsId]);
-
   return (
     <PlaylistsContext.Provider
       value={{
@@ -121,6 +117,8 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
         isLoading: state.isLoading,
 
         getInitialTracks: (currentPlaylist) => {
+          setTrackList([]);
+
           if (currentPlaylist) {
             setPlaylistsId(currentPlaylist);
             const getTracks = async () => {
