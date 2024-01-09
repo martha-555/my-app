@@ -13,6 +13,7 @@ const SearchTracks = () => {
   const [searchParams] = useSearchParams();
   const [tracks, settracks] = useState<TrackData[] | null>(null);
   const [fetchRequest] = useDeezerRequest<ResponseTrackData>();
+  const [nextTracksURL, setNextTracksURL] = useState<boolean>(false);
 
   const initialTracks = async () => {
     const response = await searchTracksRequest(0);
@@ -33,11 +34,12 @@ const SearchTracks = () => {
         return json;
       },
     });
+    setNextTracksURL(!!response.next)
     return response.data;
   };
 
   const getNextTracks = async () => {
-    if (tracks) {
+    if (tracks && nextTracksURL) {
       const data = await searchTracksRequest(tracks.length);
       settracks(connectWithoutDuplicates(tracks, data));
     }

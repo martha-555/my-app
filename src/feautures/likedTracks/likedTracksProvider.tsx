@@ -1,6 +1,6 @@
 /** @format */
 
-import React, {
+import {
   ReactElement,
   createContext,
   useContext,
@@ -11,40 +11,52 @@ import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
+import { LOCAL_STORAGE_AUTH_KEY } from "../auth/constants";
+import { authContext } from "../auth/authProvider";
 
 type LikedTracksType = {
-  favoriteTracks: TrackData[];
+  favoriteTracks: TrackData[] | null;
   isLoading: boolean;
   addTrack: (id: number, track: TrackData) => void;
   removeTrack: (id: number, track: TrackData) => void;
+  getNextTracks:() => void
 };
 
 export const LikedTracksContext = createContext<LikedTracksType>({
-  favoriteTracks: [],
+  favoriteTracks: null,
   isLoading: false,
   addTrack: (id: number, track: TrackData) => {},
   removeTrack: (id: number, track: TrackData) => {},
+  getNextTracks: () => {}
 });
 
 const LikedTracksProvider = (props: { children: ReactElement }) => {
-  const [favoriteTracks, setFavoriteTracks] = useState<TrackData[]>([]);
+  const [favoriteTracks, setFavoriteTracks] = useState<TrackData[] | null>(null);
   const [favoriteTracksRequest, state] = useDeezerRequest<TrackData[]>();
   const [requestAction, stateAction] = useDeezerRequest();
+  const [nextTracksURL, setNextTracksURL] = useState<boolean>(false);
+const {authKey} = useContext(authContext);
 
+  const fetchRequest = async (path: string) => {
+    const tracks = await favoriteTracksRequest({
+      path: path,
+      parser: async (response) => {
+        const json = await response.json();
+        setNextTracksURL(!!json.next)
+        return json.data?.map(parseDeezerTrack);
+      },
+    });
+return tracks
+  };
+
+
+  const getOpeningTracks = async () => {
+  const tracklist = await fetchRequest(`/user/me/tracks`);
+  if (tracklist) setFavoriteTracks(tracklist);
+ } 
   useEffect(() => {
-    const fetchRequest = async () => {
-      const tracks = await favoriteTracksRequest({
-        path: `/user/me/tracks`,
-        parser: async (response) => {
-          const json = await response.json();
-          // console.log(json)
-          return json.data?.map(parseDeezerTrack);
-        },
-      });
-      setFavoriteTracks(tracks);
-    };
-    fetchRequest();
-  }, [favoriteTracksRequest]);
+    getOpeningTracks()
+  }, [authKey]);
 
   return (
     <LikedTracksContext.Provider
@@ -59,7 +71,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
             parser: async () => null,
           });
           const upd: TrackData[] = [];
-          upd.push(...favoriteTracks, track);
+          if (favoriteTracks) upd.push(...favoriteTracks, track);
           setFavoriteTracks(upd);
         },
 
@@ -69,12 +81,23 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
             method: HttpMethod.DELETE,
             parser: async () => null,
           });
-          const upd: TrackData[] = favoriteTracks?.filter(
+          if (favoriteTracks) {const upd: TrackData[] = favoriteTracks?.filter(
             (item) => item.id !== track.id
           );
-          setFavoriteTracks(upd);
+          setFavoriteTracks(upd)}
         },
-      }}
+
+        getNextTracks: () => {
+        if ( nextTracksURL && favoriteTracks) {
+        const getTracks = async () => {
+         const nextTracks = await fetchRequest(`/user/me/tracks&index=${favoriteTracks.length}`);
+         if (nextTracks) setFavoriteTracks([...favoriteTracks, ...nextTracks])
+        }
+        getTracks()
+        }  
+        }}}
+
+
     >
       {props.children}
     </LikedTracksContext.Provider>

@@ -18,9 +18,11 @@ const LikeButton = ({ selectedTrack, track }: Props) => {
     useContext(LikedTracksContext);
 
   useEffect(() => {
-    for (let i = 0; i < favoriteTracks?.length; i++) {}
-    // console.log(favoriteTracks[i])
-    setidLikedList(favoriteTracks?.map((item) => item.id));
+    if (favoriteTracks) {
+      for (let i = 0; i < favoriteTracks?.length; i++) {}
+      // console.log(favoriteTracks[i])
+      setidLikedList(favoriteTracks?.map((item) => item.id));
+    }
   }, [favoriteTracks]);
 
   const handleClick = useCallback(() => {

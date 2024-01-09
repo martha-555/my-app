@@ -3,10 +3,11 @@
     margin: 5px;
     padding: 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content: inherit;
+    flex-direction: column;
     width: 25%;
     height: 25%;
-    position: relative;
+    // position: relative;
 }
 
 .playlistsContainer {
@@ -28,14 +29,18 @@ flex-wrap: wrap;
     display: none;
 }
 
-.deleteButtonContainer {
+
+.optionContainer {
     display: flex;
-    justify-content: end;
+   justify-content: end;
 }
 
-.optionButton {
-    width: fit-content;
-    
+.deleteIcon {
+    width: 20%;
+}
+
+.isDelete {
+    border: 1px solid black;
 }
 
 .delete{

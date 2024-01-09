@@ -3,7 +3,6 @@
 import {
   ReactElement,
   createContext,
-  useContext,
   useEffect,
   useState,
 } from "react";
@@ -12,11 +11,7 @@ import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
 import connectWithoutDuplicates from "../../utils/connectWithoutDuplicates";
-import { useSearchParams } from "react-router-dom";
 
-type UpdateTracklist = {
-  [key: number]: TrackData[];
-};
 type errorResponse = {
   [key: string]: {
     code: number;
@@ -31,7 +26,7 @@ type PlaylistsType = {
 
   playlists: Playlist[];
   createPlaylist: (name: string) => void;
-  removePlaylist: (name: string, playlist: Playlist) => void;
+  removePlaylist: (id: number) => void;
   addToPlaylist: (
     track: number,
     currentPlaylist: number
@@ -48,7 +43,7 @@ type PlaylistsType = {
 export const PlaylistsContext = createContext<PlaylistsType>({
   playlists: [],
   createPlaylist: (name) => {},
-  removePlaylist: (name, playlist) => {},
+  removePlaylist: (id) => {},
   getInitialTracks: async (currentPlaylist) => {},
   getNextTracks: async (currentPlaylist, indexForRequest) => {},
 
@@ -71,6 +66,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [trackList, setTrackList] = useState<TrackData[] | null>(null);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [playlistsId, setPlaylistsId] = useState<number>(0);
+  const [nextTracksURL, setNextTracksURL] = useState<boolean>(false);
   // const [searchParams] = useSearchParams({});
 
   useEffect(() => {
@@ -103,15 +99,12 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
       }`,
       parser: async (response) => {
         const json = await response.json();
+        setNextTracksURL(!!json.next)
         return json?.data?.map(parseDeezerTrack);
       },
     });
     return tracks;
   };
-
-  useEffect(() => {
-    if (trackList) setTrackList(null);
-  }, [playlistsId]);
 
   return (
     <PlaylistsContext.Provider
@@ -121,8 +114,9 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
         isLoading: state.isLoading,
 
         getInitialTracks: (currentPlaylist) => {
+    if (trackList) setTrackList(null);
+
           if (currentPlaylist) {
-            setPlaylistsId(currentPlaylist);
             const getTracks = async () => {
               const response = await fetchRequest(currentPlaylist);
               setTrackList(response);
@@ -132,9 +126,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
         },
 
         getNextTracks: (currentPlaylist, indexForRequest) => {
-          if (currentPlaylist) {
-            setPlaylistsId(currentPlaylist);
-
+          if (currentPlaylist && nextTracksURL) {
             const getTracks = async () => {
               const response = await fetchRequest(
                 currentPlaylist,
@@ -169,7 +161,6 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
               parser: async () => null,
             });
             if (trackList) {
-              const upd = trackList;
               const updateTracks = trackList.filter(
                 (item) => +item.id !== +track.id
               );
@@ -197,7 +188,16 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
           };
           requestFunction();
         },
-        removePlaylist: () => {},
+        removePlaylist: (id) => {
+          actionRequest({
+            path: `/playlist/${id}`,
+            method: HttpMethod.DELETE,
+            parser: async () => null,
+          });
+          const updatePlaylists = playlists.filter(
+            (item) => +item.id !== id);
+            setPlaylists(updatePlaylists)
+        },
       }}
     >
       {props.children}

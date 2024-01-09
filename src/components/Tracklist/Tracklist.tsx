@@ -9,7 +9,7 @@ import { PlayerContext } from "../../feautures/player/playerProvider";
 
 type Props = {
   tracks: TrackData[];
-  nextTracks?: Function;
+  nextTracks: Function;
   emptyState: ReactNode;
 };
 

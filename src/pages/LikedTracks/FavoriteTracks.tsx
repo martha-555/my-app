@@ -3,23 +3,21 @@ import { useContext, useEffect } from "react";
 import Tracklist from "../../components/Tracklist/Tracklist";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { LikedTracksContext } from "../../feautures/likedTracks/likedTracksProvider";
-import { useLocation } from "react-router";
-import { authContext } from "../../feautures/auth/authProvider";
 
 const FavoriteTracks = () => {
-  const { favoriteTracks, isLoading } = useContext(LikedTracksContext);
+  const { favoriteTracks, isLoading, getNextTracks } = useContext(LikedTracksContext);
 
   return (
     <PageWrapper>
       <div>
         {isLoading ? (
           <span>loading...</span>
-        ) : (
-          <Tracklist
+        ) : null}
+       {favoriteTracks? <Tracklist
+          nextTracks={getNextTracks}
             emptyState="У Вас немає улюблених треків"
             tracks={favoriteTracks}
-          />
-        )}
+          /> : null}
       </div>
     </PageWrapper>
   );

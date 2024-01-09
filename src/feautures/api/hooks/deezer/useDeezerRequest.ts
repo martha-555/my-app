@@ -24,11 +24,6 @@ const useDeezerRequest = <Data>(): UseDeezerRequestReturn<Data> => {
   const [makeRequest, state] = useBackendRequest<Data>();
   const { authKey } = useContext(authContext);
 
-  useEffect(() => {
-    // console.log(authKey);
-  }, [authKey]);
-  if (authKey) {
-  }
   const makeDeezerRequest = useCallback<RequestMaker<Data>>(
     async ({ path, parser, method = HttpMethod.GET }) => {
       return makeRequest(

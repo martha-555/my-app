@@ -8,18 +8,22 @@ import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
 import CreatePlaylists from "./CreatePlaylists";
 import Tracklist from "../../components/Tracklist/Tracklist";
+import Logo  from '../../icons/deleteIcon.png'
 
 const Playlists = () => {
   const [searchParams, setSearchParams] = useSearchParams({});
-  const { playlists, getInitialTracks, getNextTracks, isLoading, trackList } =
+  const { playlists, getInitialTracks, getNextTracks, isLoading, trackList, removePlaylist } =
     useContext(PlaylistsContext);
-
+const [clickedDelete, setClickedDelete] = useState<boolean>(false)
   const currentPlaylist = Number(searchParams.get("playlist"));
+  const [clickedPlaylist, setClickedPlaylist] = useState<number>();
+  
 
-  const clickedPlaylist = async (e: React.MouseEvent<HTMLElement>) => {
+  const handleClickedPlaylist = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLDivElement;
     const playlistId = target.id;
-    if (target.className.includes("optionButton") === false)
+    setClickedPlaylist(+target.id)
+    if (target.className.includes("optionContainer") === false && target.className.includes("isDelete") === false && target.localName !== 'img')
       setSearchParams({ playlist: playlistId });
   };
 
@@ -30,9 +34,18 @@ const Playlists = () => {
   const nextTracksRequest = () => {
     if (trackList) getNextTracks(currentPlaylist, trackList.length);
   };
-  useEffect(() => {
-    console.log({ trackList });
-  }, [trackList]);
+
+  const handleDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLDivElement;
++(target.id) == clickedPlaylist? setClickedDelete(!clickedDelete): setClickedDelete(true);
+  }
+
+  const deletePlaylist = (e:React.MouseEvent<HTMLElement>) => {
+    const target = e.target as HTMLDivElement;
+    removePlaylist(+target.id)
+  }
+
+
   return (
     <PageWrapper>
       <CreatePlaylists />
@@ -52,12 +65,15 @@ const Playlists = () => {
                 id={item.id.toString()}
                 className={classes.playlists}
                 key={item.id}
-                onClick={clickedPlaylist}
-              >
+                onClick={handleClickedPlaylist}>
                 <div id={item.id.toString()}>{item.title}</div>
+                {clickedDelete && clickedPlaylist === +item.id? <div id={item.id.toString()} className={classes.isDelete} onClick={deletePlaylist} >Видалити плейлист?</div>: null }
+                <div className={classes.optionContainer} id={item.id.toString()} onClick={handleDeleteClick}>  
+                <img className={classes.deleteIcon} id={item.id.toString()} src={Logo} alt="" />
+                </div>
               </div>
             ))
-          : null}
+            : null}
       </div>
     </PageWrapper>
   );
