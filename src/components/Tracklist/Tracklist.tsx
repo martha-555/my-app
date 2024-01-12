@@ -1,6 +1,6 @@
 /** @format */
 
-import { ReactNode, useContext, useEffect } from "react";
+import { ReactNode, useContext, useEffect, useRef } from "react";
 import { TrackData } from "../../types/deezer";
 import Track from "../Track/Track";
 import classes from "./styles.module.scss";
@@ -14,29 +14,31 @@ type Props = {
 };
 
 const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
-  const { ref, inView } = useInView({
-    threshold: 1.0,
-    // triggerOnce: true,
-  });
 
   const { setTracklist } = useContext(PlayerContext);
+
   useEffect(() => {
     setTracklist(tracks);
   }, [tracks]);
 
-  useEffect(() => {
-    if (inView && nextTracks) nextTracks();
-  }, [inView]);
+  const [ ref, inView ] = useInView({
+    threshold: 1.0,
+    // triggerOnce: true,
+  });
+
+  const  [ref2, inView2]  = useInView({
+    threshold: 1.0,
+  });
 
   useEffect(() => {
-    // console.log({ tracks });
-  }, []);
+    if (inView || inView2) nextTracks();
+  }, [inView, inView2]);
+
 
   return (
-    <div className={classes.tracklistContainer}>
+    <div ref={ref} className={classes.tracklistContainer}>
       {tracks?.map((item) => (
-        <Track key={item.id} ref={ref} track={item} />
-      ))}
+      <Track ref={ref2} key={item.id}  track={item} />))}
       {tracks?.length == 0 ? emptyState : null}
     </div>
   );

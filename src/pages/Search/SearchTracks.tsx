@@ -27,7 +27,7 @@ const SearchTracks = () => {
   const searchTracksRequest = async (index: number) => {
     const response = await fetchRequest({
       path: encodeURI(
-        `/search?q=${searchParams.get("q")}&index=${index}&limit=30`
+        `/search?q=${searchParams.get("q")}&index=${index}&limit=4`
       ),
       parser: async (response) => {
         const json = await response.json();

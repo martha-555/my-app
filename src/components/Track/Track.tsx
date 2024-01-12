@@ -13,7 +13,7 @@ type Props = {
   track: TrackData;
 };
 
-const Track = forwardRef(
+const Track = forwardRef( 
   ({ track }: Props, ref: React.ForwardedRef<HTMLDivElement>) => {
     const { play, currentTrack, togglePlay } = useContext(PlayerContext);
 
@@ -21,7 +21,7 @@ const Track = forwardRef(
       <div ref={ref}>
         <div
           className={classes.container}
-          onClick={(e) => {
+          onClick={() => {
             currentTrack?.id === track.id ? togglePlay() : play(track.id);
           }}
         >
