@@ -35,6 +35,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   const [favoriteTracksRequest, state] = useDeezerRequest<TrackData[]>();
   const [requestAction, stateAction] = useDeezerRequest();
   const [nextTracksURL, setNextTracksURL] = useState<boolean>(false);
+  const [tracksLength, setTracksLength] = useState<number>();
 const {authKey} = useContext(authContext);
 
   const fetchRequest = async (path: string) => {
@@ -58,6 +59,10 @@ return tracks
     getOpeningTracks()
   }, [authKey]);
 
+
+  useEffect(() => {
+setTracksLength(favoriteTracks?.length)
+  },[favoriteTracks])
   return (
     <LikedTracksContext.Provider
       value={{
@@ -75,7 +80,7 @@ return tracks
           setFavoriteTracks(upd);
         },
 
-        removeTrack: (id, track) => {
+        removeTrack: (id, track) =>  {
           requestAction({
             path: `/user/me/tracks?track_id=${id}`,
             method: HttpMethod.DELETE,
@@ -84,14 +89,17 @@ return tracks
           if (favoriteTracks) {const upd: TrackData[] = favoriteTracks?.filter(
             (item) => item.id !== track.id
           );
+          console.log('delete')
           setFavoriteTracks(upd)}
         },
 
         getNextTracks: () => {
+   console.log('next tracks in provider',favoriteTracks?.length)
         if ( nextTracksURL && favoriteTracks) {
         const getTracks = async () => {
          const nextTracks = await fetchRequest(`/user/me/tracks&index=${favoriteTracks.length}`);
-         if (nextTracks) setFavoriteTracks([...favoriteTracks, ...nextTracks])
+         console.log('nextTracks url', nextTracks)
+         setFavoriteTracks([...favoriteTracks, ...nextTracks])
         }
         getTracks()
         }  
