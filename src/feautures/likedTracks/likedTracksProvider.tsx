@@ -38,7 +38,6 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   const [favoriteTracksRequest, state] = useDeezerRequest<TrackData[]>();
   const [requestAction, stateAction] = useDeezerRequest();
   const [nextTracksURL, setNextTracksURL] = useState<boolean>(false);
-  const [tracksLength, setTracksLength] = useState<number>();
   const { authKey } = useContext(authContext);
 
   const fetchRequest = async (path: string) => {
@@ -62,7 +61,6 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   }, [authKey]);
 
   useEffect(() => {
-    setTracksLength(favoriteTracks?.length);
   }, [favoriteTracks]);
   return (
     <LikedTracksContext.Provider
