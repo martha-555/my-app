@@ -54,7 +54,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
 
   const getOpeningTracks = async () => {
   const tracklist = await fetchRequest(`/user/me/tracks`);
-  if (tracklist) setFavoriteTracks(tracklist);
+  if (tracklist) setFavoriteTracks(tracklist.reverse());
  } 
   useEffect(() => {
     getOpeningTracks();
@@ -89,13 +89,11 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
             const upd: TrackData[] = favoriteTracks?.filter(
               (item) => item.id !== track.id
             );
-            console.log("delete");
             setFavoriteTracks(upd);
           }
         },
 
         getNextTracks: () => {
-   console.log('next tracks in provider',favoriteTracks?.length)
         if ( nextTracksURL && favoriteTracks) {
         const getTracks = async () => {
          const nextTracks = await fetchRequest(`/user/me/tracks&index=${favoriteTracks.length}`);
