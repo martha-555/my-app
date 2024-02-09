@@ -15,10 +15,18 @@ import { LOCAL_STORAGE_AUTH_KEY } from "../auth/constants";
 import { authContext } from "../auth/authProvider";
 import connectWithoutDuplicates from "../../utils/connectWithoutDuplicates";
 
+type errorResponse = {
+  [key: string]: {
+    code: number;
+    message: string;
+    type: string;
+  };
+};
+
 type LikedTracksType = {
   favoriteTracks: TrackData[] | null;
   isLoading: boolean;
-  addTrack: (id: number, track: TrackData) => void;
+  addTrack: (id: number, track: TrackData) => Promise<errorResponse | boolean>;
   removeTrack: (id: number, track: TrackData) => void;
   getNextTracks: () => void;
 };
@@ -26,17 +34,17 @@ type LikedTracksType = {
 export const LikedTracksContext = createContext<LikedTracksType>({
   favoriteTracks: null,
   isLoading: false,
-  addTrack: (id: number, track: TrackData) => {},
+  addTrack: async (id: number, track: TrackData) => false,
   removeTrack: (id: number, track: TrackData) => {},
   getNextTracks: () => {},
 });
 
 const LikedTracksProvider = (props: { children: ReactElement }) => {
-  const [favoriteTracks, setFavoriteTracks] = useState<TrackData[] | null>(
-    null
-  );
+  const [favoriteTracks, setFavoriteTracks] = useState<TrackData[] | null>(null);
   const [favoriteTracksRequest, state] = useDeezerRequest<TrackData[]>();
   const [requestAction, stateAction] = useDeezerRequest();
+  const [requestAddAction] = useDeezerRequest<errorResponse | boolean>();
+
   const [nextTracksURL, setNextTracksURL] = useState<boolean>(false);
   const { authKey } = useContext(authContext);
 
@@ -54,6 +62,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
 
   const getOpeningTracks = async () => {
   const tracklist = await fetchRequest(`/user/me/tracks`);
+  console.log(tracklist)
   if (tracklist) setFavoriteTracks(tracklist.reverse());
  } 
   useEffect(() => {
@@ -69,14 +78,18 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
         isLoading: state.isLoading,
 
         addTrack: (id, track) => {
-          requestAction({
+        const request = async () => await requestAddAction({
             path: `/user/me/tracks?track_id=${id}`,
             method: HttpMethod.POST,
-            parser: async () => null,
+            parser: async (response) => {
+              const code = await response.json();
+              return code;
+            },
           });
           const upd: TrackData[] = [];
           if (favoriteTracks) upd.push(track,...favoriteTracks);
           setFavoriteTracks(upd);
+          return request()
         },
 
         removeTrack: (id, track) => {

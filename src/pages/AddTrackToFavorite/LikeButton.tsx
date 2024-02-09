@@ -13,6 +13,7 @@ type Props = {
 
 const LikeButton = ({ selectedTrack, track }: Props) => {
   const [idLikedList, setidLikedList] = useState<number[]>([]);
+  const [responseCode, setResponseCode] = useState<boolean>(false)
   const [idLiked, setIdLiked] = useState<number>(0);
   const { favoriteTracks, addTrack, removeTrack } =
     useContext(LikedTracksContext);
@@ -25,18 +26,23 @@ const LikeButton = ({ selectedTrack, track }: Props) => {
     }
   }, [favoriteTracks]);
 
-  const handleClick = useCallback(() => {
+  const handleClick = async () => {
     setIdLiked(selectedTrack);
-    idLikedList.includes(selectedTrack) && idLikedList
-      ? removeTrack(selectedTrack, track)
-      : addTrack(selectedTrack, track);
-  }, [idLiked, selectedTrack, idLikedList, track]);
+    // idLikedList.includes(selectedTrack) && idLikedList
+    //   ? removeTrack(selectedTrack, track)
+    //   : addTrack(selectedTrack, track);
+    const code = await addTrack(selectedTrack, track);
+   if ( typeof code !== "boolean") removeTrack(selectedTrack, track);
+   typeof code == "boolean"? setResponseCode(true) : setResponseCode(false);
+
+  }
+
   return (
     <>
       <div
         onClick={handleClick}
         className={
-          idLikedList?.includes(+selectedTrack)
+          responseCode
             ? classes.isLiked
             : classes.notClicked
         }

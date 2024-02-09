@@ -139,7 +139,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
 
         trackList,
         addToPlaylist: (track, currentPlaylist) => {
-          const a = async () =>
+          const request = async () =>
             await returnResponse({
               path: `/playlist/${currentPlaylist}/tracks&songs=${track}`,
               method: HttpMethod.POST,
@@ -148,7 +148,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
                 return code;
               },
             });
-          return a();
+          return request();
         },
 
         deleteFromPlaylist: (track, currentPlaylist) => {
