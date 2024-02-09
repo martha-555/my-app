@@ -17,7 +17,7 @@ const Auth = () => {
   const [isDelete, setIsDelete] = useState<boolean>(false);
 
   const handleClick = () => {
-  isAuth? setIsDelete(!isDelete):  window.location.replace(
+  isAuth? setIsDelete(!isDelete): window.location.replace(
        "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
      );
    };
