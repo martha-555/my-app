@@ -14,5 +14,9 @@ const routes: Routes[] = [
     name: "recommendations",
     path: "/recommendations",
   },
+  {
+    name: "main",
+    path: "/main",
+  },
 ];
 export { routes };

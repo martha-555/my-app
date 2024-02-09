@@ -45,7 +45,6 @@ const [clickedDelete, setClickedDelete] = useState<boolean>(false)
     removePlaylist(+target.id)
   }
 
-useEffect(() => {console.log({trackList})},[trackList])
   return (
     <PageWrapper>
       <CreatePlaylists />

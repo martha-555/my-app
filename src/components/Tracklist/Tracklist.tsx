@@ -4,7 +4,6 @@ import { ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { TrackData } from "../../types/deezer";
 import Track from "../Track/Track";
 import classes from "./styles.module.scss";
-import { useInView } from "react-intersection-observer";
 import { PlayerContext } from "../../feautures/player/playerProvider";
 
 type Props = {
@@ -17,28 +16,12 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
 
   const { setTracklist } = useContext(PlayerContext);
   const [isVisible, setIsvisible] = useState<boolean>(false);
-  const rootRef = useRef(null);
   const ref = useRef(null);
 
 
   useEffect(() => {
     setTracklist(tracks);
   }, [tracks]);
-
-  // const { ref, inView } = useInView({
-  //   threshold: 1.0,
-  //   root: rootRef.current
-  //   // triggerOnce: true,
-  // });
-
-  // const  [ref2, inView2]  = useInView({
-  //   threshold: 1.0,
-  // });
-
-  // console.log(inView)
-  // useEffect(() => {
-  //   if (inView) 
-  // }, [inView]);
 
   const options = {
     root: null,
@@ -49,7 +32,6 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
     const [entry] = entries;
     // console.log(entry.isIntersecting)
     setIsvisible(entry.isIntersecting)
-  //  if (entry.isIntersecting) nextTracks();
   };
   
   useEffect(() => {
@@ -59,9 +41,11 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
     return () => {
       if (ref.current) observer.unobserve(ref.current)
     }
-  },[ref.current,options,isVisible])
+  },[ref.current,options])
 
-useEffect(() => {console.log('useEffect', tracks.length); if (isVisible) nextTracks()},[tracks.length])
+useEffect(() => {
+  if (isVisible) nextTracks()
+},[isVisible])
 
   return (
     <div className={classes.tracklistContainer}>

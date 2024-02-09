@@ -13,6 +13,7 @@ import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
 import { LOCAL_STORAGE_AUTH_KEY } from "../auth/constants";
 import { authContext } from "../auth/authProvider";
+import connectWithoutDuplicates from "../../utils/connectWithoutDuplicates";
 
 type LikedTracksType = {
   favoriteTracks: TrackData[] | null;
@@ -53,7 +54,7 @@ return tracks
 
   const getOpeningTracks = async () => {
   const tracklist = await fetchRequest(`/user/me/tracks`);
-  if (tracklist) setFavoriteTracks(tracklist);
+  if (tracklist) setFavoriteTracks(tracklist.reverse());
  } 
   useEffect(() => {
     getOpeningTracks()
@@ -76,7 +77,7 @@ setTracksLength(favoriteTracks?.length)
             parser: async () => null,
           });
           const upd: TrackData[] = [];
-          if (favoriteTracks) upd.push(...favoriteTracks, track);
+          if (favoriteTracks) upd.push(track,...favoriteTracks);
           setFavoriteTracks(upd);
         },
 
@@ -94,12 +95,12 @@ setTracksLength(favoriteTracks?.length)
         },
 
         getNextTracks: () => {
-   console.log('next tracks in provider',favoriteTracks?.length)
-        if ( nextTracksURL && favoriteTracks) {
+          if ( nextTracksURL && favoriteTracks) {
+            console.log(favoriteTracks.length)
         const getTracks = async () => {
          const nextTracks = await fetchRequest(`/user/me/tracks&index=${favoriteTracks.length}`);
-         console.log('nextTracks url', nextTracks)
-         setFavoriteTracks([...favoriteTracks, ...nextTracks])
+         setFavoriteTracks(connectWithoutDuplicates(favoriteTracks,nextTracks))
+        //  setFavoriteTracks([...favoriteTracks, ...nextTracks])
         }
         getTracks()
         }  

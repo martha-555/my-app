@@ -7,6 +7,7 @@ import Player from "../../components/Player/Player";
 import SearchTracks from "../../pages/Search/SearchTracks";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
+import Auth from "../../pages/Auth/Auth";
 
 type Props = {
   children: ReactNode;
@@ -35,8 +36,7 @@ const PageWrapper = ({ children }: Props) => {
             setInputValue(target.value);
           }}
         />
-          {/* <button onClick={()=> navigate('/search')}>Ok</button> */}
-          {/* <SearchTracks></SearchTracks> */}
+          <Auth/>
           {children}
         </div>
         <Player />

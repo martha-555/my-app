@@ -1,26 +1,27 @@
 /** @format */
 
-import { useContext, useEffect } from "react";
-import { useLocation, useParams } from "react-router";
+import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { LOCAL_STORAGE_AUTH_KEY } from "../../feautures/auth/constants";
 import { authContext } from "../../feautures/auth/authProvider";
 import useBackendRequest from "../../feautures/api/hooks/useBackendRequest";
 import { HttpMethod } from "../../feautures/api/types";
+import useIsAuthorize from "../../feautures/auth/hooks/useIsAuthorize";
 
 const Auth = () => {
-  const { authKey } = useContext(authContext);
-
-  const handleClick = () => {
-    window.location.replace(
-      "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
-    );
-  };
-
+  
   const [searchParams] = useSearchParams();
   const code = searchParams.get("code");
   const { updateAuthKey } = useContext(authContext);
   const [makeRequest] = useBackendRequest<string>();
+  const isAuth = useIsAuthorize();
+  const [isDelete, setIsDelete] = useState<boolean>(false);
+
+  const handleClick = () => {
+  isAuth? setIsDelete(!isDelete):  window.location.replace(
+       "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
+     );
+   };
+ 
 
   useEffect(() => {
     if (code) {
@@ -43,9 +44,12 @@ const Auth = () => {
       fetchToken();
     }
   }, [code]);
+
   return (
     <div>
-      <button onClick={handleClick}>Log in</button>
+      <button onClick={handleClick}>{isAuth? 'Вийти': 'Увійти'}</button>
+      {isDelete?
+      <div onClick={() => updateAuthKey(null)} >Вийти з акаунту?</div> : null}
     </div>
   );
 };

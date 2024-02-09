@@ -65,9 +65,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [responseId] = useDeezerRequest<number>();
   const [trackList, setTrackList] = useState<TrackData[] | null>(null);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
-  const [playlistsId, setPlaylistsId] = useState<number>(0);
   const [nextTracksURL, setNextTracksURL] = useState<boolean>(false);
-  // const [searchParams] = useSearchParams({});
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -119,7 +117,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
           if (currentPlaylist) {
             const getTracks = async () => {
               const response = await fetchRequest(currentPlaylist);
-              setTrackList(response);
+              setTrackList(response.reverse());
             };
             getTracks();
           }
