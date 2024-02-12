@@ -2,14 +2,20 @@
 
 .container {
   height: 100%;
-  background: rgb(208 206 206);
+  background: #232121;
+  color: #FFFFFF;
   box-shadow: 2px 1px 6px 0px #7a7474;
   width: 200px;
-  padding: 5px;
+  padding-top: 5px;
 }
 
 .item {
   text-align: center;
-  background: rgb(103, 84, 84);
+  background: #494646;
   padding: 2px;
+  margin: 20px 5px 20px 5px;
+  border-radius: 10px 100px / 120px;
+  font-family: cursive;
+  font-size: 20px;
+  color:#DCDCDC;
 }

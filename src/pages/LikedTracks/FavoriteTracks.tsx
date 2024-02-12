@@ -14,7 +14,7 @@ const FavoriteTracks = () => {
           <span>loading...</span>
         ) : null}
        {favoriteTracks? <Tracklist
-          nextTracks={getNextTracks}
+          nextTracks={() => {}}
             emptyState="У Вас немає улюблених треків"
             tracks={favoriteTracks}
           /> : null}

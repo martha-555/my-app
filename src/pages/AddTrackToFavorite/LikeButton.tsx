@@ -5,6 +5,7 @@ import classes from "./styles.module.scss";
 import { LikedTracksContext } from "../../feautures/likedTracks/likedTracksProvider";
 import { TrackData } from "../../types/deezer";
 
+
 // `/playlist/${lovedTracks}/tracks&songs=${selectedTrack}`
 type Props = {
   selectedTrack: number;
@@ -28,12 +29,12 @@ const LikeButton = ({ selectedTrack, track }: Props) => {
 
   const handleClick = async () => {
     setIdLiked(selectedTrack);
-    // idLikedList.includes(selectedTrack) && idLikedList
-    //   ? removeTrack(selectedTrack, track)
-    //   : addTrack(selectedTrack, track);
-    const code = await addTrack(selectedTrack, track);
-   if ( typeof code !== "boolean") removeTrack(selectedTrack, track);
-   typeof code == "boolean"? setResponseCode(true) : setResponseCode(false);
+    idLikedList.includes(selectedTrack) && idLikedList
+      ? removeTrack(selectedTrack, track)
+      : addTrack(selectedTrack, track);
+  //   const code = await addTrack(selectedTrack, track);
+  //  if ( typeof code !== "boolean") removeTrack(selectedTrack, track);
+  //  typeof code == "boolean" ? setResponseCode(true) : setResponseCode(false);
 
   }
 
@@ -42,7 +43,7 @@ const LikeButton = ({ selectedTrack, track }: Props) => {
       <div
         onClick={handleClick}
         className={
-          responseCode
+          idLikedList.includes(selectedTrack)
             ? classes.isLiked
             : classes.notClicked
         }

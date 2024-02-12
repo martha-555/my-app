@@ -14,6 +14,7 @@ import { parseDeezerTrack } from "../../utils/deezer";
 import { LOCAL_STORAGE_AUTH_KEY } from "../auth/constants";
 import { authContext } from "../auth/authProvider";
 import connectWithoutDuplicates from "../../utils/connectWithoutDuplicates";
+import { getNextTracks } from "../../utils/updateNextTracks";
 
 type errorResponse = {
   [key: string]: {
@@ -41,6 +42,8 @@ export const LikedTracksContext = createContext<LikedTracksType>({
 
 const LikedTracksProvider = (props: { children: ReactElement }) => {
   const [favoriteTracks, setFavoriteTracks] = useState<TrackData[] | null>(null);
+  const [initialTracks, setInitialTracks] = useState<TrackData[] | null>(null);
+
   const [favoriteTracksRequest, state] = useDeezerRequest<TrackData[]>();
   const [requestAction, stateAction] = useDeezerRequest();
   const [requestAddAction] = useDeezerRequest<errorResponse | boolean>();
@@ -62,15 +65,28 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
 
   const getOpeningTracks = async () => {
   const tracklist = await fetchRequest(`/user/me/tracks`);
-  console.log(tracklist)
-  if (tracklist) setFavoriteTracks(tracklist.reverse());
+  if (tracklist) setInitialTracks(tracklist.reverse());
  } 
   useEffect(() => {
     getOpeningTracks();
   }, [authKey]);
 
   useEffect(() => {
+    if (nextTracksURL) {
+  const getTracks = async () => {
+const tracklist = await fetchRequest(`/user/me/tracks&index=${favoriteTracks? favoriteTracks?.length: initialTracks?.length}`);
+const allTracks: TrackData[] = [];
+if (initialTracks) allTracks.push(...tracklist.reverse(), ...initialTracks)
+setFavoriteTracks(allTracks)
+  }   
+  getTracks()
+}
+  },[favoriteTracks?.length, initialTracks?.length])
+
+  useEffect(() => {
+    console.log(favoriteTracks?.length)
   }, [favoriteTracks]);
+
   return (
     <LikedTracksContext.Provider
       value={{
