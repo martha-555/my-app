@@ -4,7 +4,7 @@ import { HttpMethod } from "../../types";
 import useBackendRequest, { BackendRequestState } from "../useBackendRequest";
 
 type ReturnType = [
-  (query: string) => Promise<string>,
+  (query: string) => Promise<string | null>,
   BackendRequestState<string>
 ];
 

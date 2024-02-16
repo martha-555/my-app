@@ -20,7 +20,7 @@ const Recommendations = () => {
         return json.data?.map(parseDeezerTrack);
       }});
 console.log(tracks);
-setTracks(tracks)
+if (tracks) setTracks(tracks)
   }
 
   useEffect(() => {

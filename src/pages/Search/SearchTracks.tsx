@@ -17,7 +17,7 @@ const SearchTracks = () => {
 
   const initialTracks = async () => {
     const response = await searchTracksRequest(0);
-    settracks(response);
+   if (response) settracks(response);
   };
   useEffect(() => {
     if (tracks) settracks(null);
@@ -34,14 +34,14 @@ const SearchTracks = () => {
         return json;
       },
     });
-    setNextTracksURL(!!response.next)
-    return response.data;
+   if (response) {setNextTracksURL(!!response.next)
+    return response.data}
   };
 
   const getNextTracks = async () => {
     if (tracks && nextTracksURL) {
       const data = await searchTracksRequest(tracks.length);
-      settracks(connectWithoutDuplicates(tracks, data));
+     if (data) settracks(connectWithoutDuplicates(tracks, data));
     }
   };
 

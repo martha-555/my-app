@@ -64,7 +64,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         `${currentTrack?.artist.name} ${currentTrack?.title}`
       );
 
-      audio.src = response;
+     if (response) audio.src = response;
       const playPromise = audio.play();
 
       if (playPromise !== undefined || null) {

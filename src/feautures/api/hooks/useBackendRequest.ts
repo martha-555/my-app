@@ -29,25 +29,29 @@ const useBackendRequest = <Data>(): UseBackendRequestReturn<Data> => {
 
 
   const makeRequest: RequestMaker<Data>= useCallback(
-    async (body: BackendRequestBody, parser: BackendResponseParser<Data>) => {
+    async (body: BackendRequestBody, parser: BackendResponseParser<Data | null>) => {
       setData(null);
       setIsLoading(true);
-
-      const data = 
-        await fetch(BACKEND_URL, {
-          method: "POST",
-          body: JSON.stringify(body),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      
-        const parsedData = await parser(data);
+try {
   
-        setData(parsedData);
-        setIsLoading(false);
+  const data = 
+    await fetch(BACKEND_URL, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  
+    const parsedData = await parser(data);
 
-        return parsedData;
+    setData(parsedData);
+    setIsLoading(false);
+
+    return parsedData;
+} catch(e) {
+  return Promise.resolve(null)
+}
       
     },
     [setIsLoading]

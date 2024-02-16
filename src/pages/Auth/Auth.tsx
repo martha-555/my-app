@@ -37,9 +37,9 @@ const Auth = () => {
         );
 
         if (response === "wrong code") return;
-        const accessToken = response.split("=")[1].split("&");
+       if (response){ const accessToken = response.split("=")[1].split("&");
 
-        updateAuthKey(accessToken[0]);
+        updateAuthKey(accessToken[0])}
       };
       fetchToken();
     }

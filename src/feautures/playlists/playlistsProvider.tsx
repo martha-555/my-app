@@ -30,7 +30,7 @@ type PlaylistsType = {
   addToPlaylist: (
     track: number,
     currentPlaylist: number
-  ) => Promise<errorResponse | boolean>;
+  ) => Promise<errorResponse | boolean | null>;
   deleteFromPlaylist: (
     track: TrackData,
     currentPlaylist: number | null
@@ -80,7 +80,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
           }));
         },
       });
-      setPlaylists(
+    if (playlistsResponse)  setPlaylists(
         playlistsResponse?.filter((item) => item.is_loved_track === false)
       );
     };
@@ -117,7 +117,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
           if (currentPlaylist) {
             const getTracks = async () => {
               const response = await fetchRequest(currentPlaylist);
-              setTrackList(response.reverse());
+            if (response)  setTrackList(response.reverse());
             };
             getTracks();
           }
@@ -130,7 +130,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
                 currentPlaylist,
                 indexForRequest
               );
-              if (trackList)
+              if (trackList && response)
                 setTrackList(connectWithoutDuplicates(trackList, response));
             };
             getTracks();
@@ -177,7 +177,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
               method: HttpMethod.POST,
             });
             const upd: Playlist[] = [];
-            upd.push(...playlists, {
+          if (response)  upd.push(...playlists, {
               id: response,
               title: name,
               is_loved_track: false,
