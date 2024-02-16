@@ -11,10 +11,8 @@ import { TrackData } from "../../types/deezer";
 import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
-import { LOCAL_STORAGE_AUTH_KEY } from "../auth/constants";
 import { authContext } from "../auth/authProvider";
-import connectWithoutDuplicates from "../../utils/connectWithoutDuplicates";
-import { getNextTracks } from "../../utils/updateNextTracks";
+
 
 type errorResponse = {
   [key: string]: {
@@ -27,7 +25,7 @@ type errorResponse = {
 type LikedTracksType = {
   favoriteTracks: TrackData[] | null;
   isLoading: boolean;
-  addTrack: (id: number, track: TrackData) => Promise<errorResponse | boolean>;
+  addTrack: (id: number, track: TrackData) => Promise<errorResponse | boolean | null>;
   removeTrack: (id: number, track: TrackData) => void;
   getNextTracks: () => void;
 };
@@ -52,6 +50,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   const { authKey } = useContext(authContext);
 
   const fetchRequest = async (path: string) => {
+  
     const tracks = await favoriteTracksRequest({
       path: path,
       parser: async (response) => {
@@ -76,7 +75,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   const getTracks = async () => {
 const tracklist = await fetchRequest(`/user/me/tracks&index=${favoriteTracks? favoriteTracks?.length: initialTracks?.length}`);
 const allTracks: TrackData[] = [];
-if (initialTracks) allTracks.push(...tracklist.reverse(), ...initialTracks)
+if (initialTracks && tracklist) allTracks.push(...tracklist.reverse(), ...initialTracks)
 setFavoriteTracks(allTracks)
   }   
   getTracks()
@@ -127,7 +126,7 @@ setFavoriteTracks(allTracks)
         const getTracks = async () => {
          const nextTracks = await fetchRequest(`/user/me/tracks&index=${favoriteTracks.length}`);
          console.log('nextTracks url', nextTracks)
-         setFavoriteTracks([...favoriteTracks, ...nextTracks])
+      if (nextTracks) setFavoriteTracks([...favoriteTracks, ...nextTracks])
         }
         getTracks()
         }  

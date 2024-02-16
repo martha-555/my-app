@@ -14,7 +14,7 @@ type RequestMaker<Data> = (params: {
   path: string;
   method?: HttpMethod;
   parser: BackendResponseParser<Data>;
-}) => Promise<Data>;
+}) => Promise<Data | null>;
 type UseDeezerRequestReturn<Data> = [
   RequestMaker<Data>,
   BackendRequestState<Data>

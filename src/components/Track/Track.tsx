@@ -10,7 +10,8 @@ import { useSearchParams } from "react-router-dom";
 import TracksOptions from "../../pages/AddAndDeleteTracksFromPlaylist/TracksOptions";
 import { forwardRef } from "react";
 import PlayIcon from '../../icons/play.png';
-import PauseIcon from '../../icons/pause.png'
+import PauseIcon from '../../icons/pause.png';
+
 
 
 type Props = {

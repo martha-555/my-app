@@ -1,13 +1,15 @@
 /** @format */
+"use client";
+
 
 import { ReactNode, useState } from "react";
 import Menu from "../Menu";
 import classes from "./styles.module.scss";
 import Player from "../../components/Player/Player";
-import SearchTracks from "../../pages/Search/SearchTracks";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import Auth from "../../pages/Auth/Auth";
+
 
 type Props = {
   children: ReactNode;
@@ -19,7 +21,9 @@ const PageWrapper = ({ children }: Props) => {
   const [inputValue, setInputValue] = useState<string | null>(
     searchParams.get("q"));
 
+
   return (
+
     <div className={classes.container}>
       <Menu />
       <div className={classes.rightSide}>
@@ -42,6 +46,7 @@ const PageWrapper = ({ children }: Props) => {
         <Player />
       </div>
     </div>
+
   );
 };
 
