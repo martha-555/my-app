@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react";
 import Tracklist from "../../components/Tracklist/Tracklist";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { LikedTracksContext } from "../../feautures/likedTracks/likedTracksProvider";
-import { ErrorBoundary, useErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary, useErrorBoundary, withErrorBoundary } from "react-error-boundary";
 
 
 const FavoriteTracks = () => {
@@ -13,7 +13,7 @@ const FavoriteTracks = () => {
 // console.log(showBoundary)
 // const { showBoundary } = useErrorBoundary();
   return (
-<ErrorBoundary fallback={ <div>hhhhhhhhhh</div> }>
+
     <PageWrapper>
       <div>
         {isLoading ? (
@@ -26,8 +26,9 @@ const FavoriteTracks = () => {
           /> : null}
       </div>
     </PageWrapper>
-    </ErrorBoundary>
+
   );
 };
 
-export default FavoriteTracks;
+
+export default FavoriteTracks

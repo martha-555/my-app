@@ -1,4 +1,4 @@
-/** @format */
+
 "use client";
 import { useCallback, useState } from "react";
 import { BackendRequestBody } from "../types";
@@ -32,7 +32,7 @@ const useBackendRequest = <Data>(): UseBackendRequestReturn<Data> => {
     async (body: BackendRequestBody, parser: BackendResponseParser<Data | null>) => {
       setData(null);
       setIsLoading(true);
-try {
+// try {
   
   const data = 
     await fetch(BACKEND_URL, {
@@ -49,9 +49,9 @@ try {
     setIsLoading(false);
 
     return parsedData;
-} catch(e) {
-  return Promise.resolve(null)
-}
+// } catch(e) { setIsLoading(true)
+//   return Promise.resolve(null)
+// }
       
     },
     [setIsLoading]

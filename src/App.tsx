@@ -1,8 +1,8 @@
-/** @format */
 
+"use client";
 import "./App.css";
 import useGetMp3 from "./feautures/api/hooks/youtube/useGetMp3";
-import { Navigate, Route, Router, Routes } from "react-router";
+import { Navigate, Outlet, Route, Router, Routes } from "react-router";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import SearchTracks from "./pages/Search/SearchTracks";
 import Auth from "./pages/Auth/Auth";
@@ -14,9 +14,20 @@ import LikedTracksProvider from "./feautures/likedTracks/likedTracksProvider";
 import Playlists from "./pages/Playlists/Playlists";
 import PlaylistsProvider from "./feautures/playlists/playlistsProvider";
 import Recommendations from "./pages/Recommendations/Recommendations";
+import React, { ComponentType, useEffect } from "react";
+import {  ErrorBoundary, withErrorBoundary } from "react-error-boundary";
+
+const ErrorBoundaryLayout = () => (
+  <ErrorBoundary fallback={<div>FUCKKKK</div> }>
+    <Outlet />
+  </ErrorBoundary>
+);
 
 const authRouters = createBrowserRouter([
   {
+    element: <ErrorBoundaryLayout />,
+    children: [
+      {
     path: "/favorite",
     element: <FavoriteTracks />,
   },
@@ -36,6 +47,8 @@ const authRouters = createBrowserRouter([
     path: "*",
     element: <Navigate to="/favorite" />,
   },
+    ],
+  },
 ]);
 
 const guestRouters = createBrowserRouter([
@@ -46,30 +59,39 @@ const guestRouters = createBrowserRouter([
 ]);
 
 const AppRoutes = () => {
+  
   const isAuth = useIsAuthorize();
+  
+
   return (
     <RouterProvider
       router={isAuth ? authRouters : guestRouters}
+      
     ></RouterProvider>
   );
+   
 };
 
 function App() {
-  const makeRequest = useGetMp3();
+  
 
-  return (
+   return (
     <div>
       <AuthProvider>
         <PlaylistsProvider>
           <LikedTracksProvider>
             <PlayerProvider>
-              <AppRoutes />
+             { <AppRoutes />}
             </PlayerProvider>
           </LikedTracksProvider>
         </PlaylistsProvider>
       </AuthProvider>
     </div>
+
   );
 }
 
-export default App;
+export default withErrorBoundary(App, {
+  fallback: <div>Error</div>
+})
+

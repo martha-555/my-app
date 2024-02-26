@@ -54,6 +54,7 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
     const tracks = await favoriteTracksRequest({
       path: path,
       parser: async (response) => {
+        console.log(response)
         const json = await response.json();
         setNextTracksURL(!!json.next);
         return json.data?.map(parseDeezerTrack);
@@ -83,7 +84,7 @@ setFavoriteTracks(allTracks)
   },[favoriteTracks?.length, initialTracks?.length])
 
   useEffect(() => {
-    console.log(favoriteTracks?.length)
+    // console.log(favoriteTracks?.length)
   }, [favoriteTracks]);
 
   return (
