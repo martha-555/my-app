@@ -50,25 +50,28 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   const { authKey } = useContext(authContext);
 
   const fetchRequest = async (path: string) => {
+   const tracks = await favoriteTracksRequest({
+    path: path,
+    parser: async (response) => {
+      const json = await response.json();
+      // console.log(json?.error)
+      setNextTracksURL(!!json.next);
+      return json.data?.map(parseDeezerTrack);
+    },
+  });
+  return tracks
   
-    const tracks = await favoriteTracksRequest({
-      path: path,
-      parser: async (response) => {
-        console.log(response)
-        const json = await response.json();
-        setNextTracksURL(!!json.next);
-        return json.data?.map(parseDeezerTrack);
-      },
-    });
-    return tracks;
   };
 
   const getOpeningTracks = async () => {
-  const tracklist = await fetchRequest(`/user/me/tracks`);
-  if (tracklist) setInitialTracks(tracklist.reverse());
+      const tracklist = await fetchRequest(`/user/me/tracks`);
+      if (tracklist) setInitialTracks(tracklist.reverse()); 
  } 
+
   useEffect(() => {
-    getOpeningTracks();
+   
+      getOpeningTracks();
+   
   }, [authKey]);
 
   useEffect(() => {

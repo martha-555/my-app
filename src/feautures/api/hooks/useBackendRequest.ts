@@ -26,13 +26,14 @@ const useBackendRequest = <Data>(): UseBackendRequestReturn<Data> => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
 
-
+//catch(e) { setIsLoading(true)
+// return Promise.resolve(null)
+// }
 
   const makeRequest: RequestMaker<Data>= useCallback(
     async (body: BackendRequestBody, parser: BackendResponseParser<Data | null>) => {
       setData(null);
       setIsLoading(true);
-// try {
   
   const data = 
     await fetch(BACKEND_URL, {
@@ -49,9 +50,7 @@ const useBackendRequest = <Data>(): UseBackendRequestReturn<Data> => {
     setIsLoading(false);
 
     return parsedData;
-// } catch(e) { setIsLoading(true)
-//   return Promise.resolve(null)
-// }
+
       
     },
     [setIsLoading]
@@ -62,6 +61,10 @@ const useBackendRequest = <Data>(): UseBackendRequestReturn<Data> => {
   }
 
   return [makeRequest, { isLoading: false, data: data as Data }];
+
+
+
+
 };
 
 export default useBackendRequest;

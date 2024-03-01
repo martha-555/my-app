@@ -14,14 +14,19 @@ import LikedTracksProvider from "./feautures/likedTracks/likedTracksProvider";
 import Playlists from "./pages/Playlists/Playlists";
 import PlaylistsProvider from "./feautures/playlists/playlistsProvider";
 import Recommendations from "./pages/Recommendations/Recommendations";
-import React, { ComponentType, useEffect } from "react";
+import React, { ComponentType, useEffect, useState } from "react";
 import {  ErrorBoundary, withErrorBoundary } from "react-error-boundary";
+import ErrorComponent from "./components/ErrorComponent/ErrorComponent";
+
+
+
 
 const ErrorBoundaryLayout = () => (
-  <ErrorBoundary fallback={<div>FUCKKKK</div> }>
+  <ErrorBoundary FallbackComponent={ErrorComponent}>
     <Outlet />
   </ErrorBoundary>
 );
+
 
 const authRouters = createBrowserRouter([
   {
@@ -77,6 +82,7 @@ function App() {
 
    return (
     <div>
+  
       <AuthProvider>
         <PlaylistsProvider>
           <LikedTracksProvider>
@@ -86,6 +92,7 @@ function App() {
           </LikedTracksProvider>
         </PlaylistsProvider>
       </AuthProvider>
+    
     </div>
 
   );

@@ -20,7 +20,7 @@ type UseDeezerRequestReturn<Data> = [
   BackendRequestState<Data>
 ];
 
-const useDeezerRequest = <Data>(): UseDeezerRequestReturn<Data> => {
+const useDeezerRequest = <Data>(): UseDeezerRequestReturn<Data>=> {
   const [makeRequest, state] = useBackendRequest<Data>();
   const { authKey } = useContext(authContext);
 
