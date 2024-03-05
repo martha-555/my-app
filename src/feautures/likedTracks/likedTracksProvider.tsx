@@ -66,13 +66,14 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   const getOpeningTracks = async () => {
       const tracklist = await fetchRequest(`/user/me/tracks`);
       if (tracklist) setInitialTracks(tracklist.reverse()); 
+      setFavoriteTracks(tracklist)
  } 
 
   useEffect(() => {
-   
-      getOpeningTracks();
-   
+    getOpeningTracks();
+    
   }, [authKey]);
+
 
   useEffect(() => {
     if (nextTracksURL) {
