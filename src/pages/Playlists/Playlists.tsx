@@ -32,6 +32,7 @@ const [clickedDelete, setClickedDelete] = useState<boolean>(false)
   }, [currentPlaylist]);
 
   const nextTracksRequest = () => {
+    console.log({trackList})
     if (trackList) getNextTracks(currentPlaylist, trackList.length);
   };
 

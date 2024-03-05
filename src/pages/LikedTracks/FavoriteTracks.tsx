@@ -9,9 +9,7 @@ import { ErrorBoundary, useErrorBoundary, withErrorBoundary } from "react-error-
 
 const FavoriteTracks = () => {
   const { favoriteTracks, isLoading, getNextTracks } = useContext(LikedTracksContext);
-      // const { showBoundary } = useErrorBoundary();
-// console.log(showBoundary)
-// const { showBoundary } = useErrorBoundary();
+
   return (
 
     <PageWrapper>

@@ -85,7 +85,7 @@ setFavoriteTracks(allTracks)
   }   
   getTracks()
 }
-  },[favoriteTracks?.length, initialTracks?.length])
+  },[favoriteTracks?.length])
 
   useEffect(() => {
     // console.log(favoriteTracks?.length)

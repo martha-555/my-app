@@ -44,7 +44,7 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
 
 useEffect(() => {
   if (isVisible) nextTracks()
-},[tracks.length])
+},[isVisible])
 
   return (
     <div className={classes.tracklistContainer}>
