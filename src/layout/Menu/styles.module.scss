@@ -2,12 +2,125 @@
 
 .container {
   height: 100%;
-  background: #232121;
+  background: rgba(14, 25, 32, 1);
+// width: 190px;
   color: #FFFFFF;
   box-shadow: 2px 1px 6px 0px #7a7474;
-  width: 200px;
-  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  // gap: 2%;
 }
+  
+
+
+// .group10 {
+//   // position: fixed;
+//   width: 286.2px;
+//   height: 69.4px;
+//   top: 155px;
+//   left: -15px;
+//   border-radius: 9px;
+// }
+  .group {
+// margin: 10px;
+border-radius: 9px;
+background: rgba(255, 55, 128, 0.2);
+min-width: 83.33%;
+// height: 83.33%;
+padding-top: 8.33%;
+padding-left: 8.33%;
+  }
+
+.rectangle1 {
+
+  // margin: 10px;
+min-width: 83.33%;
+min-height: 83.33%;
+border-radius: 9px;
+// opacity: 70%;
+border: 1.12px solid rgba(255, 255, 255, 1);
+
+}
+
+.rectangle2 {
+  width: 178px;
+  height: 100%;
+border-radius: 9px;
+// opacity: 70%;
+border: 2.23px solid rgba(251, 55, 255, 1);
+}
+
+.rectangle3 {
+  width: 178px;
+
+border-radius: 9px;
+// opacity: 70%;
+border: 3.63px solid rgba(251, 55, 255, 0.2);
+box-shadow: 0px 3.629166603088379px 2.7916667461395264px 0px rgba(77, 0, 66, 0.7);
+
+box-shadow: 0px 5.583333492279053px 7.258333206176758px 0px rgba(153, 0, 153, 1);
+
+box-shadow: -0.3629166781902313px 0.7258333563804626px 0.3629166781902313px 0px rgba(255, 255, 255, 0.5) inset;
+mix-blend-mode: hard-light;
+
+}
+
+.rectangle4 {
+  width: 178px;
+
+  border-radius: 9px;
+  // opacity: 70%;
+  border: 4.75px solid rgba(255, 38, 194, 1);
+  mix-blend-mode: hard-light;
+}
+
+  .rectangle5 {
+    width: 178px;
+
+border-radius: 9px;
+// opacity: 70%;
+border: 3.63px solid rgba(243, 46, 124, 1);
+mix-blend-mode: hard-light;
+
+  }
+
+.ellipse {
+  background: rgba(255, 55, 128, 0.2);
+  mix-blend-mode: hard-light;
+
+}
+
+.group9 {
+  background: rgba(255, 255, 255, 1);
+  border: 1.5px solid rgba(255, 255, 255, 1)
+}
+
+.home {
+font-family: Vazirmatn;
+font-size: 24px;
+font-weight: 600;
+line-height: 38px;
+letter-spacing: 0em;
+text-align: left;
+background: rgba(255, 255, 255, 1);
+
+}
+.home2 {
+border-radius: 9px;
+opacity: 70%;
+background: rgba(238, 16, 176, 1);
+
+}
+
+  
+
+
+
+
+
+  
+
+
 
 .item {
   text-align: center;

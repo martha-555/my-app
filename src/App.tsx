@@ -81,7 +81,7 @@ function App() {
   
 
    return (
-    <div>
+    // <div>
   
       <AuthProvider>
         <PlaylistsProvider>
@@ -93,7 +93,7 @@ function App() {
         </PlaylistsProvider>
       </AuthProvider>
     
-    </div>
+    // </div>
 
   );
 }

@@ -1,8 +1,11 @@
 /** @format */
 
-.container {
+.containerWrapper {
   display: flex;
+  // gap: 5%;
   height: 100vh;
+  background: rgba(14, 25, 32, 1)
+
 }
 
 .content {

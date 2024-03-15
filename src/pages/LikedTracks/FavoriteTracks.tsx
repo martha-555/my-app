@@ -13,7 +13,7 @@ const FavoriteTracks = () => {
   return (
 
     <PageWrapper>
-      <div>
+      {/* <div> */}
         {isLoading ? (
           <span>loading...</span>
         ) : null}
@@ -22,7 +22,7 @@ const FavoriteTracks = () => {
             emptyState="У Вас немає улюблених треків"
             tracks={favoriteTracks}
           /> : null}
-      </div>
+      {/* </div> */}
     </PageWrapper>
 
   );

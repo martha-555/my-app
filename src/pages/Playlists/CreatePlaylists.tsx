@@ -68,15 +68,6 @@ const CreatePlaylists = () => {
 
   return (
     <div className={classes.container}>
-      {/* <PageWrapper> */}
-        <div
-        //   className={
-        //     (trackList?.length > 0 && searchParams.get("playlist")) || empty
-        //       ? classes.hide
-        //       : ""
-        //   }
-        >
-          <div>
             <input
               value={name}
               type="text"
@@ -89,28 +80,7 @@ const CreatePlaylists = () => {
             />
             <button onClick={handleClick}>create playlist</button>
             <div >
-              {/* {allPlaylists?.map((item) => (
-                <div
-                  id={item.id.toString()}
-                  className={classes.playlists}
-                  key={item.id}
-                  onClick={clickedPlaylist}
-                >
-                  <div id={item.id.toString()}>{item.title}</div>
-                  <DeletePlaylist
-                    playlistId={item.id}
-                    setState={setAllPlaylists}
-                  />{" "}
-                </div>
-              ))} */}
-            </div>
-          </div>{" "}
-          <div></div>
-        </div>
-
-        {/* <Tracklist tracks={trackList} error={empty} /> */}
-        {/* {empty? <div>{empty} </div>: null } */}
-      {/* </PageWrapper> */}
+          </div>
     </div>
   );
 };

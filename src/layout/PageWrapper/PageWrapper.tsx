@@ -24,7 +24,7 @@ const PageWrapper = ({ children }: Props) => {
 
   return (
 
-    <div className={classes.container}>
+    <div className={classes.containerWrapper}>
       <Menu />
       <div className={classes.rightSide}>
         <div className={classes.content}>
