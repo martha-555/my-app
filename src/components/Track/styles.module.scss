@@ -1,14 +1,18 @@
 /** @format */
 .container {
-  background-color: #292929;
+  background: rgba(30, 30, 30, 1);
   display: flex;
   align-items: center;
-  gap: 10px;
-  border-radius: 10% / 50%;
+  gap: 25px;
+  // border-radius: 10% / 50%;
+  border-radius: 5px;
   padding: 10px;
   margin: 15px;
   font-family: cursive;
-  color: #FAF0E6;
+  // color: #faf0e6;
+  color: rgba(255, 255, 255, 1);
+
+  background: linear-gradient(180deg, #666 0%, #111111 48%);
 }
 
 .cover {

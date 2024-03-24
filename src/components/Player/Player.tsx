@@ -1,13 +1,12 @@
 /** @format */
 
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { PlayerContext } from "../../feautures/player/playerProvider";
 import classes from "./styles.module.scss";
+import playButton from "../../icons/Player Buttons/Play Button.png";
+import pauseButton from "../../icons/Player Buttons/pause.png";
+import nextButton from "../../icons/Player Buttons/Next.png";
+import previousButton from "../../icons/Player Buttons/Polygon 2 (1).png";
 
 const Player = () => {
   const {
@@ -51,35 +50,48 @@ const Player = () => {
 
   return (
     <div className={classes.container}>
-      {currentTrack ? (
-        <div className={classes.song}>
-          <span>{`${currentTrack?.artist.name}`}</span>
-          <span>{currentTrack?.title}</span>
-        </div>
-      ) : (
-        <div></div>
-      )}
+      <div className={classes.wrapper}>
+        {currentTrack ? (
+          <div className={classes.song}>
+            <img src={currentTrack.album.cover} alt="" />
+            <span>{`${currentTrack?.artist.name}`}</span>
+            <span>{currentTrack?.title}</span>
+          </div>
+        ) : null}
 
-      <div
-        onClick={() => {
-          back();
-        }}
-      >
-        back
+        <div
+          onClick={() => {
+            back();
+          }}
+        >
+          <img className={classes.arrows} src={previousButton} alt="" />
+        </div>
+        <div onClick={() => togglePlay()}>
+          {paused ? (
+            <img className={classes.playButton} src={playButton} alt="" />
+          ) : (
+            <img className={classes.playButton} src={pauseButton} alt="" />
+          )}
+        </div>
+        <div onClick={() => next()}>
+          {" "}
+          <img className={classes.arrows} src={nextButton} alt="" />{" "}
+        </div>
       </div>
-      <div onClick={() => togglePlay()}>{paused ? "play" : "||"}</div>
-      <div onClick={() => next()}>next</div>
-      <div>{currentTime()} </div>
-      {currentTrack ? (
-        <input
-          onChange={handleMove}
-          className={classes.range}
-          type="range"
-          name="inp"
-          value={inputValue}
-        />
-      ) : null}
-      <div> {subtractTime} </div>
+
+      <div className={classes.rangeWrapper}>
+        <div>{currentTime()} </div>
+        {currentTrack ? (
+          <input
+            onChange={handleMove}
+            className={classes.range}
+            type="range"
+            name="inp"
+            value={inputValue}
+          />
+        ) : null}
+        <div> {subtractTime} </div>
+      </div>
     </div>
   );
 };

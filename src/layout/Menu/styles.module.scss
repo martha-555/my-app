@@ -1,17 +1,22 @@
 /** @format */
 
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
 .container {
-  height: 100%;
+  // height: 100%;
   background: rgba(14, 25, 32, 1);
-// width: 190px;
-  color: #FFFFFF;
+  // width: 190px;
+  color: #ffffff;
   box-shadow: 2px 1px 6px 0px #7a7474;
   display: flex;
   flex-direction: column;
-  margin-top: 67px;  
+  margin-top: 67px;
   gap: 2%;
 }
-  
+
 .item {
   // background: rgba(40, 40, 40, 1);
   border-radius: 5px;
@@ -19,34 +24,36 @@
   display: flex;
   gap: 10px;
   align-items: center;
-margin: 10px 20px 0 10px;
-padding: 0 10px 0 10px;
+  margin: 10px 20px 0 10px;
+  padding: 10px;
 
-&:hover{
-  background:rgb(63, 51, 51)
-}
+  &:hover {
+    background: rgb(63, 51, 51);
+  }
 }
 
 .activeItem {
-@extend .item;
-background: rgba(40, 40, 40, 1)
-
+  @extend .item;
+  background: rgba(40, 40, 40, 1);
 }
 
 .name {
   font-family: Montserrat;
-font-size: 18px;
-font-weight: 700;
-line-height: 22px;
-letter-spacing: 0em;
-text-align: left;
-color: rgba(255, 255, 255, 1);
-// padding: 18px;
-
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 22px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(255, 255, 255, 1);
+  // padding: 18px;
 }
 
 .item img {
-height: 50px;
+  height: 20px;
+}
+
+.logoIcon {
+  height: 100px;
 }
 
 .imageWrapper {
@@ -55,14 +62,49 @@ height: 50px;
 }
 
 .logo {
-  background: linear-gradient(90.07deg, #EE10B0 -4.82%, rgba(14, 158, 239, 0.92) 127.01%);
+  background: linear-gradient(
+    90.07deg,
+    #ee10b0 -4.82%,
+    rgba(14, 158, 239, 0.92) 127.01%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
+  font-size: 50px;
 
+  // font-family: "Bonbon", cursive;
+  // font-weight: 400;
+  // font-style: normal;
 
-  font-family: "Pacifico", cursive;
+  // font-family: "Ruge Boogie", cursive;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Butterfly Kids", cursive;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Spirax", system-ui;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Srisakdi", system-ui;
+  // font-weight: 700;
+  // font-style: normal;
+
+  // font-family: "Black And White Picture", system-ui;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Puppies Play", cursive;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Henny Penny", system-ui;
+  // font-weight: 400;
+  // font-style: normal;
+
+  font-family: "Flavors", cursive;
   font-weight: 400;
   font-style: normal;
-
-
-  
 }

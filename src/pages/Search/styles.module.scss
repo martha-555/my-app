@@ -1,13 +1,15 @@
-.inputBlock{
-    display: flex;
+/** @format */
+
+.inputBlock {
+  display: flex;
 }
 .mainContainer {
-    height: 100%;
+  height: 100%;
 }
 .flexPages {
-    display: flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
 }
 .clickedPage {
-    color: red;
+  color: red;
 }

@@ -1,24 +1,25 @@
 /** @format */
 import { Routes } from "../feautures/api/types";
-import favoriteIcon from '../icons/Star@3x.png';
-import playlistsIcon from '../icons/Subtract.png';
-import recomendationsIcon from '../icons/Headphones_fill@3x.png'
+import favoriteIcon from "../icons/Star@3x.png";
+import playlistsIcon from "../icons/Subtract.png";
+import recomendationsIcon from "../icons/Headphones_fill@3x.png";
+import playlistsLogo from "../icons/logo/ph_playlist.png";
 
 const routes: Routes[] = [
   {
-    name: "favorite",
+    name: "Favorite",
     path: "/favorite",
-    icon: favoriteIcon
+    icon: favoriteIcon,
   },
   {
-    name: "playlists",
+    name: "Playlists",
     path: "/playlists",
-    icon: playlistsIcon
+    icon: playlistsIcon,
   },
   {
-    name: "recommendations",
+    name: "Recommendations",
     path: "/recommendations",
-    icon: recomendationsIcon
+    icon: recomendationsIcon,
   },
 ];
 export { routes };
