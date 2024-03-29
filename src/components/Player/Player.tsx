@@ -26,6 +26,7 @@ const Player = () => {
   const handleMove = (event: React.ChangeEvent) => {
     let target = (event.target as HTMLInputElement).value;
     setInputValue(+target);
+   
     rewind(+target);
   };
 
@@ -41,6 +42,7 @@ const Player = () => {
     [currentTrack]
   );
 
+
   useEffect(() => {
     document.addEventListener("keydown", handleKeyUp);
     return () => {
@@ -49,23 +51,26 @@ const Player = () => {
   }, [handleKeyUp]);
 
   return (
-    <div className={classes.container}>
+<>
+  {currentTrack? <div className={classes.container}>
       <div className={classes.wrapper}>
-        {currentTrack ? (
+
           <div className={classes.song}>
             <img src={currentTrack.album.cover} alt="" />
+            <div className={classes.spanContainer}>
             <span>{`${currentTrack?.artist.name}`}</span>
             <span>{currentTrack?.title}</span>
+            </div>
           </div>
-        ) : null}
-
+ 
+<div className={classes.buttonsContainer}>
         <div
           onClick={() => {
             back();
-          }}
-        >
+          }}>
           <img className={classes.arrows} src={previousButton} alt="" />
         </div>
+
         <div onClick={() => togglePlay()}>
           {paused ? (
             <img className={classes.playButton} src={playButton} alt="" />
@@ -78,21 +83,23 @@ const Player = () => {
           <img className={classes.arrows} src={nextButton} alt="" />{" "}
         </div>
       </div>
+      </div>
 
       <div className={classes.rangeWrapper}>
         <div>{currentTime()} </div>
-        {currentTrack ? (
-          <input
+          <input style={{background:`linear-gradient(90deg, rgb(255, 255, 255) ${inputValue}%, rgb(6, 0, 0) ${inputValue}%)`}}
             onChange={handleMove}
             className={classes.range}
             type="range"
             name="inp"
             value={inputValue}
           />
-        ) : null}
         <div> {subtractTime} </div>
       </div>
-    </div>
+
+    </div> : null}
+</>
+    
   );
 };
 export default Player;

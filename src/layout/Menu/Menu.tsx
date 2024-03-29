@@ -26,7 +26,7 @@ const Menu = () => {
   };
 
   return (
-    <div>
+    <div className={classes.mainContainer}>
       <div className={classes.logoContainer}>
         <img className={classes.logoIcon} src={noteIcon} alt="" />
         <span className={classes.logo}>MUZa</span>

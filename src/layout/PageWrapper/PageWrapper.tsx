@@ -40,8 +40,8 @@ const PageWrapper = ({ children }: Props) => {
           />
           <Auth />
           {children}
-        </div>
         <Player />
+        </div>
       </div>
     </div>
   );

@@ -4,13 +4,13 @@
   display: flex;
   align-items: center;
   gap: 25px;
-  // border-radius: 10% / 50%;
+ height: 100px;
   border-radius: 5px;
   padding: 10px;
   margin: 15px;
   font-family: cursive;
   // color: #faf0e6;
-  color: rgba(255, 255, 255, 1);
+  color: rgb(201 201 201);
 
   background: linear-gradient(180deg, #666 0%, #111111 48%);
 }
