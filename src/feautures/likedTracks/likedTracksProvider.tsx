@@ -60,12 +60,11 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
     },
   });
   return tracks
-  
   };
 
   const getOpeningTracks = async () => {
-      const tracklist = await fetchRequest(`/user/me/tracks`);
-      if (tracklist) setInitialTracks(tracklist.reverse()); 
+      const tracklist = await fetchRequest(`/user/me/tracks&order=time_add`);
+      if (tracklist) setInitialTracks(tracklist); 
       setFavoriteTracks(tracklist)
  } 
 
@@ -78,18 +77,15 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   useEffect(() => {
     if (nextTracksURL) {
   const getTracks = async () => {
-const tracklist = await fetchRequest(`/user/me/tracks&index=${favoriteTracks? favoriteTracks?.length: initialTracks?.length}`);
+const tracklist = await fetchRequest(`/user/me/tracks&index=${favoriteTracks? favoriteTracks?.length: initialTracks?.length}&order=time_add`);
 const allTracks: TrackData[] = [];
-if (initialTracks && tracklist) allTracks.push(...tracklist.reverse(), ...initialTracks)
+if (initialTracks && tracklist) allTracks.push(...initialTracks, ...tracklist)
 setFavoriteTracks(allTracks)
   }   
   getTracks()
 }
   },[favoriteTracks?.length])
 
-  useEffect(() => {
-    // console.log(favoriteTracks?.length)
-  }, [favoriteTracks]);
 
   return (
     <LikedTracksContext.Provider
@@ -99,7 +95,7 @@ setFavoriteTracks(allTracks)
 
         addTrack: (id, track) => {
         const request = async () => await requestAddAction({
-            path: `/user/me/tracks?track_id=${id}`,
+            path: `/user/me/tracks?track_id=${id}&order=time_add`,
             method: HttpMethod.POST,
             parser: async (response) => {
               const code = await response.json();

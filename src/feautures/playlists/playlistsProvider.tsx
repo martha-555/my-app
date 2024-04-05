@@ -93,12 +93,17 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   ) => {
 
     // &order=time_add
+
+    // https://api.deezer.com/user/me/tracks&index=25&order=time_add?access_token=
+
+    // https://api.deezer.com/playlist/11620008804/tracks&order=time_add&index=25?access_token=
+    // https://api.deezer.com/playlist/11620008804/tracks&index=25&order=time_add?access_token=
+console.log(indexForRequest)
     const tracks = await retutnTracks({
-      path: `/playlist/${currentPlaylist}/tracks&order=time_add${
-        indexForRequest ? `&index=${indexForRequest}` : ""
-      }`,
+      path: `/playlist/${currentPlaylist}/tracks&index=${indexForRequest || 0}&order=time_add`,
       parser: async (response) => {
         const json = await response.json();
+        console.log({json})
         setNextTracksURL(!!json.next)
         return json?.data?.map(parseDeezerTrack);
       },
@@ -146,7 +151,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
         addToPlaylist: (track, currentPlaylist) => {
           const request = async () =>
             await returnResponse({
-              path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}`,
+              path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}&order=time_add`,
               method: HttpMethod.POST,
               parser: async (response) => {
                 const code = await response.json();
