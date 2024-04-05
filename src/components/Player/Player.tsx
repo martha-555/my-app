@@ -59,7 +59,7 @@ const Player = () => {
             <img src={currentTrack.album.cover} alt="" />
             <div className={classes.spanContainer}>
             <span>{`${currentTrack?.artist.name}`}</span>
-            <span>{currentTrack?.title}</span>
+            <span className={classes.spanTitle} >{currentTrack?.title}</span>
             </div>
           </div>
  

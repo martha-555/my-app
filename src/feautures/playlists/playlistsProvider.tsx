@@ -28,7 +28,7 @@ type PlaylistsType = {
   createPlaylist: (name: string) => void;
   removePlaylist: (id: number) => void;
   addToPlaylist: (
-    track: number,
+    track: TrackData,
     currentPlaylist: number
   ) => Promise<errorResponse | boolean | null>;
   deleteFromPlaylist: (
@@ -91,8 +91,10 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
     currentPlaylist: number,
     indexForRequest?: number
   ) => {
+
+    // &order=time_add
     const tracks = await retutnTracks({
-      path: `/playlist/${currentPlaylist}/tracks${
+      path: `/playlist/${currentPlaylist}/tracks&order=time_add${
         indexForRequest ? `&index=${indexForRequest}` : ""
       }`,
       parser: async (response) => {
@@ -104,6 +106,8 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
     return tracks;
   };
 
+  
+
   return (
     <PlaylistsContext.Provider
       value={{
@@ -113,11 +117,11 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
 
         getInitialTracks: (currentPlaylist) => {
     if (trackList) setTrackList(null);
-
           if (currentPlaylist) {
             const getTracks = async () => {
               const response = await fetchRequest(currentPlaylist);
-            if (response)  setTrackList(response.reverse());
+              
+            if (response)  setTrackList(response);
             };
             getTracks();
           }
@@ -130,6 +134,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
                 currentPlaylist,
                 indexForRequest
               );
+             
               if (trackList && response)
                 setTrackList(connectWithoutDuplicates(trackList, response));
             };
@@ -141,13 +146,14 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
         addToPlaylist: (track, currentPlaylist) => {
           const request = async () =>
             await returnResponse({
-              path: `/playlist/${currentPlaylist}/tracks&songs=${track}`,
+              path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}`,
               method: HttpMethod.POST,
               parser: async (response) => {
                 const code = await response.json();
                 return code;
               },
             });
+ 
           return request();
         },
 

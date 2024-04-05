@@ -2,7 +2,8 @@
 
 .container {
   border: 1.57px solid rgba(50, 50, 50, 1);
-width: 100%;
+width: inherit;
+max-width: inherit;
   background: rgba(27, 27, 27, 1);
 position: fixed;
 bottom: 0px;
@@ -15,25 +16,29 @@ bottom: 0px;
   display: flex;
   align-items: center;
   justify-content: start;
-  gap: 10%;
+  // gap: 10%;
 }
 .song {
-  display: flex;
-  font-family: Montserrat;
+display: flex;
+font-family: Montserrat;
 font-size: 18px;
 font-weight: 700;
 line-height: 21.94px;
 text-align: left;
+align-items: center;
 
 
   & img {
-    width: 40px;
+    width: 79px;
+   margin: 0 10px 0 0;
   }
 }
 
 .spanContainer {
 display: flex;
 flex-direction: column;
+width: 300px;
+text-wrap: wrap;
 }
 
 .buttonsContainer {
@@ -65,6 +70,16 @@ flex-direction: column;
     box-shadow: -410px 0 400px #0707e3;
     cursor: pointer;
   }
+}
+
+.spanTitle {
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 17.07px;
+  text-align: left;
+  color: rgba(164, 164, 164, 1);
+  
 }
 
 .playButton {

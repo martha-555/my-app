@@ -18,10 +18,13 @@
 
 .rightSide {
   overflow-y: auto;
+  max-width: 78%;
+  width: 100%;
   display: flex;
   height: 100vh;
   flex-direction: column;
   flex: 1;
+  scrollbar-width: thin;
   // background: linear-gradient(180deg, #34587a 0%, #395be61f 48%);
   background: #717171;
 

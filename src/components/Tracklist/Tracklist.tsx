@@ -43,7 +43,7 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
   },[ref.current,options,isVisible])
 
 useEffect(() => {
-  console.log(isVisible)
+// console.log(isVisible)
   if (isVisible) nextTracks()
 },[isVisible])
 

@@ -21,7 +21,7 @@ const useGetMp3 = (): ReturnType => {
       },
       async (response) => {
         const json = await response.json();
-        return json.data.mp3;
+        return await json.data.mp3;
       }
     );
   };

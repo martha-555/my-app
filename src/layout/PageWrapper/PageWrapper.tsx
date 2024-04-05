@@ -1,7 +1,7 @@
 /** @format */
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import Menu from "../Menu";
 import classes from "./styles.module.scss";
 import Player from "../../components/Player/Player";
@@ -19,6 +19,7 @@ const PageWrapper = ({ children }: Props) => {
   const [inputValue, setInputValue] = useState<string | null>(
     searchParams.get("q")
   );
+
 
   return (
     <div className={classes.containerWrapper}>
@@ -40,8 +41,8 @@ const PageWrapper = ({ children }: Props) => {
           />
           <Auth />
           {children}
-        <Player />
         </div>
+        <Player />
       </div>
     </div>
   );

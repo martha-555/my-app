@@ -69,7 +69,7 @@ const TracksOptions = ({ track }: Props) => {
     setAddToPlaylistId(target.id);
 
     const response = async () => {
-      const code = await addToPlaylist(track.id, target.id);
+      const code = await addToPlaylist(track, target.id);
       typeof code == "boolean"
         ? setMessage("Трек додано")
         : setMessage("Вже є у плейлисті");
