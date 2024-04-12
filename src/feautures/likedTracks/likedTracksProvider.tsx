@@ -79,13 +79,14 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   const getTracks = async () => {
 const tracklist = await fetchRequest(`/user/me/tracks&index=${favoriteTracks? favoriteTracks?.length: initialTracks?.length}&order=time_add`);
 const allTracks: TrackData[] = [];
-if (initialTracks && tracklist) allTracks.push(...initialTracks, ...tracklist)
+if (initialTracks && tracklist) allTracks.push(...initialTracks, ...tracklist);
 setFavoriteTracks(allTracks)
   }   
   getTracks()
 }
   },[favoriteTracks?.length])
 
+ 
 
   return (
     <LikedTracksContext.Provider

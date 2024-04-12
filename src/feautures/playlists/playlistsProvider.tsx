@@ -21,8 +21,8 @@ type errorResponse = {
 };
 
 type PlaylistsType = {
-  getInitialTracks: (currentPlaylist: number) => void;
-  getNextTracks: (currentPlaylist: number, indexForRequest: number) => void;
+  getCurrentPlaylist: (currentPlaylist: number) => void;
+  // getNextTracks: (currentPlaylist: number, indexForRequest: number) => void;
 
   playlists: Playlist[];
   createPlaylist: (name: string) => void;
@@ -35,7 +35,7 @@ type PlaylistsType = {
     track: TrackData,
     currentPlaylist: number | null
   ) => void;
-  trackList: TrackData[] | null;
+  allTracks: TrackData[] | null;
   isLoading: boolean;
   isLoadingResponse: boolean;
 };
@@ -44,12 +44,12 @@ export const PlaylistsContext = createContext<PlaylistsType>({
   playlists: [],
   createPlaylist: (name) => {},
   removePlaylist: (id) => {},
-  getInitialTracks: async (currentPlaylist) => {},
-  getNextTracks: async (currentPlaylist, indexForRequest) => {},
+  getCurrentPlaylist: async (currentPlaylist) => {},
+  // getNextTracks: async (currentPlaylist, indexForRequest) => {},
 
   addToPlaylist: async (track, currentPlaylist) => false,
   deleteFromPlaylist: (track, currentPlaylist) => {},
-  trackList: null,
+  allTracks: null,
   isLoading: false,
   isLoadingResponse: true,
 });
@@ -57,15 +57,16 @@ export const PlaylistsContext = createContext<PlaylistsType>({
 const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [deezerRequest] = useDeezerRequest<Playlist[]>();
   const [actionRequest, state] = useDeezerRequest();
-  const [retutnTracks] = useDeezerRequest<TrackData[]>();
+  const [retutnTracks,load] = useDeezerRequest<TrackData[]>();
   const [returnResponse, isLoadingResponse] = useDeezerRequest<
     errorResponse | boolean
   >();
 
   const [responseId] = useDeezerRequest<number>();
   const [trackList, setTrackList] = useState<TrackData[] | null>(null);
+  const [allTracks, setAllTracks] = useState<TrackData[] | null>(null);
+  const [currentPlaylist, setCurrentPlaylist] = useState<number>(0)
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
-  const [nextTracksURL, setNextTracksURL] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -88,30 +89,45 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   }, [deezerRequest]);
 
   const fetchRequest = async (
-    currentPlaylist: number,
-    indexForRequest?: number
+    currentPlaylist: number
   ) => {
-
-    // &order=time_add
-
-    // https://api.deezer.com/user/me/tracks&index=25&order=time_add?access_token=
-
-    // https://api.deezer.com/playlist/11620008804/tracks&order=time_add&index=25?access_token=
-    // https://api.deezer.com/playlist/11620008804/tracks&index=25&order=time_add?access_token=
-console.log(indexForRequest)
     const tracks = await retutnTracks({
-      path: `/playlist/${currentPlaylist}/tracks&index=${indexForRequest || 0}&order=time_add`,
+      path: `/playlist/${currentPlaylist}/tracks&offset=0&limit=${Number.MAX_SAFE_INTEGER}`,
       parser: async (response) => {
         const json = await response.json();
-        console.log({json})
-        setNextTracksURL(!!json.next)
+        console.log(json)
         return json?.data?.map(parseDeezerTrack);
       },
     });
+
     return tracks;
   };
 
   
+
+  useEffect(() => {
+    const  getNextTracks = () => {
+       if (currentPlaylist) {
+         const getTracks = async () => {
+           const response = await fetchRequest(currentPlaylist);
+            trackList && response? setTrackList(connectWithoutDuplicates(trackList, response)): setTrackList(response) 
+         };
+         getTracks();
+       }
+     }
+     getNextTracks()
+  },[currentPlaylist])
+
+  useEffect(() => {
+if (trackList) {
+  setAllTracks(trackList.sort((a,b) => b.time_add - a.time_add))
+}
+  },[trackList])
+
+
+useEffect(() => {
+
+},[allTracks])
 
   return (
     <PlaylistsContext.Provider
@@ -120,52 +136,44 @@ console.log(indexForRequest)
         isLoadingResponse: isLoadingResponse.isLoading,
         isLoading: state.isLoading,
 
-        getInitialTracks: (currentPlaylist) => {
+        getCurrentPlaylist: (currentPlaylist) => {
+          
     if (trackList) setTrackList(null);
-          if (currentPlaylist) {
-            const getTracks = async () => {
-              const response = await fetchRequest(currentPlaylist);
-              
-            if (response)  setTrackList(response);
-            };
-            getTracks();
+    if (currentPlaylist) {
+        setCurrentPlaylist(currentPlaylist)
+      // const getTracks = async () => {
+      //   const response = await fetchRequest(currentPlaylist);
+      //   console.log(nextTracksURL)
+      //       if (response)  setTrackList(response);
+      //       };
+      //       getTracks();
           }
         },
 
-        getNextTracks: (currentPlaylist, indexForRequest) => {
-          if (currentPlaylist && nextTracksURL) {
-            const getTracks = async () => {
-              const response = await fetchRequest(
-                currentPlaylist,
-                indexForRequest
-              );
-             
-              if (trackList && response)
-                setTrackList(connectWithoutDuplicates(trackList, response));
-            };
-            getTracks();
-          }
-        },
-
-        trackList,
-        addToPlaylist: (track, currentPlaylist) => {
+        allTracks,
+        addToPlaylist: (track, playlistId) => {
           const request = async () =>
             await returnResponse({
-              path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}&order=time_add`,
+              path: `/playlist/${playlistId}/tracks&songs=${track.id}`,
               method: HttpMethod.POST,
               parser: async (response) => {
                 const code = await response.json();
                 return code;
               },
             });
- 
+            if (currentPlaylist == playlistId && allTracks) {
+          const addTrack: TrackData[] = allTracks;
+          addTrack.unshift(track)
+             setAllTracks(addTrack)
+           }
+
           return request();
         },
 
-        deleteFromPlaylist: (track, currentPlaylist) => {
+        deleteFromPlaylist: (track, playlistsId) => {
           if (currentPlaylist) {
             actionRequest({
-              path: `/playlist/${currentPlaylist}/tracks&songs=${track.id}`,
+              path: `/playlist/${playlistsId}/tracks&songs=${track.id}`,
               method: HttpMethod.DELETE,
               parser: async () => null,
             });

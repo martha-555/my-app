@@ -20,6 +20,7 @@ export type TrackData = {
   duration: number;
   id: number;
   title: string;
+  time_add: number
 };
 export type ResponseTrackData = {
   data: TrackData[];

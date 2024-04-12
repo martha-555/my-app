@@ -12,7 +12,7 @@ import Logo  from '../../icons/deleteIcon.png'
 
 const Playlists = () => {
   const [searchParams, setSearchParams] = useSearchParams({});
-  const { playlists, getInitialTracks, getNextTracks, isLoading, trackList, removePlaylist } =
+  const { playlists, getCurrentPlaylist: getCurrentPlaylist, isLoading, allTracks, removePlaylist } =
     useContext(PlaylistsContext);
 const [clickedDelete, setClickedDelete] = useState<boolean>(false)
   const currentPlaylist = Number(searchParams.get("playlist"));
@@ -28,13 +28,10 @@ const [clickedDelete, setClickedDelete] = useState<boolean>(false)
   };
 
   useEffect(() => {
-    getInitialTracks(currentPlaylist);
+    getCurrentPlaylist(currentPlaylist);
   }, [currentPlaylist]);
 
-  const nextTracksRequest = () => {
-    console.log({trackList})
-    if (trackList) getNextTracks(currentPlaylist, trackList.length);
-  };
+
 
   const handleDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLDivElement;
@@ -47,8 +44,8 @@ const [clickedDelete, setClickedDelete] = useState<boolean>(false)
   }
 
 useEffect(() => {
-  // console.log(trackList)
-},[trackList])
+
+},[allTracks])
 
   return (
     <PageWrapper>
@@ -56,11 +53,11 @@ useEffect(() => {
       <div className={classes.playlistsContainer}>
         {isLoading ? <div>Loading...</div> : null}
 
-        {currentPlaylist && trackList ? (
+        {currentPlaylist && allTracks ? (
           <Tracklist
-            nextTracks={nextTracksRequest}
+            nextTracks={() =>{}}
             emptyState="Цей плейлист пустий"
-            tracks={trackList}
+            tracks={allTracks}
           />
         ) : null}
         {!searchParams.get("playlist")
