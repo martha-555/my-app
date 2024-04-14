@@ -1,11 +1,6 @@
 /** @format */
 
-import {
-  ReactElement,
-  createContext,
-  useEffect,
-  useState,
-} from "react";
+import { ReactElement, createContext, useEffect, useState } from "react";
 import { Playlist, TrackData } from "../../types/deezer";
 import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
 import { HttpMethod } from "../api/types";
@@ -80,9 +75,10 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
           }));
         },
       });
-    if (playlistsResponse)  setPlaylists(
-        playlistsResponse?.filter((item) => item.is_loved_track === false)
-      );
+      if (playlistsResponse)
+        setPlaylists(
+          playlistsResponse?.filter((item) => item.is_loved_track === false)
+        );
     };
     fetchRequest();
   }, [deezerRequest]);
@@ -91,27 +87,26 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
     currentPlaylist: number,
     indexForRequest?: number
   ) => {
-
     // &order=time_add
 
     // https://api.deezer.com/user/me/tracks&index=25&order=time_add?access_token=
 
     // https://api.deezer.com/playlist/11620008804/tracks&order=time_add&index=25?access_token=
     // https://api.deezer.com/playlist/11620008804/tracks&index=25&order=time_add?access_token=
-console.log(indexForRequest)
+    console.log(indexForRequest);
     const tracks = await retutnTracks({
-      path: `/playlist/${currentPlaylist}/tracks&index=${indexForRequest || 0}&order=time_add`,
+      path: `/playlist/${currentPlaylist}/tracks&index=${
+        indexForRequest || 0
+      }&order=time_add`,
       parser: async (response) => {
         const json = await response.json();
-        console.log({json})
-        setNextTracksURL(!!json.next)
+
+        setNextTracksURL(!!json.next);
         return json?.data?.map(parseDeezerTrack);
       },
     });
     return tracks;
   };
-
-  
 
   return (
     <PlaylistsContext.Provider
@@ -121,25 +116,26 @@ console.log(indexForRequest)
         isLoading: state.isLoading,
 
         getInitialTracks: (currentPlaylist) => {
-    if (trackList) setTrackList(null);
+          if (trackList) setTrackList(null);
           if (currentPlaylist) {
             const getTracks = async () => {
               const response = await fetchRequest(currentPlaylist);
-              
-            if (response)  setTrackList(response);
+
+              if (response) setTrackList(response);
             };
             getTracks();
           }
         },
 
         getNextTracks: (currentPlaylist, indexForRequest) => {
+          console.log(trackList);
           if (currentPlaylist && nextTracksURL) {
             const getTracks = async () => {
               const response = await fetchRequest(
                 currentPlaylist,
                 indexForRequest
               );
-             
+
               if (trackList && response)
                 setTrackList(connectWithoutDuplicates(trackList, response));
             };
@@ -158,7 +154,7 @@ console.log(indexForRequest)
                 return code;
               },
             });
- 
+
           return request();
         },
 
@@ -188,11 +184,12 @@ console.log(indexForRequest)
               method: HttpMethod.POST,
             });
             const upd: Playlist[] = [];
-          if (response)  upd.push(...playlists, {
-              id: response,
-              title: name,
-              is_loved_track: false,
-            });
+            if (response)
+              upd.push(...playlists, {
+                id: response,
+                title: name,
+                is_loved_track: false,
+              });
             setPlaylists(upd);
           };
           requestFunction();
@@ -203,9 +200,8 @@ console.log(indexForRequest)
             method: HttpMethod.DELETE,
             parser: async () => null,
           });
-          const updatePlaylists = playlists.filter(
-            (item) => +item.id !== id);
-            setPlaylists(updatePlaylists)
+          const updatePlaylists = playlists.filter((item) => +item.id !== id);
+          setPlaylists(updatePlaylists);
         },
       }}
     >

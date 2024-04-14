@@ -1,6 +1,13 @@
 /** @format */
 
-import { ReactNode, useContext, useEffect, useRef, useState } from "react";
+import {
+  ReactNode,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { TrackData } from "../../types/deezer";
 import Track from "../Track/Track";
 import classes from "./styles.module.scss";
@@ -21,31 +28,33 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
     setTracklist(tracks);
   }, [tracks]);
 
-
   const options = {
-    root: null,
-    rootMargin: "0px",
+    // root: null,
+    // rootMargin: "0px",
     threshold: 1.0,
   };
-  const callback = (entries: any) => {
-    const [entry] = entries;
-    // console.log(entry.isIntersecting)
-    setIsvisible(entry.isIntersecting)
-  };
 
-  useEffect(() => {
-    var observer = new IntersectionObserver(callback, options);
-    if (ref.current) observer.observe(ref.current);
+  useLayoutEffect(() => {
+    const callback = (entries: any) => {
+      const [entry] = entries;
+      console.log(entry.isIntersecting);
+      setIsvisible(entry.isIntersecting);
+    };
+
+    if (!ref.current) return;
+
+    var observer = new IntersectionObserver(callback);
+    observer.observe(ref.current);
 
     return () => {
-      if (ref.current) observer.unobserve(ref.current)
-    }
-  },[ref.current,options,isVisible])
+      observer.disconnect();
+    };
+  }, [options]);
 
-useEffect(() => {
-// console.log(isVisible)
-  if (isVisible) nextTracks()
-},[isVisible])
+  useEffect(() => {
+    // console.log(isVisible);
+    if (isVisible) nextTracks();
+  }, [isVisible]);
 
   return (
     <div className={classes.tracklistContainer}>
