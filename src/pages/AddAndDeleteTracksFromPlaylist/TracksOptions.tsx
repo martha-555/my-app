@@ -5,6 +5,7 @@ import { Playlist, TrackData } from "../../types/deezer";
 import { useSearchParams } from "react-router-dom";
 import classes from "./styles.module.scss";
 import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
+import optionIcon from '../../icons/icon-park_more.png'
 
 type Props = {
   track: TrackData;
@@ -92,18 +93,18 @@ const TracksOptions = ({ track }: Props) => {
   };
 
   return (
-    <div>
+    <>
       {show && !isLoadingResponse ? <div>{message} </div> : null}
-      <button className="options" id={track.id.toString()}>
-        ...
-      </button>
-      <div>
+      <img  className="options" id={track.id.toString()} src={optionIcon} alt="" />
+     
+      <div className={classes.optionContainer}>
+     <div className={classes.fixedSize}>
         {selectedTrack === track.id && clickedOption ? (
-          <div>
+          
             <div className={classes.addToPlaylist} id={track.id.toString()}>
               Додати в плейлист
             </div>
-          </div>
+         
         ) : null}
         {searchParams.get("playlist") &&
         selectedTrack === track.id &&
@@ -112,20 +113,22 @@ const TracksOptions = ({ track }: Props) => {
             Видалити з плейлиста
           </div>
         ) : null}
-      </div>
+
+
+
+<div className={classes.playlists}>
       {selectedTrack === track.id && (clickedAddButton || deleteTrack) ? (
-        <div>
+       
           <div id={track.id.toString()} className={classes.backArrow}>
             &#x21E6;
           </div>
-          <div></div>
-        </div>
+       
       ) : (
         false
       )}
       {selectedTrack === track.id && clickedAddButton
         ? parsedPlaylists.map((item) => (
-            <div
+            <div 
               onClick={addSongToPlaylist}
               id={item.id.toString()}
               key={item.id}
@@ -134,12 +137,15 @@ const TracksOptions = ({ track }: Props) => {
             </div>
           ))
         : null}
+        </div>
       {deleteTrack && selectedTrack === track.id ? (
         <div id={track.id.toString()} onClick={deleteSongFromPlaylist}>
           Видалити трек?
         </div>
       ) : null}
-    </div>
+      </div>
+      </div>
+    </>
   );
 };
 export default TracksOptions;

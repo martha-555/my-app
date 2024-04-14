@@ -8,18 +8,45 @@
 .hideList {
   display: none;
 }
+.optionContainer {
+  position: absolute;
+  top: 70px;
+  right: -70px;
+  background: #292a2b;
+  width: 45%;
+  // height: 200px;
+  z-index: 1;
+
+}
+
+.fixedSize {
+  // width: 200px;
+  // height: 50px;
+}
 .addToPlaylist {
-  border: 1px solid black;
-  width: fit-content;
+
+  // width: 200px;
+  // height: 95px;
+  text-wrap: nowrap;
 }
 .options {
-  border: 1px solid black;
+  // border: 1px solid black;
 }
 
 .backArrow {
   font-size: 30px;
+  // position: absolute;
+  // top: -25px;
 }
 .deleteFromPlaylist {
-  border: 1px solid black;
-  width: fit-content
+  // position: absolute;
+  // right: -29px;
+  // top: -12px;
+//  height: 95px;
+  text-wrap: nowrap;
+}
+
+.playlists {
+text-align: center;
+
 }

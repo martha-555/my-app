@@ -2,7 +2,7 @@
 
 .mainContainer {
   background: rgba(14, 25, 32, 1);
-width: 300px;
+  width: 300px;
 }
 
 .logoContainer {
@@ -72,8 +72,12 @@ width: 300px;
   //   #ee10b0 -4.82%,
   //   rgba(14, 158, 239, 0.92) 127.01%
   // );
-  background: linear-gradient(90.07deg, #F95000 40.18%, rgba(14, 158, 239, 0.92) 54.01%);
-  -webkit-background-clip: text;
+  background: linear-gradient(
+    90.07deg,
+    #f95000 40.18%,
+    rgba(14, 158, 239, 0.92) 54.01%
+  );
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 
   font-size: 50px;

@@ -13,7 +13,6 @@ import { HttpMethod } from "../api/types";
 import { parseDeezerTrack } from "../../utils/deezer";
 import { authContext } from "../auth/authProvider";
 
-
 type errorResponse = {
   [key: string]: {
     code: number;
@@ -25,7 +24,10 @@ type errorResponse = {
 type LikedTracksType = {
   favoriteTracks: TrackData[] | null;
   isLoading: boolean;
-  addTrack: (id: number, track: TrackData) => Promise<errorResponse | boolean | null>;
+  addTrack: (
+    id: number,
+    track: TrackData
+  ) => Promise<errorResponse | boolean | null>;
   removeTrack: (id: number, track: TrackData) => void;
   getNextTracks: () => void;
 };
@@ -39,7 +41,9 @@ export const LikedTracksContext = createContext<LikedTracksType>({
 });
 
 const LikedTracksProvider = (props: { children: ReactElement }) => {
-  const [favoriteTracks, setFavoriteTracks] = useState<TrackData[] | null>(null);
+  const [favoriteTracks, setFavoriteTracks] = useState<TrackData[] | null>(
+    null
+  );
   const [initialTracks, setInitialTracks] = useState<TrackData[] | null>(null);
 
   const [favoriteTracksRequest, state] = useDeezerRequest<TrackData[]>();
@@ -50,42 +54,43 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   const { authKey } = useContext(authContext);
 
   const fetchRequest = async (path: string) => {
-   const tracks = await favoriteTracksRequest({
-    path: path,
-    parser: async (response) => {
-      const json = await response.json();
-      // console.log(json?.error)
-      setNextTracksURL(!!json.next);
-      return json.data?.map(parseDeezerTrack);
-    },
-  });
-  return tracks
+    const tracks = await favoriteTracksRequest({
+      path: path,
+      parser: async (response) => {
+        const json = await response.json();
+        // console.log(json?.error)
+        setNextTracksURL(!!json.next);
+        return json.data?.map(parseDeezerTrack);
+      },
+    });
+    return tracks;
   };
 
   const getOpeningTracks = async () => {
-      const tracklist = await fetchRequest(`/user/me/tracks&order=time_add`);
-      if (tracklist) setInitialTracks(tracklist); 
-      setFavoriteTracks(tracklist)
- } 
+    const tracklist = await fetchRequest(
+      `/user/me/tracks&offset=0&limit=${Number.MAX_SAFE_INTEGER}&order=time_add`
+    );
+    if (tracklist) setFavoriteTracks(tracklist);
+  };
 
   useEffect(() => {
     getOpeningTracks();
-    
   }, [authKey]);
 
-
-  useEffect(() => {
-    if (nextTracksURL) {
-  const getTracks = async () => {
-const tracklist = await fetchRequest(`/user/me/tracks&index=${favoriteTracks? favoriteTracks?.length: initialTracks?.length}&order=time_add`);
-const allTracks: TrackData[] = [];
-if (initialTracks && tracklist) allTracks.push(...initialTracks, ...tracklist)
-setFavoriteTracks(allTracks)
-  }   
-  getTracks()
-}
-  },[favoriteTracks?.length])
-
+  // useEffect(() => {
+  //   if (nextTracksURL) {
+  //     const getTracks = async () => {
+  //       const tracklist = await fetchRequest(
+  //         `/user/me/tracks&offset=0&limit=${Number.MAX_SAFE_INTEGER}&order=time_add`
+  //       );
+  //       const allTracks: TrackData[] = [];
+  //       if (initialTracks && tracklist)
+  //         allTracks.push(...initialTracks, ...tracklist);
+  //       setFavoriteTracks(allTracks);
+  //     };
+  //     getTracks();
+  //   }
+  // }, [favoriteTracks?.length]);
 
   return (
     <LikedTracksContext.Provider
@@ -94,18 +99,19 @@ setFavoriteTracks(allTracks)
         isLoading: state.isLoading,
 
         addTrack: (id, track) => {
-        const request = async () => await requestAddAction({
-            path: `/user/me/tracks?track_id=${id}&order=time_add`,
-            method: HttpMethod.POST,
-            parser: async (response) => {
-              const code = await response.json();
-              return code;
-            },
-          });
+          const request = async () =>
+            await requestAddAction({
+              path: `/user/me/tracks?track_id=${id}&order=time_add`,
+              method: HttpMethod.POST,
+              parser: async (response) => {
+                const code = await response.json();
+                return code;
+              },
+            });
           const upd: TrackData[] = [];
-          if (favoriteTracks) upd.push(track,...favoriteTracks);
+          if (favoriteTracks) upd.push(track, ...favoriteTracks);
           setFavoriteTracks(upd);
-          return request()
+          return request();
         },
 
         removeTrack: (id, track) => {
@@ -123,15 +129,19 @@ setFavoriteTracks(allTracks)
         },
 
         getNextTracks: () => {
-        if ( nextTracksURL && favoriteTracks) {
-        const getTracks = async () => {
-         const nextTracks = await fetchRequest(`/user/me/tracks&index=${favoriteTracks.length}`);
-         console.log('nextTracks url', nextTracks)
-      if (nextTracks) setFavoriteTracks([...favoriteTracks, ...nextTracks])
-        }
-        getTracks()
-        }  
-        }}}
+          if (nextTracksURL && favoriteTracks) {
+            const getTracks = async () => {
+              const nextTracks = await fetchRequest(
+                `/user/me/tracks&index=${favoriteTracks.length}`
+              );
+              console.log("nextTracks url", nextTracks);
+              if (nextTracks)
+                setFavoriteTracks([...favoriteTracks, ...nextTracks]);
+            };
+            getTracks();
+          }
+        },
+      }}
     >
       {props.children}
     </LikedTracksContext.Provider>

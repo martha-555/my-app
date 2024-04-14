@@ -37,7 +37,7 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
   useLayoutEffect(() => {
     const callback = (entries: any) => {
       const [entry] = entries;
-      console.log(entry.isIntersecting);
+
       setIsvisible(entry.isIntersecting);
     };
 
@@ -52,9 +52,9 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
   }, [options]);
 
   useEffect(() => {
-    // console.log(isVisible);
-    if (isVisible) nextTracks();
-  }, [isVisible]);
+    console.log({ tracks });
+    // if (isVisible) nextTracks();
+  }, []);
 
   return (
     <div className={classes.tracklistContainer}>
