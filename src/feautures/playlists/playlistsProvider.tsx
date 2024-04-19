@@ -89,7 +89,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
       path: `/playlist/${currentPlaylist}/tracks&offset=0&limit=${Number.MAX_SAFE_INTEGER}`,
       parser: async (response) => {
         const json = await response.json();
-        console.log(json);
+        // console.log(json);
         return json?.data?.map(parseDeezerTrack);
       },
     });

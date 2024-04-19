@@ -61,7 +61,11 @@ useEffect(() => {
           />
         ) : null}
         {!searchParams.get("playlist")
-          ? playlists?.map((item) => (
+          ?
+          <div className={classes.wrapper}>
+             <i id="left" className="fa-solid fa-angle-left"></i>
+            <div className={classes.carousel}>
+   {         playlists?.map((item) => (
               <div
                 id={item.id.toString()}
                 className={classes.playlists}
@@ -73,7 +77,11 @@ useEffect(() => {
                 <img className={classes.deleteIcon} id={item.id.toString()} src={Logo} alt="" />
                 </div>
               </div>
-            ))
+            ))}
+            </div>
+            <i id="right" className="fa-solid fa-angle-right"></i>
+          </div>
+        
             : null}
       </div>
     </PageWrapper>

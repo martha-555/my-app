@@ -21,7 +21,6 @@ type Props = {
 
 const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
   const { setTracklist } = useContext(PlayerContext);
-  const [isVisible, setIsvisible] = useState<boolean>(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -29,16 +28,12 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
   }, [tracks]);
 
   const options = {
-    // root: null,
-    // rootMargin: "0px",
     threshold: 1.0,
   };
 
   useLayoutEffect(() => {
     const callback = (entries: any) => {
       const [entry] = entries;
-
-      setIsvisible(entry.isIntersecting);
     };
 
     if (!ref.current) return;
@@ -52,8 +47,7 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
   }, [options]);
 
   useEffect(() => {
-    console.log({ tracks });
-    // if (isVisible) nextTracks();
+ 
   }, []);
 
   return (

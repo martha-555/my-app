@@ -5,7 +5,9 @@ import { Playlist, TrackData } from "../../types/deezer";
 import { useSearchParams } from "react-router-dom";
 import classes from "./styles.module.scss";
 import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
-import optionIcon from '../../icons/icon-park_more.png'
+import optionIcon from '../../icons/icon-park_more.png';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 type Props = {
   track: TrackData;
@@ -13,16 +15,21 @@ type Props = {
 
 const TracksOptions = ({ track }: Props) => {
   const [selectedTrack, setSelectedTrack] = useState<number>(0);
-  const [trackId, setTrackId] = useState<number>(0);
   const [message, setMessage] = useState<string>("");
-  const [showMessage, setshowMessage] = useState(true);
   const [deleteTrack, setDeleteTrack] = useState<boolean>(false);
-  const [show, setShow] = useState(true);
-  const [addToPlaylistId, setAddToPlaylistId] = useState<number>(0);
   const [parsedPlaylists, setParsedPlaylists] = useState<Playlist[]>([]);
   const [clickedOption, setclickedOption] = useState<boolean>(false);
   const [clickedAddButton, setclickedAddButton] = useState<boolean>(false);
   const [searchParams] = useSearchParams({});
+
+  const notify = () => toast(message, {
+    duration: 1500,
+    style:{
+      // background: '#818486'
+    }
+  });
+
+ 
 
   const { playlists, addToPlaylist, deleteFromPlaylist, isLoadingResponse } =
     useContext(PlaylistsContext);
@@ -54,9 +61,7 @@ const TracksOptions = ({ track }: Props) => {
         setDeleteTrack(false);
       }
       if (target.className.includes("backArrow")) setclickedOption(true);
-      setTimeout(() => {
-        setshowMessage(false);
-      }, 4000);
+     
     };
 
     document.addEventListener("click", handleClick);
@@ -64,10 +69,8 @@ const TracksOptions = ({ track }: Props) => {
   }, [selectedTrack, clickedOption, clickedAddButton, deleteTrack, track.id]);
 
   const addSongToPlaylist = async (e: any) => {
-    setShow(true);
-    setTrackId(track.id);
+
     const target = e.target;
-    setAddToPlaylistId(target.id);
 
     const response = async () => {
       const code = await addToPlaylist(track, target.id);
@@ -76,57 +79,47 @@ const TracksOptions = ({ track }: Props) => {
         : setMessage("Вже є у плейлисті");
     };
     response();
+
   };
 
-  useEffect(() => {
-    const timeId = setTimeout(() => {
-      setShow(false);
-    }, 2000);
-
-    return () => {
-      clearTimeout(timeId);
-    };
-  }, [message, trackId, addToPlaylistId]);
+useEffect(() => {
+if (message) notify()
+},[message])
 
   const deleteSongFromPlaylist = () => {
     deleteFromPlaylist(track, Number(searchParams.get("playlist")));
+    setMessage('Трек видалено')
   };
 
+
+ 
   return (
     <>
-      {show && !isLoadingResponse ? <div>{message} </div> : null}
-      <img  className="options" id={track.id.toString()} src={optionIcon} alt="" />
+      <Toaster />
+      <img className="options" id={track.id.toString()} src={optionIcon} alt="" />
      
       <div className={classes.optionContainer}>
-     <div className={classes.fixedSize}>
+     <div>
+
         {selectedTrack === track.id && clickedOption ? (
-          
+          <div className={classes.fixedSize}>
             <div className={classes.addToPlaylist} id={track.id.toString()}>
               Додати в плейлист
             </div>
-         
-        ) : null}
-        {searchParams.get("playlist") &&
-        selectedTrack === track.id &&
-        clickedOption ? (
-          <div id={track.id.toString()} className={classes.deleteFromPlaylist}>
+
+{searchParams.get("playlist")? <div id={track.id.toString()} className={classes.deleteFromPlaylist}>
             Видалити з плейлиста
+          </div> : null }
           </div>
         ) : null}
 
 
-
-<div className={classes.playlists}>
       {selectedTrack === track.id && (clickedAddButton || deleteTrack) ? (
-       
-          <div id={track.id.toString()} className={classes.backArrow}>
+        <div className={classes.playlists}>
+        <div id={track.id.toString()} className={classes.backArrow}>
             &#x21E6;
           </div>
-       
-      ) : (
-        false
-      )}
-      {selectedTrack === track.id && clickedAddButton
+          {clickedAddButton
         ? parsedPlaylists.map((item) => (
             <div 
               onClick={addSongToPlaylist}
@@ -137,15 +130,19 @@ const TracksOptions = ({ track }: Props) => {
             </div>
           ))
         : null}
-        </div>
-      {deleteTrack && selectedTrack === track.id ? (
+          {deleteTrack? (
         <div id={track.id.toString()} onClick={deleteSongFromPlaylist}>
           Видалити трек?
         </div>
       ) : null}
+          </div>
+      ) : (
+        false
+      )}   
       </div>
       </div>
     </>
   );
 };
+
 export default TracksOptions;

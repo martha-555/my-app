@@ -44,7 +44,6 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   const [favoriteTracks, setFavoriteTracks] = useState<TrackData[] | null>(
     null
   );
-  const [initialTracks, setInitialTracks] = useState<TrackData[] | null>(null);
 
   const [favoriteTracksRequest, state] = useDeezerRequest<TrackData[]>();
   const [requestAction, stateAction] = useDeezerRequest();
