@@ -8,11 +8,31 @@
   border-radius: 5px;
   padding: 10px;
   margin: 15px;
-  font-family: cursive;
-  // color: #faf0e6;
   color: rgb(201 201 201);
 position: relative;
   background: linear-gradient(180deg, #666 0%, #111111 48%);
+
+  font-family: "Merienda", cursive;
+  font-optical-sizing: auto;
+  font-weight: weight;
+  font-style: normal;
+
+  // font-family: "Acme", sans-serif;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Domine", serif;
+  // font-optical-sizing: auto;
+  // font-weight: weight;
+  // font-style: normal;
+
+  // font-family: "IBM Plex Serif", serif;
+  // font-weight: 700;
+  // font-style: italic;
+
+  // font-family: "Zilla Slab", serif;
+  // font-weight: 600;
+  // font-style: italic;
 }
 
 .cover {
@@ -24,6 +44,10 @@ position: relative;
   display: flex;
   gap: 5px;
   flex-direction: column;
+
+  & :first-child {
+    // font-size: 20px;
+  }
 }
 .duration {
   // margin-left: auto;

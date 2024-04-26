@@ -31,5 +31,6 @@ export type ResponseTrackData = {
 export type Playlist = {
   id: number;
   title:string;
-  is_loved_track:boolean
+  is_loved_track:boolean;
+  image:string
 }

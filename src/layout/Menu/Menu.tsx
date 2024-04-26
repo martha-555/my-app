@@ -19,7 +19,6 @@ const Menu = () => {
         onClick={() => navigate(path)}
       >
         <img src={icon} alt="" />
-        {/* <div className={classes.imageWrapper}></div> */}
         <div className={classes.name}>{name}</div>
       </div>
     );

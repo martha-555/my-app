@@ -6,7 +6,6 @@ import {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState,
 } from "react";
 import { TrackData } from "../../types/deezer";
 import Track from "../Track/Track";
@@ -34,6 +33,7 @@ const Tracklist = ({ tracks, nextTracks, emptyState }: Props) => {
   useLayoutEffect(() => {
     const callback = (entries: any) => {
       const [entry] = entries;
+     if (entry.isIntersecting) nextTracks()
     };
 
     if (!ref.current) return;

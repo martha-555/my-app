@@ -15,6 +15,7 @@ type errorResponse = {
   };
 };
 
+
 type PlaylistsType = {
   getCurrentPlaylist: (currentPlaylist: number) => void;
   // getNextTracks: (currentPlaylist: number, indexForRequest: number) => void;
@@ -63,22 +64,24 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [currentPlaylist, setCurrentPlaylist] = useState<number>(0);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
+
   useEffect(() => {
     const fetchRequest = async () => {
       const playlistsResponse = await deezerRequest({
-        path: `/user/me/playlists`,
+        path: `/user/me/playlists&order=time_add`,
         parser: async (response) => {
           const json = await response.json();
           return json?.data?.map((item: any) => ({
             id: item.id,
             title: item.title,
             is_loved_track: item.is_loved_track,
+            image: item.picture_big
           }));
         },
       });
       if (playlistsResponse)
         setPlaylists(
-          playlistsResponse?.filter((item) => item.is_loved_track === false)
+          (playlistsResponse?.filter((item) => item.is_loved_track === false).reverse())
         );
     };
     fetchRequest();
@@ -118,7 +121,9 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
     }
   }, [trackList]);
 
-  useEffect(() => {}, [allTracks]);
+  useEffect(() => {
+    console.log(playlists)
+  }, [playlists]);
 
   return (
     <PlaylistsContext.Provider
@@ -191,6 +196,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
                 id: response,
                 title: name,
                 is_loved_track: false,
+                image: ''
               });
             setPlaylists(upd);
           };
