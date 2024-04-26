@@ -18,8 +18,6 @@ type errorResponse = {
 
 type PlaylistsType = {
   getCurrentPlaylist: (currentPlaylist: number) => void;
-  // getNextTracks: (currentPlaylist: number, indexForRequest: number) => void;
-
   playlists: Playlist[];
   createPlaylist: (name: string) => void;
   removePlaylist: (id: number) => void;
@@ -41,7 +39,6 @@ export const PlaylistsContext = createContext<PlaylistsType>({
   createPlaylist: (name) => {},
   removePlaylist: (id) => {},
   getCurrentPlaylist: async (currentPlaylist) => {},
-  // getNextTracks: async (currentPlaylist, indexForRequest) => {},
 
   addToPlaylist: async (track, currentPlaylist) => false,
   deleteFromPlaylist: (track, currentPlaylist) => {},
@@ -53,7 +50,7 @@ export const PlaylistsContext = createContext<PlaylistsType>({
 const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [deezerRequest] = useDeezerRequest<Playlist[]>();
   const [actionRequest, state] = useDeezerRequest();
-  const [retutnTracks, load] = useDeezerRequest<TrackData[]>();
+  const [retutnTracks] = useDeezerRequest<TrackData[]>();
   const [returnResponse, isLoadingResponse] = useDeezerRequest<
     errorResponse | boolean
   >();
@@ -92,7 +89,6 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
       path: `/playlist/${currentPlaylist}/tracks&offset=0&limit=${Number.MAX_SAFE_INTEGER}`,
       parser: async (response) => {
         const json = await response.json();
-        // console.log(json);
         return json?.data?.map(parseDeezerTrack);
       },
     });
@@ -101,7 +97,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   };
 
   useEffect(() => {
-    const getNextTracks = () => {
+    const getAllTracks = () => {
       if (currentPlaylist) {
         const getTracks = async () => {
           const response = await fetchRequest(currentPlaylist);
@@ -112,7 +108,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
         getTracks();
       }
     };
-    getNextTracks();
+    getAllTracks();
   }, [currentPlaylist]);
 
   useEffect(() => {
@@ -122,7 +118,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   }, [trackList]);
 
   useEffect(() => {
-    console.log(playlists)
+
   }, [playlists]);
 
   return (

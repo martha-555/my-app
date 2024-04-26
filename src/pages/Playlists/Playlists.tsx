@@ -1,7 +1,6 @@
 /** @format */
 
 import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { TrackData } from "../../types/deezer";
 import classes from "./styles.module.scss";
 import { useSearchParams } from "react-router-dom";
 import PageWrapper from "../../layout/PageWrapper/PageWrapper";
@@ -106,12 +105,12 @@ useEffect(() => {
              <i onClick={leftMove} ref={leftArrovRef} id="left" className="fa-solid fa-angle-left"></i>
 
             <div className={classes.carousel} ref={ref}>
-   {playlists?.map((item) => (
+            {playlists?.map((item) => (
              <div key={item.id} className={classes.playlistsWrapper}>
               <div style={{backgroundImage:`url(${item.image})`}}
                 ref={playlistsRef}
                 id={item.id.toString()}
-                className={classes.playlists}
+                className={currentPlaylist == item.id? classes.activePlaylist: classes.playlists}
                 
                 onClick={handleClickedPlaylist}>
                 {clickedDelete && clickedPlaylist === +item.id? <div id={item.id.toString()} className={classes.isDelete} onClick={deletePlaylist} >Видалити плейлист?</div>: null }

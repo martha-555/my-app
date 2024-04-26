@@ -87,9 +87,9 @@ text-wrap: nowrap;
     display: flex;
     max-width: 850px;
     position: relative;
-    margin: 0 auto;
+    margin: 20px auto;
     overflow: hidden;
-    // border: 1px solid red;
+    
   }
 
 
@@ -162,23 +162,25 @@ text-wrap: nowrap;
 
  
   .playlists {
-        // height: 340px;
         object-fit: cover;
         user-select: none;
         margin-left: 14px;
         width: calc(100% / 3);
-        // overflow: hidden;
         min-width: 150px;
         min-height: 150px;
         justify-content: space-between;
     background-size: contain;
+   
   }
 
+
+  
   .playlistsWrapper {
     text-align: center;
     font-size: 30px;
-  
-  
+    // border: 1px solid whitesmoke;
+    box-shadow: 5px 8px 13px whitesmoke;
+    
     // ??????????
     // font-family: "Spirax", system-ui;
     // font-weight: 400;
@@ -194,3 +196,11 @@ text-wrap: nowrap;
     font-weight: 400;
     font-style: normal;
     }
+
+     .activePlaylist {
+     @extend .playlists;
+     min-width: 180px;
+     min-height: 180px;
+     box-shadow: rgba(255, 255, 255, 1.25) 0px 54px 55px, rgba(255, 255, 255, 0.12) 0px -12px 30px, rgba(255, 255, 255, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
+     }
+
