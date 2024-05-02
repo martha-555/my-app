@@ -48,8 +48,8 @@ export const PlaylistsContext = createContext<PlaylistsType>({
 });
 
 const PlaylistsProvider = (props: { children: ReactElement }) => {
-  const [deezerRequest] = useDeezerRequest<Playlist[]>();
-  const [actionRequest, state] = useDeezerRequest();
+  const [deezerRequest,state] = useDeezerRequest<Playlist[]>();
+  const [actionRequest] = useDeezerRequest();
   const [retutnTracks] = useDeezerRequest<TrackData[]>();
   const [returnResponse, isLoadingResponse] = useDeezerRequest<
     errorResponse | boolean
@@ -62,27 +62,29 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
 
+  const getPlaylists = async () => {
+    const playlistsResponse = await deezerRequest({
+      path: `/user/me/playlists&order=time_add`,
+      parser: async (response) => {
+        const json = await response.json();
+        return json?.data?.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          is_loved_track: item.is_loved_track,
+          image: item.picture_big
+        }));
+      },
+    });
+    if (playlistsResponse)
+      setPlaylists(
+        (playlistsResponse?.filter((item) => item.is_loved_track === false))
+      );
+   
+  };
   useEffect(() => {
-    const fetchRequest = async () => {
-      const playlistsResponse = await deezerRequest({
-        path: `/user/me/playlists&order=time_add`,
-        parser: async (response) => {
-          const json = await response.json();
-          return json?.data?.map((item: any) => ({
-            id: item.id,
-            title: item.title,
-            is_loved_track: item.is_loved_track,
-            image: item.picture_big
-          }));
-        },
-      });
-      if (playlistsResponse)
-        setPlaylists(
-          (playlistsResponse?.filter((item) => item.is_loved_track === false).reverse())
-        );
-    };
-    fetchRequest();
-  }, [deezerRequest]);
+    getPlaylists();
+  
+  }, [deezerRequest,playlists.length]);
 
   const fetchRequest = async (currentPlaylist: number) => {
     const tracks = await retutnTracks({
@@ -118,8 +120,8 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   }, [trackList]);
 
   useEffect(() => {
-
-  }, [playlists]);
+// console.log('state.isLoad', state.isLoading)
+  }, [state.isLoading]);
 
   return (
     <PlaylistsContext.Provider
@@ -154,10 +156,10 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
             });
           if (currentPlaylist == playlistId && allTracks) {
             const addTrack: TrackData[] = allTracks;
-            addTrack.unshift(track);
+            addTrack.push(track);
             setAllTracks(addTrack);
           }
-
+          getPlaylists()
           return request();
         },
 
@@ -186,9 +188,9 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
               },
               method: HttpMethod.POST,
             });
-            const upd: Playlist[] = [];
+            const upd: Playlist[] = playlists;
             if (response)
-              upd.push(...playlists, {
+              upd.unshift( {
                 id: response,
                 title: name,
                 is_loved_track: false,
