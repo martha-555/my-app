@@ -69,9 +69,7 @@ const TracksOptions = ({ track }: Props) => {
   }, [selectedTrack, clickedOption, clickedAddButton, deleteTrack, track.id]);
 
   const addSongToPlaylist = async (e: any) => {
-
     const target = e.target;
-
     const response = async () => {
       const code = await addToPlaylist(track, target.id);
       typeof code == "boolean"
@@ -122,6 +120,7 @@ if (message) notify()
           {clickedAddButton
         ? parsedPlaylists.map((item) => (
             <div 
+            className={classes.playlistsList}
               onClick={addSongToPlaylist}
               id={item.id.toString()}
               key={item.id}
@@ -131,7 +130,7 @@ if (message) notify()
           ))
         : null}
           {deleteTrack? (
-        <div id={track.id.toString()} onClick={deleteSongFromPlaylist}>
+        <div className={classes.isDeleteTrack} id={track.id.toString()} onClick={deleteSongFromPlaylist}>
           Видалити трек?
         </div>
       ) : null}

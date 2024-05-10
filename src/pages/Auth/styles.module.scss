@@ -1,0 +1,36 @@
+
+.authContainer {
+ position: relative;
+ font-family: "Flavors", cursive;
+ font-weight: 400;
+ font-style: normal;
+}
+
+.authButton {
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 10px;
+    font-size: 20px;
+    background: rgb(199, 191, 191);
+    box-shadow: 3px 3px 0px rgb(164, 164, 164);
+
+    &:hover {
+    background: rgb(230, 230, 230);
+    }
+}
+
+.logOutMessage {
+position: absolute;
+background: rgb(213 213 213);
+text-wrap: nowrap;
+margin: 10px;
+right: 30%;
+font-size: 20px;
+padding: 10px;
+z-index: 1;
+border: 4px solid black;
+border-radius: 30px;
+
+&:hover {
+background: rgb(255, 255, 255);;
+}
+}

@@ -26,6 +26,7 @@ const PageWrapper = ({ children }: Props) => {
       <Menu />
       <div className={classes.rightSide}>
         <div className={classes.content}>
+          <div className={classes.flexWrapper}>
           <input
             className={classes.searchInput}
             type="text"
@@ -40,6 +41,7 @@ const PageWrapper = ({ children }: Props) => {
             }}
           />
           <Auth />
+          </div>
           {children}
         </div>
         <Player />

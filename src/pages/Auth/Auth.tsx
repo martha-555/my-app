@@ -6,6 +6,7 @@ import { authContext } from "../../feautures/auth/authProvider";
 import useBackendRequest from "../../feautures/api/hooks/useBackendRequest";
 import { HttpMethod } from "../../feautures/api/types";
 import useIsAuthorize from "../../feautures/auth/hooks/useIsAuthorize";
+import classes from './styles.module.scss'
 
 const Auth = () => {
   
@@ -16,12 +17,22 @@ const Auth = () => {
   const isAuth = useIsAuthorize();
   const [isDelete, setIsDelete] = useState<boolean>(false);
 
-  const handleClick = () => {
-  isAuth? setIsDelete(!isDelete): window.location.replace(
-       "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
-     );
-   };
- 
+  useEffect(() => {
+
+    const handleClick = (e:Event) => {
+      const target = e.target as HTMLButtonElement;
+    isAuth && target.className.includes('authButton')? setIsDelete(!isDelete): setIsDelete(false)
+    
+  if (!isAuth) window.location.replace(
+         "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
+       );
+     };
+   
+  
+     document.addEventListener("click", handleClick);
+     return () => document.removeEventListener("click", handleClick);
+  },[isAuth, isDelete])
+
 
   useEffect(() => {
     if (code) {
@@ -46,10 +57,10 @@ const Auth = () => {
   }, [code]);
 
   return (
-    <div>
-      <button onClick={handleClick}>{isAuth? 'Вийти': 'Увійти'}</button>
+    <div className={classes.authContainer}>
+      <button className={classes.authButton} >{isAuth? 'Вийти': 'Увійти'}</button>
       {isDelete?
-      <div onClick={() => updateAuthKey(null)} >Вийти з акаунту?</div> : null}
+      <div className={classes.logOutMessage} onClick={() => updateAuthKey(null)} >Вийти з акаунту?</div> : null}
     </div>
   );
 };

@@ -19,7 +19,6 @@ const Recommendations = () => {
         const json = await response.json();
         return json.data?.map(parseDeezerTrack);
       }});
-console.log(tracks);
 if (tracks) setTracks(tracks)
   }
 

@@ -30,30 +30,26 @@ const [clickedDelete, setClickedDelete] = useState<boolean>(false)
     }
   });
 
-  
+  useEffect(() => {
+    const handleClickedPlaylist = (e: Event) => {
+      const target = e.target as HTMLDivElement;
+      const playlistId = target.id;
+      setClickedPlaylist(+target.id);
+      target.className.includes('deleteIcon') &&  +(target.id) == clickedPlaylist? setClickedDelete(!clickedDelete): setClickedDelete(true);
+      if (!target.className.includes('deleteIcon')) setClickedDelete(false)
+      if (!target.className.includes("optionContainer") && !target.className.includes("isDelete") && target.localName !== 'img')
+        setSearchParams({ playlist: playlistId });
+    };
+document.addEventListener('click', handleClickedPlaylist);
+return () => document.removeEventListener('click', handleClickedPlaylist)
 
-  const handleClickedPlaylist = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLDivElement;
-    const playlistId = target.id;
+  },[clickedDelete,clickedPlaylist])
 
-    setClickedPlaylist(+target.id)
-    if (target.className.includes("optionContainer") === false && target.className.includes("isDelete") === false && target.localName !== 'img')
-      setSearchParams({ playlist: playlistId });
-  };
 
 
   useEffect(() => {
     getCurrentPlaylist(currentPlaylist);
   }, [currentPlaylist]);
-
-
-
-  const handleDeleteClick = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLDivElement;
-+(target.id) == clickedPlaylist? setClickedDelete(!clickedDelete): setClickedDelete(true);
-console.log(+(target.id) == clickedPlaylist)
-  }
-  
 
   const deletePlaylist = (e:React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLDivElement;
@@ -122,17 +118,16 @@ useEffect(() => {
 
             <div className={classes.carousel} ref={ref}>
             {playlists?.map((item,index) => (
-             <div onClick={handleClickedPlaylist} key={item.id} className={classes.playlistsWrapper}>
+             <div  key={item.id} className={classes.playlistsWrapper}>
               <div style={{backgroundImage:`url(${item.image})`}}
                 ref={index === playlists.length-1? playlistsRef: null}
                 id={item.id.toString()}
                 className={currentPlaylist == item.id? classes.activePlaylist: classes.playlists}>
               </div>
-              <div id={item.id.toString()}>{item.title}</div>
-                {clickedDelete && clickedPlaylist === +item.id? <div id={item.id.toString()} className={classes.isDelete} onClick={deletePlaylist} >Видалити плейлист?</div>: null }
-                <div className={classes.optionContainer} id={item.id.toString()} onClick={handleDeleteClick}>  
+              <div className={classes.optionContainer} id={item.id.toString()}>{item.title}
+                {clickedDelete && clickedPlaylist === +item.id? <div id={item.id.toString()} className={classes.isDeletePlaylist} onClick={deletePlaylist} >Видалити плейлист?</div>: null }
                 <img className={classes.deleteIcon} id={item.id.toString()} src={Logo} alt="" />
-                </div>
+              </div>
               </div>
             ))}
             </div>
