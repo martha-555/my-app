@@ -37,15 +37,19 @@ const [clickedDelete, setClickedDelete] = useState<boolean>(false)
       setClickedPlaylist(+target.id);
       target.className.includes('deleteIcon') &&  +(target.id) == clickedPlaylist? setClickedDelete(!clickedDelete): setClickedDelete(true);
       if (!target.className.includes('deleteIcon')) setClickedDelete(false)
-      if (!target.className.includes("optionContainer") && !target.className.includes("isDelete") && target.localName !== 'img')
-        setSearchParams({ playlist: playlistId });
+      
     };
 document.addEventListener('click', handleClickedPlaylist);
 return () => document.removeEventListener('click', handleClickedPlaylist)
 
   },[clickedDelete,clickedPlaylist])
 
-
+const getClickedTracks = (e:  React.MouseEvent<HTMLDivElement>) => {
+  const target = e.target as HTMLDivElement;
+  const playlistId = target.id;
+  if (!target.className.includes("optionContainer") && !target.className.includes("isDelete") && target.localName !== 'img')
+    setSearchParams({ playlist: playlistId });
+}
 
   useEffect(() => {
     getCurrentPlaylist(currentPlaylist);
@@ -118,7 +122,7 @@ useEffect(() => {
 
             <div className={classes.carousel} ref={ref}>
             {playlists?.map((item,index) => (
-             <div  key={item.id} className={classes.playlistsWrapper}>
+             <div onClick={getClickedTracks} key={item.id} className={classes.playlistsWrapper}>
               <div style={{backgroundImage:`url(${item.image})`}}
                 ref={index === playlists.length-1? playlistsRef: null}
                 id={item.id.toString()}
