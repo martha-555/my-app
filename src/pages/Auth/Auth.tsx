@@ -7,6 +7,7 @@ import useBackendRequest from "../../feautures/api/hooks/useBackendRequest";
 import { HttpMethod } from "../../feautures/api/types";
 import useIsAuthorize from "../../feautures/auth/hooks/useIsAuthorize";
 import classes from './styles.module.scss'
+import logo from '../../icons/logo/pngegg (15).png'
 
 const Auth = () => {
   
@@ -22,12 +23,10 @@ const Auth = () => {
     const handleClick = (e:Event) => {
       const target = e.target as HTMLButtonElement;
     isAuth && target.className.includes('authButton')? setIsDelete(!isDelete): setIsDelete(false)
-    
-  if (!isAuth) window.location.replace(
+  if (!isAuth && target.innerText.includes('Увійти')) window.location.replace(
          "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
        );
      };
-   
   
      document.addEventListener("click", handleClick);
      return () => document.removeEventListener("click", handleClick);
@@ -58,7 +57,13 @@ const Auth = () => {
 
   return (
     <div className={classes.authContainer}>
-      <button className={classes.authButton} >{isAuth? 'Вийти': 'Увійти'}</button>
+      {isAuth?
+      <button className={classes.authButton} >Вийти</button>:
+      <div className={classes.startPage}>
+        <img className={classes.logo} src={logo} alt="" />
+         <button className={classes.authButton} >Увійти</button>
+      </div>
+      }
       {isDelete?
       <div className={classes.logOutMessage} onClick={() => updateAuthKey(null)} >Вийти з акаунту?</div> : null}
     </div>

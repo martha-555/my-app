@@ -6,14 +6,11 @@
     justify-content: inherit;
     flex-direction: column;
     width: 25%;
-    // height: 25%;
-    // position: relative;
 }
 
 .playlistsContainer {
 display: flex;
 justify-content: space-between;
-// height: 80vh;
 flex-wrap: wrap;
 
 .playlistName{
@@ -82,21 +79,8 @@ text-wrap: nowrap;
 .playlistsContainer {
     display: flex;
     padding: 0 35px;
-    // min-height: 100vh;
     align-items: center;
     justify-content: center;
-
-
-    // background: #343F4F;
-    // max-width: 800px;
-    // margin: 0 auto;
-    // overflow: hidden;
-    // border: 1px solid red;
-
-    // max-width: 870px;
-    // overflow: hidden;
-    // border: 1px solid green;
-    // margin: 0 auto;
 }
 
 .carousel {
@@ -104,6 +88,8 @@ text-wrap: nowrap;
     transition: all 1s ease;
     gap: 10px;
     height: 250px;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
 .wrapper{
@@ -147,42 +133,6 @@ text-wrap: nowrap;
     right: 3px;
     display: none;
   }
-  .wrapper .carousel{
-    // font-size: 0px;
-    cursor: pointer;
-    // overflow: hidden;
-    white-space: nowrap;
-    // scroll-behavior: smooth;
-
-    // transform: translateX(-242px);
-  }
-  .carousel.dragging{
-    cursor: grab;
-    // scroll-behavior: auto;
-  }
-  .carousel.dragging img{
-    // pointer-events: none;
-  }
-  .carousel img{
-    // height: 340px;
-    // object-fit: cover;
-    // user-select: none;
-    // margin-left: 14px;
-    // width: calc(100% / 3);
-  }
-  .carousel img:first-child{
-    // margin-left: 0px;
-  }
-  @media screen and (max-width: 900px) {
-    .playlists{
-      width: calc(100% / 2);
-    }
-  }
-  @media screen and (max-width: 550px) {
-    .playlists{
-      width: 100%;
-    }
-  }
 
  
   .playlists {
@@ -194,7 +144,6 @@ text-wrap: nowrap;
         height: 150px;
         justify-content: space-between;
     background-size: contain;
-   
   }
 
 
@@ -221,3 +170,55 @@ text-wrap: nowrap;
      background-size:cover
      }
 
+
+     .createInput {
+      margin: 10px 0px 0px 60px;
+      padding-left: 10px;
+      background: rgb(164, 164, 164);
+      border: 1px solid rgb(0, 0, 0);
+      border-radius: 10px;
+      font-family: Vazirmatn;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 25px;
+      text-align: left;
+
+      &::placeholder {
+        // color: rgba(255, 255, 255, 1);
+        color: rgb(0, 0, 0);
+      }
+     }
+
+   
+  
+.createButton {
+  background-color: rgb(224, 219, 219);;
+  border: 2px solid #422800;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 0 18px;
+  line-height: 25px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+
+  &:hover {
+    background-color: #fff;
+  }
+  
+  &:active {
+    box-shadow: #422800 2px 2px 0 0;
+    transform: translate(2px, 2px);
+  
+  }
+}
+
+.container {
+  margin: 20px 0px;
+}

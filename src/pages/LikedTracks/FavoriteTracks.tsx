@@ -14,16 +14,15 @@ const FavoriteTracks = () => {
   return (
 
     <PageWrapper>
-      {/* <div> */}
-        {isLoading ? (
-          <span>loading...</span>
-        ) : null}
+        {/* {isLoading ? (
+          <div style={{textAlign: 'center'}}>loading...</div>
+        ) : null} */}
        {favoriteTracks? <Tracklist
           nextTracks={() => {}}
             emptyState="У Вас немає улюблених треків"
             tracks={favoriteTracks}
           /> : null}
-      {/* </div> */}
+
     </PageWrapper>
 
   );

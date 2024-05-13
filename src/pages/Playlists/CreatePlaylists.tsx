@@ -20,17 +20,13 @@ type Props = {
 };
 
 const CreatePlaylists = () => {
-  const [empty, setEmpty] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [idNewPlaylist, setIdNewPlaylist] = useState<number>(0);
-  const [allPlaylists, setAllPlaylists] = useState<Playlist[]>([]);
   const [searchParams, setSearchParams] = useSearchParams({});
-  // const [trackList, settracklist] = useState<TrackData[]>([])
-  const [makeDeezerRequest] = useDeezerRequest();
   const {createPlaylist} = useContext(PlaylistsContext)
 
 
-  const handleClick = (e: any) => {
+  const handleClick = () => {
    createPlaylist(name);
    setName('')
   };
@@ -69,16 +65,18 @@ const CreatePlaylists = () => {
   return (
     <div className={classes.container}>
             <input
+            className={classes.createInput}
               value={name}
               type="text"
+              placeholder="Create a new playlist"
               onKeyUp={(e) => {
-                if (e.key === "Enter") handleClick(e);
+                if (e.key === "Enter") handleClick();
               }}
               onInput={(e) => {
                 setName((e.target as HTMLInputElement).value);
               }}
             />
-            <button onClick={handleClick}>create playlist</button>
+            <button className={classes.createButton} onClick={handleClick}>CREATE</button>
             <div >
           </div>
     </div>

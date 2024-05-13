@@ -30,7 +30,7 @@ const PageWrapper = ({ children }: Props) => {
           <input
             className={classes.searchInput}
             type="text"
-            placeholder="Search"
+            placeholder="Search music, artists..."
             value={inputValue || ""}
             onKeyUp={(e) => {
               if (e.key === "Enter") navigate(`/search?q=${inputValue}`);

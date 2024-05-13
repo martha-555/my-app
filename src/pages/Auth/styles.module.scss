@@ -34,3 +34,27 @@ border-radius: 30px;
 background: rgb(255, 255, 255);;
 }
 }
+
+.startPage {
+    background: rgb(146, 146, 236);
+    height: 100vh;
+}
+
+.logo {
+    width: 100px;
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ animation: myFirst 6s infinite linear;
+}
+
+@keyframes myFirst {
+0% {
+    transform: translate(-50%, -50%) rotateY(360deg);
+}
+100% {
+    transform: translate(-50%, -50%) rotateY(-360deg);
+
+}
+}
