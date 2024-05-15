@@ -68,7 +68,7 @@ const CreatePlaylists = () => {
             className={classes.createInput}
               value={name}
               type="text"
-              placeholder="Create a new playlist"
+              placeholder="Playlist name"
               onKeyUp={(e) => {
                 if (e.key === "Enter") handleClick();
               }}
@@ -76,7 +76,7 @@ const CreatePlaylists = () => {
                 setName((e.target as HTMLInputElement).value);
               }}
             />
-            <button className={classes.createButton} onClick={handleClick}>CREATE</button>
+            <button className={classes.createButton} onClick={handleClick}>Create a new playlist</button>
             <div >
           </div>
     </div>

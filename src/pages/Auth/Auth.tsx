@@ -23,7 +23,7 @@ const Auth = () => {
     const handleClick = (e:Event) => {
       const target = e.target as HTMLButtonElement;
     isAuth && target.className.includes('authButton')? setIsDelete(!isDelete): setIsDelete(false)
-  if (!isAuth && target.innerText.includes('Увійти')) window.location.replace(
+  if (!isAuth && target.className.includes('enterButton')) window.location.replace(
          "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
        );
      };
@@ -58,14 +58,19 @@ const Auth = () => {
   return (
     <div className={classes.authContainer}>
       {isAuth?
-      <button className={classes.authButton} >Вийти</button>:
-      <div className={classes.startPage}>
-        <img className={classes.logo} src={logo} alt="" />
-         <button className={classes.authButton} >Увійти</button>
+      <button className={classes.authButton}>Log out</button>:
+      <div className={classes.startPageContainer}>
+        <div className={classes.startPage}>
+        <span className={classes.logo}>MUZa</span>
+
+        <img className={classes.logoIcon} src={logo} alt="" />
+         <button className={classes.enterButton} >Log in</button>
+
+        </div>
       </div>
       }
       {isDelete?
-      <div className={classes.logOutMessage} onClick={() => updateAuthKey(null)} >Вийти з акаунту?</div> : null}
+      <div className={classes.logOutMessage} onClick={() => updateAuthKey(null)} >Sign out of the account</div> : null}
     </div>
   );
 };

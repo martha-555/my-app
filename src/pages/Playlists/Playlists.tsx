@@ -21,15 +21,17 @@ const [clickedDelete, setClickedDelete] = useState<boolean>(false)
   const playlistsRef = useRef<HTMLDivElement>(null);
   const rightArrowRef = useRef<HTMLDivElement>(null);
   const leftArrovRef = useRef<HTMLDivElement>(null);
-  const [pixelsState, setPixelsState] = useState<number>(0)
+  const [pixelsState, setPixelsState] = useState<number>(0);
+  const [showNotify, setShowNotify] = useState<boolean>(false)
 
-  const notify = () => toast('Плейлист видалено', {
+
+  const notify = () => toast('Playlist has been deleted', {
     duration: 1500,
     style:{
-      // background: '#818486'
     }
   });
 
+ 
   useEffect(() => {
     const handleClickedPlaylist = (e: Event) => {
       const target = e.target as HTMLDivElement;
@@ -56,6 +58,7 @@ const getClickedTracks = (e:  React.MouseEvent<HTMLDivElement>) => {
   }, [currentPlaylist]);
 
   const deletePlaylist = (e:React.MouseEvent<HTMLElement>) => {
+    setShowNotify(true)
     const target = e.target as HTMLDivElement;
     removePlaylist(+target.id);
     notify()
@@ -91,7 +94,7 @@ useEffect(() => {
     const [entry] = entries;
 if (rightArrowRef.current && entry.isIntersecting) rightArrowRef.current.style.display = 'none';
 if (rightArrowRef.current && !entry.isIntersecting) rightArrowRef.current.style.display = 'block';
-
+console.log(entry.isIntersecting)
     // if (rightArrowRef.current) {
     //   entry.isIntersecting? rightArrowRef.current.style.display = 'none': rightArrowRef.current.style.display = 'block'
     // }
@@ -110,8 +113,9 @@ useEffect(() => {
 // console.log(isLoading)
 },[isLoading])
   return (
+
     <PageWrapper>
-       <Toaster />
+      {/* <Toaster/> */}
       <CreatePlaylists />
       <div className={classes.playlistsContainer}>
         {/* {isLoading ? <div>Loading...</div> : null} */}
@@ -129,7 +133,7 @@ useEffect(() => {
                 className={currentPlaylist == item.id? classes.activePlaylist: classes.playlists}>
               </div>
               <div className={classes.optionContainer} id={item.id.toString()}>{item.title}
-                {clickedDelete && clickedPlaylist === +item.id? <div id={item.id.toString()} className={classes.isDeletePlaylist} onClick={deletePlaylist} >Видалити плейлист?</div>: null }
+                {clickedDelete && clickedPlaylist === +item.id? <div id={item.id.toString()} className={classes.isDeletePlaylist} onClick={deletePlaylist} >Delete this playlist?</div>: null }
                 <img className={classes.deleteIcon} id={item.id.toString()} src={Logo} alt="" />
               </div>
               </div>

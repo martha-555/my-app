@@ -1,6 +1,7 @@
 
-"use client";
+
 import "./App.css";
+import toast, { Toaster } from "react-hot-toast";
 import useGetMp3 from "./feautures/api/hooks/youtube/useGetMp3";
 import { Navigate, Outlet, Route, Router, Routes } from "react-router";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -17,6 +18,7 @@ import Recommendations from "./pages/Recommendations/Recommendations";
 import React, { ComponentType, useEffect, useState } from "react";
 import {  ErrorBoundary, withErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "./components/ErrorComponent/ErrorComponent";
+
 
 
 
@@ -78,22 +80,22 @@ const AppRoutes = () => {
 };
 
 function App() {
-  
 
    return (
-    // <div>
-  
+    <div>
+            <Toaster/>
       <AuthProvider>
         <PlaylistsProvider>
           <LikedTracksProvider>
             <PlayerProvider>
-             { <AppRoutes />}
+             {  <AppRoutes /> }
+       
             </PlayerProvider>
           </LikedTracksProvider>
         </PlaylistsProvider>
       </AuthProvider>
-    
-    // </div>
+  
+     </div>
 
   );
 }

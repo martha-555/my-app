@@ -1,7 +1,7 @@
 /** @format */
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useState } from "react";
 import Menu from "../Menu";
 import classes from "./styles.module.scss";
 import Player from "../../components/Player/Player";
@@ -30,7 +30,7 @@ const PageWrapper = ({ children }: Props) => {
           <input
             className={classes.searchInput}
             type="text"
-            placeholder="Search music, artists..."
+            placeholder="Search tracks, artists..."
             value={inputValue || ""}
             onKeyUp={(e) => {
               if (e.key === "Enter") navigate(`/search?q=${inputValue}`);

@@ -1,10 +1,6 @@
 /** @format */
 
-.showList {
-  background: red;
-  height: 20px;
-  width: 50px;
-}
+
 .hideList {
   display: none;
 }
@@ -39,19 +35,12 @@
   border-bottom: 1px solid rgb(110 106 106);
 }
 .addToPlaylist {
-
-  // width: 200px;
-  // height: 95px;
   text-wrap: nowrap;
-}
-.options {
-  // border: 1px solid black;
 }
 
 .backArrow {
   font-size: 30px;
-  // position: absolute;
-  // top: -25px;
+
 }
 .deleteFromPlaylist, .isDeleteTrack {
   border-top: 1px solid rgb(110 106 106);
@@ -64,10 +53,4 @@ min-width: 250px;
 padding: 10px;
 border: 1px solid #c3b8b8;
 border-radius: 15px;
-}
-
-.showMessage {
-  // position: absolute;
-  // height: 100px;
-  // width: 100px;
 }
