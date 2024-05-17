@@ -1,22 +1,21 @@
-/** @format */
+
 
 .container {
-  border: 1.57px solid rgba(50, 50, 50, 1);
-width: 74vw;
+border: 1.57px solid rgba(50, 50, 50, 1);
+width: 81vw;
 max-width: inherit;
-  background: rgba(27, 27, 27, 1);
+background: rgba(27, 27, 27, 1);
 position: fixed;
 bottom: 0px;
-  padding: 10px;
-
-  color: rgba(255, 255, 255, 1);
+padding: 10px;
+color: rgba(255, 255, 255, 1);
 }
 
 .wrapper {
   display: flex;
   align-items: center;
   justify-content: start;
-  // gap: 13%;
+
 }
 .song {
 display: flex;
@@ -26,7 +25,7 @@ font-weight: 700;
 line-height: 21.94px;
 text-align: left;
 align-items: center;
-width: 340px;
+width: 367px;
 
   & img {
     width: 79px;
@@ -37,28 +36,21 @@ width: 340px;
 .spanContainer {
 display: flex;
 flex-direction: column;
-// width: 300px;
 text-wrap: wrap;
 }
 
 .buttonsContainer {
   display: flex;
   align-items: center;
-  width: 340px;
+  width: 367px;
   justify-content: space-evenly;
 }
 .range {
-  // border: 2px solid rgba(64, 64, 64, 1);
   width: 80%;
   -webkit-appearance: none;
   height: 3px;
   outline: none;
   border-radius: 7px;
-  background: #111;
-
-  // background: linear-gradient(90.07deg, 
-  // rgb(117, 252, 117) 20%, rgb(214, 214, 214) 20%);
-
   box-shadow: inset 0 0 5px rgb(237, 237, 240);
 
   &::-webkit-slider-thumb {

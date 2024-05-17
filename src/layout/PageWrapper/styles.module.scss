@@ -2,19 +2,15 @@
 
 
 .containerWrapper {
-  font-family: "Merienda", cursive;
-  font-optical-sizing: auto;
-  font-weight: weight;
-  font-style: normal;
-
+  // font-family: "Merienda", cursive;
   display: flex;
-  height: 100vh;
+  // height: 100vh;
 
 }
 
 .content {
   // overflow-y: auto;
-  flex: 1;
+  // flex: 1;
  
   // background: #412c3a;
   // background: linear-gradient(180deg, #34587a 0%, #395be61f 48%);
@@ -23,9 +19,9 @@
 
 .rightSide {
   overflow-y: auto;
-  display: flex;
+  // display: flex;
   height: 100vh;
-  flex-direction: column;
+  // flex-direction: column;
   flex: 1;
   scrollbar-width: thin;
   background: linear-gradient(130deg, #34587A 0%, #111111 98%);
@@ -39,10 +35,10 @@
   border-radius: 10px;
   font-family: Vazirmatn;
   font-size: 16px;
-  font-weight: 500;
+  // font-weight: 500;
   line-height: 25px;
-  text-align: left;
-  margin: 10px auto;
+  // text-align: left;
+  margin: 10px 0 10px 263px;
   width: 50%;
 &:hover {
   background: rgb(224, 224, 224);

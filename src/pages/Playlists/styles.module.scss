@@ -1,12 +1,3 @@
-.playlists {
-    border: 1px solid black;
-    margin: 5px;
-    padding: 10px;
-    display: flex;
-    justify-content: inherit;
-    flex-direction: column;
-    width: 25%;
-}
 
 .playlistsContainer {
 display: flex;
@@ -28,8 +19,6 @@ flex-wrap: wrap;
 
 
 .optionContainer {
-    display: flex;
-   justify-content: end;
    display: flex;
     justify-content: space-between;
     padding: 0 10px;
@@ -46,7 +35,7 @@ flex-wrap: wrap;
 }
 
 .isDeletePlaylist {
-    width: 200px;
+    width: fit-content;
     font-size: 15px;
     position: absolute;
     background: #c7c7c7;
@@ -55,12 +44,12 @@ flex-wrap: wrap;
     right: -20px;
     border: 1px solid #000000;
     border-radius: 10px;
-    padding: 10px 0;
+    padding: 10px;
     box-shadow: 5px 4px 5px;
     font-family: "Domine", serif;
-font-optical-sizing: auto;
+// font-optical-sizing: auto;
 font-weight: bold;
-font-style: normal;
+// font-style: normal;
 }
 
 .delete{
@@ -80,12 +69,6 @@ text-wrap: nowrap;
  
 // ______________________________________________________________
 
-.playlistsContainer {
-    display: flex;
-    padding: 0 35px;
-    align-items: center;
-    justify-content: center;
-}
 
 .carousel {
     display: flex;
@@ -97,31 +80,32 @@ text-wrap: nowrap;
 }
 
 .wrapper{
-    display: flex;
+    // display: flex;
     max-width: 920px;
     position: relative;
     margin: 20px auto;
     overflow: hidden;
     padding: 10px 25px;
+
+    i{
+     top: 42%;
+    //  height: 44px;
+     width: 44px;
+     color: #343F4F;
+     cursor: pointer;
+     font-size: 1.15rem;
+     position: absolute;
+     text-align: center;
+     line-height: 44px;
+     background: #fff;
+     border-radius: 50%;
+     transform: translateY(-50%);
+     transition: transform 0.1s linear;
+  
+   }
   }
 
 
-  .wrapper i{
-    top: 50%;
-    height: 44px;
-    width: 44px;
-    color: #343F4F;
-    cursor: pointer;
-    font-size: 1.15rem;
-    position: absolute;
-    text-align: center;
-    line-height: 44px;
-    background: #fff;
-    border-radius: 50%;
-    transform: translateY(-50%);
-    transition: transform 0.1s linear;
-
-  }
   .wrapper i:active{
     transform: translateY(-50%) scale(0.9);
   }
@@ -138,30 +122,40 @@ text-wrap: nowrap;
     display: none;
   }
 
+  .playlists {
+    border: 1px solid black;
+    margin: 5px 5px 5px 14px;
+    // padding: 10px;
+    // display: flex;
+    // justify-content: inherit;
+    // flex-direction: column;
+    // width: 25%;
+}
+
  
   .playlists {
-        object-fit: cover;
-        user-select: none;
-        margin-left: 14px;
-        width: calc(100% / 3);
+        // object-fit: cover;
+        // user-select: none;
+        // margin-left: 14px;
+        // width: calc(100% / 3);
         width: 150px;
         height: 150px;
-        justify-content: space-between;
+        // justify-content: space-between;
     background-size: contain;
   }
 
 
   
   .playlistsWrapper {
-    text-align: center;
+    // text-align: center;
     font-size: 30px;
     background: rgb(164 164 164 / 75%);
     position: relative;
     padding: 10px 0;
     box-shadow: 4px 4px 4px #000000;
     font-family: "Black And White Picture", system-ui;
-    font-weight: 400;
-    font-style: normal;
+    // font-weight: 400;
+    // font-style: normal;
     max-width: 170px;
     height: fit-content;
     border-radius: 10px
@@ -176,16 +170,16 @@ text-wrap: nowrap;
 
 
      .createInput {
-      margin: 10px 0px 0px 60px;
+      margin: 10px 0px 0px 110px;
       padding-left: 10px;
       background: rgb(164, 164, 164);
       border: 2px solid rgb(0, 0, 0);
       border-radius: 10px;
       font-family: Vazirmatn;
       font-size: 16px;
-      font-weight: 500;
+      // font-weight: 500;
       line-height: 25px;
-      text-align: left;
+      // text-align: left;
 
       &::placeholder {
         opacity: 50%;
@@ -205,17 +199,17 @@ text-wrap: nowrap;
   border: 2px solid #422800;
   border-radius: 30px;
   box-shadow: #422800 4px 4px 0 0;
-  color: #422800;
+  // color: #422800;
   cursor: pointer;
-  display: inline-block;
+  // display: inline-block;
   font-weight: 600;
   font-size: 15px;
   padding: 0 18px;
   line-height: 25px;
   text-align: center;
-  text-decoration: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
+  // text-decoration: none;
+  // -webkit-user-select: none;
+  // touch-action: manipulation;
 
   &:hover {
     background-color: #fff;
