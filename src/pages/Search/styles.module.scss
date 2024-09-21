@@ -1,0 +1,18 @@
+/** @format */
+
+.inputBlock {
+  display: flex;
+}
+.mainContainer {
+  font-family: "Spirax", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  height: 100%;
+}
+.flexPages {
+  display: flex;
+  justify-content: space-evenly;
+}
+.clickedPage {
+  color: red;
+}

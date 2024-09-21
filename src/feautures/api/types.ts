@@ -23,4 +23,5 @@ export type BackendRequestBody = DeezerRequestBody | YouTubeRequestBody;
 export type Routes = {
   name: string;
   path: string;
+  icon: string
 };

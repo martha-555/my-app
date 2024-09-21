@@ -1,23 +1,31 @@
 /** @format */
-
-import Menu from "../../layout/Menu";
-import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
-import { useContext, useEffect, useState } from "react";
-import { authContext } from "../../feautures/auth/authProvider";
-import { TrackData } from "../../types/deezer";
-import { parseDeezerTrack } from "../../utils/deezer";
-import useFetchFavoriteTracks from "../../feautures/api/hooks/deezer/useFetchFavoriteTracks";
-import PageWrapper from "../../layout/PageWrapper/PageWrapper";
-import Track from "../../components/Track";
+"use client";
+import { useContext, useEffect } from "react";
 import Tracklist from "../../components/Tracklist/Tracklist";
+import PageWrapper from "../../layout/PageWrapper/PageWrapper";
+import { LikedTracksContext } from "../../feautures/likedTracks/likedTracksProvider";
+import {
+  ErrorBoundary,
+  useErrorBoundary,
+  withErrorBoundary,
+} from "react-error-boundary";
 
 const FavoriteTracks = () => {
-  const tracks = useFetchFavoriteTracks();
-  console.log({ tracks });
+  const { favoriteTracks, isLoading, getNextTracks } =
+    useContext(LikedTracksContext);
 
   return (
     <PageWrapper>
-      <Tracklist tracks={tracks} />
+      {/* {isLoading ? (
+          <div style={{textAlign: 'center'}}>loading...</div>
+        ) : null} */}
+      {favoriteTracks ? (
+        <Tracklist
+          nextTracks={() => {}}
+          emptyState="У Вас немає улюблених треків"
+          tracks={favoriteTracks}
+        />
+      ) : null}
     </PageWrapper>
   );
 };

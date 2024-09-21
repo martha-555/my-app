@@ -20,4 +20,17 @@ export type TrackData = {
   duration: number;
   id: number;
   title: string;
+  time_add: number
 };
+export type ResponseTrackData = {
+  data: TrackData[];
+  next: string;
+  total: number
+}
+
+export type Playlist = {
+  id: number;
+  title:string;
+  is_loved_track:boolean;
+  image:string
+}
