@@ -1,9 +1,34 @@
 /** @format */
 
-.container {
-  padding: 10px;
-  gap: 5px;
+.tracklistContainer {
+  // padding: 10px;
+  // gap: 5px;
+  // display: flex;
+  // flex-direction: column;
+  // width: 70%;
+  height: 90vh;
+margin: 0 auto;
+  // overflow-y: scroll;
+}
+
+.inView {
+  height: fit-content;
+}
+
+.flexPages {
+  display: flex;
+  justify-content: space-evenly;
+}
+.clickedPage {
+  color: red;
+}
+
+.allTracks {
+  // font-size: large;
+  width: 600px;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  gap: 10px;
+  margin: 0 auto;
+  // background: linear-gradient(180deg, #34587a 0%, #395be61f 48%);
 }

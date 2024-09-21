@@ -1,0 +1,56 @@
+/** @format */
+
+
+.hideList {
+  display: none;
+}
+.optionContainer {
+  position: absolute;
+  top: 70px;
+  right: -70px;
+  // will-change: transform;
+  border-radius: 20px;
+  min-width: 250px;
+  background: #292a2b;
+  box-shadow: 2px 1px 5px;
+  z-index: 1;
+
+}
+
+.fixedSize {
+  border: 1px solid #c3b8b8;
+  border-radius: 15px;
+  text-align: center;
+  padding: 10px;
+  gap: 5px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 1px 5px;
+}
+
+.playlistsList {
+  border-radius: 15px;
+  text-align: center;
+  padding: 5px;
+  border-bottom: 1px solid rgb(110 106 106);
+}
+.addToPlaylist {
+  text-wrap: nowrap;
+}
+
+.backArrow {
+  font-size: 30px;
+
+}
+.deleteFromPlaylist, .isDeleteTrack {
+  border-top: 1px solid rgb(110 106 106);
+  text-wrap: nowrap;
+}
+
+.playlists {
+text-align: center;
+// min-width: 250px;
+padding: 10px;
+border: 1px solid #c3b8b8;
+border-radius: 15px;
+}

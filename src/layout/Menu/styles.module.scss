@@ -1,15 +1,116 @@
 /** @format */
 
+.mainContainer {
+  background: rgba(14, 25, 32, 1);
+  min-width: fit-content;
+  // width: 25%;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
 .container {
-  height: 100%;
-  background: rgb(208 206 206);
+  // background: rgba(14, 25, 32, 1);
+  // color: #ffffff;
   box-shadow: 2px 1px 6px 0px #7a7474;
-  width: 200px;
-  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 67px;
+  padding-bottom: 20px;
+  // gap: 2%;
 }
 
 .item {
-  text-align: center;
-  background: rgb(103, 84, 84);
-  padding: 2px;
+  // border-radius: 5px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 20px 0 10px;
+  padding: 10px;
+
+  &:hover {
+    background:rgba(15, 42, 58, 0.92);
+  }
+}
+
+.activeItem {
+  @extend .item;
+  background: rgba(40, 40, 40, 1);
+}
+
+.name {
+  font-family: "Domine", serif;
+  // font-optical-sizing: auto;
+
+  font-style: normal;
+
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 22px;
+  // letter-spacing: 0em;
+  // text-align: left;
+  color: rgba(255, 255, 255, 1);
+}
+
+.item img {
+  height: 20px;
+}
+
+.logoIcon {
+  height: 100px;
+}
+
+.imageWrapper {
+  width: 55px;
+  height: 55px;
+}
+
+.logo {
+  background: linear-gradient(
+    90.07deg,
+    #f95000 40.18%,
+    rgba(14, 158, 239, 0.92) 54.01%
+  );
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  font-size: 50px;
+
+  // font-family: "Bonbon", cursive;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Ruge Boogie", cursive;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Butterfly Kids", cursive;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Spirax", system-ui;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Srisakdi", system-ui;
+  // font-weight: 700;
+  // font-style: normal;
+
+  // font-family: "Black And White Picture", system-ui;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Puppies Play", cursive;
+  // font-weight: 400;
+  // font-style: normal;
+
+  // font-family: "Henny Penny", system-ui;
+  // font-weight: 400;
+  // font-style: normal;
+
+  font-family: "Flavors", cursive;
+  font-weight: 400;
+  font-style: normal;
 }

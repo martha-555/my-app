@@ -1,18 +1,32 @@
 /** @format */
-import useBackendRequest from "../useBackendRequest";
+import { async } from "q";
+import { HttpMethod } from "../../types";
+import useBackendRequest, { BackendRequestState } from "../useBackendRequest";
 
-const useGetMp3 = () => {
-  const makeRequest = useBackendRequest();
+type ReturnType = [
+  (query: string) => Promise<string | null>,
+  BackendRequestState<string>
+];
 
-  return async (query: string) => {
-    const response = await makeRequest({
-      type: "Mp3",
-      payload: {
-        query,
+const useGetMp3 = (): ReturnType => {
+  const [makeRequest, state] = useBackendRequest<string>();
+
+  const getMp3 = async (query: string) => {
+    return await makeRequest(
+      {
+        type: "Mp3",
+        payload: {
+          query,
+        },
       },
-    });
-    console.log(await response.json());
+      async (response) => {
+        const json = await response.json();
+        return await json.data.mp3;
+      }
+    );
   };
+
+  return [getMp3, state];
 };
 
 export default useGetMp3;

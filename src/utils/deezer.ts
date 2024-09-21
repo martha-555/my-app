@@ -16,4 +16,5 @@ export const parseDeezerTrack = (response: any): TrackData => ({
   duration: response.duration,
   id: response.id,
   title: response.title,
+  time_add: response.time_add
 });

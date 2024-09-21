@@ -22,6 +22,7 @@ const AuthProvider = (props: { children: ReactElement }) => {
     localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, authKey || "");
     setAuthKey(authKey || "");
   };
+
   return (
     <authContext.Provider value={{ updateAuthKey, authKey }}>
       {props.children}
