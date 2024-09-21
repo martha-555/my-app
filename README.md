@@ -23,7 +23,8 @@ To set up and run the application, follow these steps:
 ```
 
 5. Install backend dependencies: Run the following command in the backend directory: `npm install`
-   6.Start the backend server: Start the backend server on port 3001: `npm start`
+
+6.Start the backend server: Start the backend server on port 3001: `npm start`
 
 Now your frontend will be able to make requests to the backend server running on port 3001.
 
