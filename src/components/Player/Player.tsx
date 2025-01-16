@@ -26,12 +26,12 @@ const Player = () => {
   const handleMove = (event: React.ChangeEvent) => {
     let target = (event.target as HTMLInputElement).value;
     setInputValue(+target);
-   
+
     rewind(+target);
   };
 
   useEffect(() => {
-    setInputValue(currentInputValue);
+    if (currentInputValue) setInputValue(currentInputValue);
   }, [currentTime]);
 
   const handleKeyUp = useCallback(
@@ -42,7 +42,6 @@ const Player = () => {
     [currentTrack]
   );
 
-
   useEffect(() => {
     document.addEventListener("keydown", handleKeyUp);
     return () => {
@@ -51,55 +50,62 @@ const Player = () => {
   }, [handleKeyUp]);
 
   return (
-<>
-  {currentTrack? <div className={classes.container}>
-      <div className={classes.wrapper}>
+    <>
+      {currentTrack ? (
+        <div className={classes.container}>
+          <div className={classes.wrapper}>
+            <div className={classes.song}>
+              <img src={currentTrack.album.cover} alt="" />
+              <div className={classes.spanContainer}>
+                <span>{`${currentTrack?.artist.name}`}</span>
+                <span className={classes.spanTitle}>{currentTrack?.title}</span>
+              </div>
+            </div>
 
-          <div className={classes.song}>
-            <img src={currentTrack.album.cover} alt="" />
-            <div className={classes.spanContainer}>
-            <span>{`${currentTrack?.artist.name}`}</span>
-            <span className={classes.spanTitle} >{currentTrack?.title}</span>
+            <div className={classes.buttonsContainer}>
+              <div
+                onClick={() => {
+                  back();
+                }}
+              >
+                <img className={classes.arrows} src={previousButton} alt="" />
+              </div>
+
+              <div onClick={() => togglePlay()}>
+                {paused ? (
+                  <img className={classes.playButton} src={playButton} alt="" />
+                ) : (
+                  <img
+                    className={classes.playButton}
+                    src={pauseButton}
+                    alt=""
+                  />
+                )}
+              </div>
+              <div onClick={() => next()}>
+                {" "}
+                <img className={classes.arrows} src={nextButton} alt="" />{" "}
+              </div>
             </div>
           </div>
- 
-<div className={classes.buttonsContainer}>
-        <div
-          onClick={() => {
-            back();
-          }}>
-          <img className={classes.arrows} src={previousButton} alt="" />
-        </div>
 
-        <div onClick={() => togglePlay()}>
-          {paused ? (
-            <img className={classes.playButton} src={playButton} alt="" />
-          ) : (
-            <img className={classes.playButton} src={pauseButton} alt="" />
-          )}
+          <div className={classes.rangeWrapper}>
+            <div>{currentTime()} </div>
+            <input
+              style={{
+                background: `linear-gradient(90deg, rgb(255, 255, 255) ${inputValue}%, rgb(6, 0, 0) ${inputValue}%)`,
+              }}
+              onChange={handleMove}
+              className={classes.range}
+              type="range"
+              name="inp"
+              value={inputValue}
+            />
+            <div> {subtractTime} </div>
+          </div>
         </div>
-        <div onClick={() => next()}>
-          {" "}
-          <img className={classes.arrows} src={nextButton} alt="" />{" "}
-        </div>
-      </div>
-      </div>
-
-      <div className={classes.rangeWrapper}>
-        <div>{currentTime()} </div>
-          <input style={{background:`linear-gradient(90deg, rgb(255, 255, 255) ${inputValue}%, rgb(6, 0, 0) ${inputValue}%)`}}
-            onChange={handleMove}
-            className={classes.range}
-            type="range"
-            name="inp"
-            value={inputValue}
-          />
-        <div> {subtractTime} </div>
-      </div>
-
-    </div> : null}
-</>
-    
+      ) : null}
+    </>
   );
 };
 export default Player;
