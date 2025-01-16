@@ -25,7 +25,7 @@ const Auth = () => {
         : setIsDelete(false);
       if (!isAuth && target.className.includes("enterButton"))
         window.location.replace(
-          "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=https://my-d1sadzv2u-martha-555s-projects.vercel.app/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
+          "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=https://my-app-two-phi-69.vercel.app/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
         );
     };
 
