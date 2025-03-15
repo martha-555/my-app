@@ -1,13 +1,12 @@
 /** @format */
 
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { TrackData } from "../../types/deezer";
-import { formatSeconds } from "../../utils/time";
+import { getFormattedTime } from "../../utils/getFormattedTime";
 import classes from "./styles.module.scss";
 import { PlayerContext } from "../../feautures/player/playerProvider";
-import LikeButton from "../../pages/AddTrackToFavorite/LikeButton";
-import { useSearchParams } from "react-router-dom";
-import TracksOptions from "../../pages/AddAndDeleteTracksFromPlaylist/TracksOptions";
+import LikeButton from "../../pages/LikeButton/LikeButton";
+import TracksOptions from "../TrackOptions/TracksOptions";
 import { forwardRef } from "react";
 import PlayIcon from "../../icons/play.png";
 import PauseIcon from "../../icons/Player Buttons/pause.png";
@@ -46,7 +45,7 @@ const Track = forwardRef(
           />
 
           <div className={classes.duration}>
-            {formatSeconds(track.duration)}
+            {getFormattedTime(track.duration)}
           </div>
           <LikeButton selectedTrack={+track.id} track={track} />
           <TracksOptions track={track} />

@@ -1,6 +1,4 @@
 /** @format */
-import { async } from "q";
-import { HttpMethod } from "../../types";
 import useBackendRequest, { BackendRequestState } from "../useBackendRequest";
 
 type ReturnType = [

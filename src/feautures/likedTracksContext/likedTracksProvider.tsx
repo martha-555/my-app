@@ -8,10 +8,10 @@ import {
   useState,
 } from "react";
 import { TrackData } from "../../types/deezer";
-import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
-import { HttpMethod } from "../api/types";
-import { parseDeezerTrack } from "../../utils/deezer";
+import { parseDeezerTrack } from "../../utils/parseDeezerTrack";
 import { authContext } from "../auth/authProvider";
+import useDeezerRequest from "../../apiHooks/hooks/deezer/useDeezerRequest";
+import { HttpMethod } from "../../apiHooks/types";
 
 type errorResponse = {
   [key: string]: {
@@ -57,7 +57,6 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
       path: path,
       parser: async (response) => {
         const json = await response.json();
-        // console.log(json?.error)
         setNextTracksURL(!!json.next);
         return json.data?.map(parseDeezerTrack);
       },
@@ -75,21 +74,6 @@ const LikedTracksProvider = (props: { children: ReactElement }) => {
   useEffect(() => {
     getOpeningTracks();
   }, [authKey]);
-
-  // useEffect(() => {
-  //   if (nextTracksURL) {
-  //     const getTracks = async () => {
-  //       const tracklist = await fetchRequest(
-  //         `/user/me/tracks&offset=0&limit=${Number.MAX_SAFE_INTEGER}&order=time_add`
-  //       );
-  //       const allTracks: TrackData[] = [];
-  //       if (initialTracks && tracklist)
-  //         allTracks.push(...initialTracks, ...tracklist);
-  //       setFavoriteTracks(allTracks);
-  //     };
-  //     getTracks();
-  //   }
-  // }, [favoriteTracks?.length]);
 
   return (
     <LikedTracksContext.Provider

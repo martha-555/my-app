@@ -2,10 +2,10 @@
 
 import { ReactElement, createContext, useEffect, useState } from "react";
 import { Playlist, TrackData } from "../../types/deezer";
-import useDeezerRequest from "../api/hooks/deezer/useDeezerRequest";
-import { HttpMethod } from "../api/types";
-import { parseDeezerTrack } from "../../utils/deezer";
+import { parseDeezerTrack } from "../../utils/parseDeezerTrack";
 import connectWithoutDuplicates from "../../utils/connectWithoutDuplicates";
+import useDeezerRequest from "../../apiHooks/hooks/deezer/useDeezerRequest";
+import { HttpMethod } from "../../apiHooks/types";
 
 type errorResponse = {
   [key: string]: {
@@ -14,7 +14,6 @@ type errorResponse = {
     type: string;
   };
 };
-
 
 type PlaylistsType = {
   getCurrentPlaylist: (currentPlaylist: number) => void;
@@ -48,7 +47,7 @@ export const PlaylistsContext = createContext<PlaylistsType>({
 });
 
 const PlaylistsProvider = (props: { children: ReactElement }) => {
-  const [deezerRequest,state] = useDeezerRequest<Playlist[]>();
+  const [deezerRequest, state] = useDeezerRequest<Playlist[]>();
   const [actionRequest] = useDeezerRequest();
   const [retutnTracks] = useDeezerRequest<TrackData[]>();
   const [returnResponse, isLoadingResponse] = useDeezerRequest<
@@ -61,7 +60,6 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
   const [currentPlaylist, setCurrentPlaylist] = useState<number>(0);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
 
-
   const getPlaylists = async () => {
     const playlistsResponse = await deezerRequest({
       path: `/user/me/playlists&order=time_add`,
@@ -71,20 +69,18 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
           id: item.id,
           title: item.title,
           is_loved_track: item.is_loved_track,
-          image: item.picture_big
+          image: item.picture_big,
         }));
       },
     });
     if (playlistsResponse)
       setPlaylists(
-        (playlistsResponse?.filter((item) => item.is_loved_track === false))
+        playlistsResponse?.filter((item) => item.is_loved_track === false)
       );
-   
   };
   useEffect(() => {
     getPlaylists();
-  
-  }, [deezerRequest,playlists.length]);
+  }, [deezerRequest, playlists.length]);
 
   const fetchRequest = async (currentPlaylist: number) => {
     const tracks = await retutnTracks({
@@ -119,10 +115,6 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
     }
   }, [trackList]);
 
-  useEffect(() => {
-// console.log('state.isLoad', state.isLoading)
-  }, [state.isLoading]);
-
   return (
     <PlaylistsContext.Provider
       value={{
@@ -134,12 +126,6 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
           if (trackList) setTrackList(null);
           if (currentPlaylist) {
             setCurrentPlaylist(currentPlaylist);
-            // const getTracks = async () => {
-            //   const response = await fetchRequest(currentPlaylist);
-            //   console.log(nextTracksURL)
-            //       if (response)  setTrackList(response);
-            //       };
-            //       getTracks();
           }
         },
 
@@ -159,7 +145,7 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
             addTrack.push(track);
             setAllTracks(addTrack);
           }
-          getPlaylists()
+          getPlaylists();
           return request();
         },
 
@@ -190,11 +176,11 @@ const PlaylistsProvider = (props: { children: ReactElement }) => {
             });
             const upd: Playlist[] = playlists;
             if (response)
-              upd.unshift( {
+              upd.unshift({
                 id: response,
                 title: name,
                 is_loved_track: false,
-                image: ''
+                image: "",
               });
             setPlaylists(upd);
           };

@@ -1,9 +1,8 @@
 /** @format */
-import { Routes } from "../feautures/api/types";
 import favoriteIcon from "../icons/Star@3x.png";
 import playlistsIcon from "../icons/Subtract.png";
 import recomendationsIcon from "../icons/Headphones_fill@3x.png";
-import playlistsLogo from "../icons/logo/ph_playlist.png";
+import { Routes } from "../apiHooks/types";
 
 const routes: Routes[] = [
   {

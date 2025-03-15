@@ -1,14 +1,9 @@
 /** @format */
 "use client";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import Tracklist from "../../components/Tracklist/Tracklist";
-import PageWrapper from "../../layout/PageWrapper/PageWrapper";
-import { LikedTracksContext } from "../../feautures/likedTracks/likedTracksProvider";
-import {
-  ErrorBoundary,
-  useErrorBoundary,
-  withErrorBoundary,
-} from "react-error-boundary";
+import { LikedTracksContext } from "../../feautures/likedTracksContext/likedTracksProvider";
+import PageWrapper from "../../components/PageWrapper/PageWrapper";
 
 const FavoriteTracks = () => {
   const { favoriteTracks, isLoading, getNextTracks } =
@@ -16,9 +11,6 @@ const FavoriteTracks = () => {
 
   return (
     <PageWrapper>
-      {/* {isLoading ? (
-          <div style={{textAlign: 'center'}}>loading...</div>
-        ) : null} */}
       {favoriteTracks ? (
         <Tracklist
           nextTracks={() => {}}

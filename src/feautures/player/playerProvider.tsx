@@ -2,8 +2,8 @@
 
 import { ReactElement, createContext, useEffect, useState } from "react";
 import { TrackData } from "../../types/deezer";
-import useGetMp3 from "../api/hooks/youtube/useGetMp3";
-import { formatSeconds } from "../../utils/time";
+import { getFormattedTime } from "../../utils/getFormattedTime";
+import useGetMp3 from "../../apiHooks/hooks/youtube/useGetMp3";
 
 type PlayerContextType = {
   play: (id: number) => void;
@@ -53,7 +53,9 @@ const PlayerProvider = (props: { children: ReactElement }) => {
 
   useEffect(() => {
     if (currentTrack) {
-      setSubtractTime(formatSeconds(currentTrack.duration - audio.currentTime));
+      setSubtractTime(
+        getFormattedTime(currentTrack.duration - audio.currentTime)
+      );
       setCurrentInputValue((audio.currentTime / currentTrack.duration) * 100);
     }
   }, [audio.currentTime]);
@@ -64,7 +66,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         `${currentTrack?.artist.name} ${currentTrack?.title}`
       );
 
-     if (response) audio.src = response;
+      if (response) audio.src = response;
       const playPromise = audio.play();
 
       if (playPromise !== undefined || null) {
@@ -126,7 +128,7 @@ const PlayerProvider = (props: { children: ReactElement }) => {
         currentInputValue,
         currentTime: () => {
           setInterval(() => {
-            setCurrentTime(formatSeconds(audio.currentTime));
+            setCurrentTime(getFormattedTime(audio.currentTime));
           }, 1000);
 
           return currentTime;

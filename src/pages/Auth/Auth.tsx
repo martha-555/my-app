@@ -3,11 +3,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { authContext } from "../../feautures/auth/authProvider";
-import useBackendRequest from "../../feautures/api/hooks/useBackendRequest";
-import { HttpMethod } from "../../feautures/api/types";
 import useIsAuthorize from "../../feautures/auth/hooks/useIsAuthorize";
 import classes from "./styles.module.scss";
 import logo from "../../icons/logo/pngegg (15).png";
+import useBackendRequest from "../../apiHooks/hooks/useBackendRequest";
+import { HttpMethod } from "../../apiHooks/types";
 
 const Auth = () => {
   const [searchParams] = useSearchParams();
@@ -25,7 +25,7 @@ const Auth = () => {
         : setIsDelete(false);
       if (!isAuth && target.className.includes("enterButton"))
         window.location.replace(
-          "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=https://my-app-two-phi-69.vercel.app/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
+          "https://connect.deezer.com/oauth/auth.php?app_id=624064&redirect_uri=http://localhost:3000/favorite&perms=basic_access,email,offline_access,manage_library,manage_community,delete_library,listening_history"
         );
     };
 

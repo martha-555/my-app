@@ -5,7 +5,8 @@ import { useCallback, useState } from "react";
 import { BackendRequestBody } from "../types";
 import { useErrorBoundary } from "react-error-boundary";
 
-const BACKEND_URL = "https://music-backend-roan.vercel.app";
+// const BACKEND_URL = "https://music-backend-roan.vercel.app";
+const BACKEND_URL = "http://localhost:3001";
 
 export type BackendResponseParser<Data> = (response: Response) => Promise<Data>;
 export type BackendRequestState<Data> =
@@ -26,10 +27,6 @@ const useBackendRequest = <Data>(): UseBackendRequestReturn<Data> => {
   const [data, setData] = useState<Data | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<boolean>(false);
-
-  //catch(e) { setIsLoading(true)
-  // return Promise.resolve(null)
-  // }
 
   const makeRequest: RequestMaker<Data> = useCallback(
     async (

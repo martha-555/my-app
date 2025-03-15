@@ -1,10 +1,8 @@
 /** @format */
 
-import { useEffect } from "react";
-
 const SEC_IN_DAY = 86400;
 
-export const formatSeconds = (seconds: number): string => {
+export const getFormattedTime = (seconds: number): string => {
   if (seconds >= SEC_IN_DAY) return "more than one day";
   const date = new Date(seconds * 1000);
 

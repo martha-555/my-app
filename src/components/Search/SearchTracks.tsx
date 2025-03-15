@@ -3,11 +3,11 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ResponseTrackData, TrackData } from "../../types/deezer";
-import useDeezerRequest from "../../feautures/api/hooks/deezer/useDeezerRequest";
 import classes from "./styles.module.scss";
 import Tracklist from "../../components/Tracklist/Tracklist";
 import connectWithoutDuplicates from "../../utils/connectWithoutDuplicates";
-import PageWrapper from "../../layout/PageWrapper/PageWrapper";
+import PageWrapper from "../PageWrapper/PageWrapper";
+import useDeezerRequest from "../../apiHooks/hooks/deezer/useDeezerRequest";
 
 const SearchTracks = () => {
   const [searchParams] = useSearchParams();
@@ -17,7 +17,7 @@ const SearchTracks = () => {
 
   const initialTracks = async () => {
     const response = await searchTracksRequest(0);
-   if (response) settracks(response);
+    if (response) settracks(response);
   };
   useEffect(() => {
     if (tracks) settracks(null);
@@ -34,17 +34,18 @@ const SearchTracks = () => {
         return json;
       },
     });
-   if (response) {setNextTracksURL(!!response.next)
-    return response.data}
+    if (response) {
+      setNextTracksURL(!!response.next);
+      return response.data;
+    }
   };
 
   const getNextTracks = async () => {
     if (tracks && nextTracksURL) {
       const data = await searchTracksRequest(tracks.length);
-     if (data) settracks(connectWithoutDuplicates(tracks, data));
+      if (data) settracks(connectWithoutDuplicates(tracks, data));
     }
   };
-
 
   return (
     <PageWrapper>
@@ -54,7 +55,7 @@ const SearchTracks = () => {
           <Tracklist
             nextTracks={getNextTracks}
             tracks={tracks}
-            emptyState="По Вашому запиту нічого не знайдено"
+            emptyState="Sorry, we couldn't find any results for your search"
           />
         ) : null}
         <div className={classes.flexPages}></div>

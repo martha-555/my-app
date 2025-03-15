@@ -6,7 +6,7 @@ import useBackendRequest, {
   BackendRequestState,
   BackendResponseParser,
 } from "../useBackendRequest";
-import { authContext } from "../../../auth/authProvider";
+import { authContext } from "../../../feautures/auth/authProvider";
 
 const DEEZER_API_URL = "https://api.deezer.com";
 
@@ -20,7 +20,7 @@ type UseDeezerRequestReturn<Data> = [
   BackendRequestState<Data>
 ];
 
-const useDeezerRequest = <Data>(): UseDeezerRequestReturn<Data>=> {
+const useDeezerRequest = <Data>(): UseDeezerRequestReturn<Data> => {
   const [makeRequest, state] = useBackendRequest<Data>();
   const { authKey } = useContext(authContext);
 

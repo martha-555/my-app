@@ -1,20 +1,14 @@
 /** @format */
 
-import {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import classes from "./styles.module.scss";
 import { useSearchParams } from "react-router-dom";
-import PageWrapper from "../../layout/PageWrapper/PageWrapper";
 import { PlaylistsContext } from "../../feautures/playlists/playlistsProvider";
 import CreatePlaylists from "./CreatePlaylists";
 import Tracklist from "../../components/Tracklist/Tracklist";
 import Logo from "../../icons/deleteIcon.png";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import PageWrapper from "../../components/PageWrapper/PageWrapper";
 
 const Playlists = () => {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -101,7 +95,6 @@ const Playlists = () => {
   };
 
   useEffect(() => {
-    // console.log(isLoading)
     const callback = (entries: any) => {
       const [entry] = entries;
       if (rightArrowRef.current && entry.isIntersecting)
@@ -119,16 +112,10 @@ const Playlists = () => {
     };
   }, [options]);
 
-  useEffect(() => {
-    // console.log(isLoading)
-  }, [isLoading]);
   return (
     <PageWrapper>
-      {/* <Toaster/> */}
       <CreatePlaylists />
       <div className={classes.playlistsContainer}>
-        {/* {isLoading ? <div>Loading...</div> : null} */}
-
         <div className={classes.wrapper}>
           <i
             onClick={leftMove}
