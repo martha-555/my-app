@@ -1,8 +1,38 @@
 <!-- @format -->
 
-# Music Portal
+# 🎧 Music Portal
 
-Welcome to the Music Portal project! This application allows users to stream music using the Deezer API, manage playlists, and discover new tracks.
+**Music Portal** is a full-featured web application that allows users to stream music using the **Deezer API**, manage personal playlists, and discover new tracks. The app features a built-in audio player, search functionality, user authentication, and seamless playlist management.
+
+In addition, the backend server allows downloading MP3 audio from YouTube videos using `ytdl-core`.
+
+---
+
+## ✨ Features
+
+- 🔐 Authorization via Deezer API  
+- 🔍 Search and explore music by track, artist, or album  
+- 🎵 Integrated player with playback controls  
+- ❤️ Add and remove tracks from favorites  
+- 📁 Create, delete, and manage playlists  
+- 📌 Add and remove tracks from playlists  
+- 🎶 Backend support for streaming MP3 from YouTube  
+- 🌙 Modern, responsive UI
+
+---
+
+## 🚀 Tech Stack
+
+- React  
+- TypeScript  
+- React Router  
+- React Hot Toast  
+- SCSS  
+- Deezer API  
+- Custom Node.js Backend  
+- `ytdl-core` for MP3 support
+
+---
 
 ## Installation Process
 
