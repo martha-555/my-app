@@ -32,10 +32,10 @@ Now your frontend will be able to make requests to the backend server running on
 
 Once both servers are running, you can access the Music Portal in your browser at `http://localhost:3000`. Enjoy exploring music and managing your playlists!
 
-UI Preview
+## UI Preview
 
-![1](https://github.com/user-attachments/assets/2186890b-debc-4b61-ba59-7774edef1f9a)
 ![11](https://github.com/user-attachments/assets/bcc72a73-1209-47e4-9147-2533ff13995c)
+![1](https://github.com/user-attachments/assets/2186890b-debc-4b61-ba59-7774edef1f9a)
 ![4](https://github.com/user-attachments/assets/d8ce0e65-3ea7-4ca7-9e6e-d35d444ee50c)
 ![3](https://github.com/user-attachments/assets/ea8337ab-d8f5-44d7-bfe6-acca0e8e906f)
 ![2](https://github.com/user-attachments/assets/a470be44-5b0f-41df-a4c1-06f3800156df)
